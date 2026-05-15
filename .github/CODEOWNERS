@@ -1,0 +1,19 @@
+# Default owner
+* @Badr-Eddine-Slaoui
+
+# Pages branches responsibility
+/app/pages/auth @Badr-Eddine-Slaoui
+/app/pages/project-management @brahimelhabchi09-lgtm
+/app/pages/time-management @Yassinenmila
+/app/pages/dashboard @tSvtok
+/app/pages/wallet @mouna-saoui
+
+# API branches responsibility
+/server/api/auth @Badr-Eddine-Slaoui
+/server/api/project-management @brahimelhabchi09-lgtm
+/server/api/time-management @Yassinenmila
+/server/api/dashboard @tSvtok
+/server/api/wallet @mouna-saoui
+
+# GitHub configs
+/.github/ @Badr-Eddine-Slaoui
