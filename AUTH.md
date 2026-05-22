@@ -42,21 +42,19 @@ The authentication backend enforces a strict layered pattern that decouples rout
 * **DAO Contract (`server/dao/user.dao.ts`)**: Declares standard data-access interfaces to decouple business operations from the specific ORM tool.
 * **Mapper (`server/mapper/user.mapper.ts`)**: Automatically transforms models to sanitize outputs, stripping sensitive database attributes (e.g., password hashes, tokens).
 
----
-
 ## 2. API Endpoint Registry
 
 All endpoints are fully documented in the Swagger UI (`/_swagger`) and OpenAPI schema (`/_openapi.json`).
 
 | Endpoint | Method | Authentication | Payload Type | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `/api/auth/register` | `POST` | ❌ None | `multipart/form-data` | Registers a new user, processes avatar uploads, and sends verification email. |
-| `/api/auth/login` | `POST` | ❌ None | `application/json` | Authenticates credentials, returns an Access Token, and sets a Refresh Token cookie. |
+| `/api/auth/register` | `POST` | ❌ Guest Only | `multipart/form-data` | Registers a new user, processes avatar uploads, and sends verification email. |
+| `/api/auth/login` | `POST` | ❌ Guest Only | `application/json` | Authenticates credentials, returns an Access Token, and sets a Refresh Token cookie. |
 | `/api/auth/me` | `GET` | ✅ Bearer JWT | None | Retrieves the sanitized user profile. Employs silent cookie refresh if expired. |
 | `/api/auth/logout` | `POST` | ✅ Bearer JWT | None | Clears the session state, invalidates active refresh tokens, and deletes cookies. |
-| `/api/auth/email/validation` | `POST` | ❌ None | `application/json` | Verifies the registration token and activates the user account. |
-| `/api/auth/forgot-password` | `POST` | ❌ None | `application/json` | Registers a secure reset token and sends an email via Resend. |
-| `/api/auth/reset-password` | `POST` | ❌ None | `application/json` | Confirms the validity of the reset token and updates the user's password. |
+| `/api/auth/email/validation` | `POST` | ❌ Guest Only | `application/json` | Verifies the registration token and activates the user account. |
+| `/api/auth/forgot-password` | `POST` | ❌ Guest Only | `application/json` | Registers a secure reset token and sends an email via Resend. |
+| `/api/auth/reset-password` | `POST` | ❌ Guest Only | `application/json` | Confirms the validity of the reset token and updates the user's password. |
 
 ---
 
@@ -68,9 +66,10 @@ All endpoints are fully documented in the Swagger UI (`/_swagger`) and OpenAPI s
   * **Refresh Token:** Long-lived (30 days), stored securely inside the database, and transmitted via an `HttpOnly`, `Secure`, `SameSite=Strict` cookie.
 * **Database Token Hardening:** Verification and reset tokens are generated using cryptographically secure random bytes, and their SHA-256 hashes are stored in the database to prevent database leakage exploitation.
 * **Silent Cookie Refresh:** When an access token expires, the system automatically checks the refresh cookie, validates it against the database, issues a new access token, and sets it on the response headers.
+* **Guest Route Shielding:** Prevents authenticated clients (with valid active Bearer tokens or active refresh cookies) from accessing guest-only routes like register, login, password recovery, and verification, immediately returning a `403 Forbidden` ("Guests only") error to avoid double-login issues.
 * **Anti-User Enumeration:** Forgot-password queries return identical success responses regardless of whether the email exists in the database.
-* **Sharp Compression:** Uploaded profile pictures are processed, downscaled to a maximum of 400x400 pixels, converted to WebP format, and stored locally to mitigate denial of service attacks.
-* **Input Sanitization:** Every request payload is run against rigorous Zod schemas, returning standardized 422 validation response envelopes.
+* **Sharp Compression:** Profile pictures are compressed via Sharp, converted to WebP format, downscaled, and stored locally.
+* **Input Sanitization:** Every request payload is validated using Zod, rejecting invalid fields immediately with 422 HTTP responses.
 
 ---
 
