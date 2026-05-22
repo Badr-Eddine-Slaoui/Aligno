@@ -4,6 +4,17 @@ import { setup, $fetch } from '@nuxt/test-utils/e2e'
 import jwt from 'jsonwebtoken'
 import { createVerifiedUser, clearDatabase } from './helpers'
 
+function createExpiredToken(userId: string) {
+  return jwt.sign(
+    {
+      userId,
+      exp: Math.floor(Date.now() / 1000) - 10,
+    },
+    process.env.JWT_SECRET || 'fallback_jwt_secret',
+    { noTimestamp: true },
+  )
+}
+
 describe('Auth API — Profile (Me)', async () => {
   await setup({})
 
@@ -43,13 +54,7 @@ describe('Auth API — Profile (Me)', async () => {
       email: 'expired@test.com',
       phone: '+212600000066',
     })
-    const token = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET || 'fallback_jwt_secret',
-      { expiresIn: '0s' },
-    )
-
-    await new Promise((r) => setTimeout(r, 100))
+    const token = createExpiredToken(user.id)
 
     const res = await $fetch('/api/auth/me', {
       headers: { Authorization: `Bearer ${token}` },

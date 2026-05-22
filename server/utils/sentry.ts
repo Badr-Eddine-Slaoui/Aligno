@@ -1,9 +1,9 @@
-import { init, captureException, captureMessage } from '@sentry/vue'
+import { init, captureException, captureMessage } from '@sentry/node'
 import { logger } from './logger'
 
 const dsn = process.env.SENTRY_DSN
 
-if (dsn) {
+if (dsn && process.env.NODE_ENV !== 'test') {
   init({
     dsn,
     environment: process.env.NODE_ENV || 'development',

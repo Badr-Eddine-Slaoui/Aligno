@@ -6,6 +6,17 @@ import { hashToken } from '../../utils/crypto'
 import { prisma } from '../../utils/prisma'
 import { createVerifiedUser, clearDatabase } from './helpers'
 
+function createExpiredToken(userId: string) {
+  return jwt.sign(
+    {
+      userId,
+      exp: Math.floor(Date.now() / 1000) - 10,
+    },
+    process.env.JWT_SECRET || 'fallback_jwt_secret',
+    { noTimestamp: true },
+  )
+}
+
 describe('Auth Middleware', async () => {
   await setup({})
 
@@ -45,11 +56,7 @@ describe('Auth Middleware', async () => {
       email: 'silent-refresh@test.com',
       phone: '+212600000101',
     })
-    const expiredToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET || 'fallback_jwt_secret',
-      { expiresIn: '0s' }, // Expired
-    )
+    const expiredToken = createExpiredToken(user.id)
     const rawRefreshToken = jwt.sign(
       { userId: user.id },
       process.env.JWT_REFRESH_SECRET || 'fallback_jwt_refresh_secret',
@@ -61,9 +68,6 @@ describe('Auth Middleware', async () => {
       where: { id: user.id },
       data: { refreshToken: hashToken(rawRefreshToken) },
     })
-
-    // Wait slightly to guarantee the access token is expired
-    await new Promise((r) => setTimeout(r, 100))
 
     const response = await fetch('/api/auth/me', {
       headers: { 
@@ -88,14 +92,8 @@ describe('Auth Middleware', async () => {
       email: 'bad-refresh@test.com',
       phone: '+212600000102',
     })
-    const expiredToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET || 'fallback_jwt_secret',
-      { expiresIn: '0s' },
-    )
+    const expiredToken = createExpiredToken(user.id)
     const invalidRefreshToken = 'invalid-refresh-token'
-
-    await new Promise((r) => setTimeout(r, 100))
 
     const res = await $fetch('/api/auth/me', {
       headers: { 
@@ -113,11 +111,7 @@ describe('Auth Middleware', async () => {
       email: 'mismatch-refresh@test.com',
       phone: '+212600000103',
     })
-    const expiredToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET || 'fallback_jwt_secret',
-      { expiresIn: '0s' },
-    )
+    const expiredToken = createExpiredToken(user.id)
     const rawRefreshToken = jwt.sign(
       { userId: user.id },
       process.env.JWT_REFRESH_SECRET || 'fallback_jwt_refresh_secret',
@@ -129,9 +123,6 @@ describe('Auth Middleware', async () => {
       where: { id: user.id },
       data: { refreshToken: 'some-other-hashed-token' },
     })
-
-    await new Promise((r) => setTimeout(r, 100))
-
     const res = await $fetch('/api/auth/me', {
       headers: { 
         Authorization: `Bearer ${expiredToken}`,
