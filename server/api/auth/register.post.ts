@@ -17,8 +17,8 @@ defineRouteMeta({
             required: ['id', 'firstName', 'lastName', 'age', 'email', 'phone', 'profilePictureUrl', 'emailVerified', 'createdAt', 'updatedAt'],
             properties: {
               id: { type: 'string', format: 'uuid' },
-              firstName: { type: 'string', description: '2 to 50 characters.', maxLength: 50 },
-              lastName: { type: 'string', description: '2 to 50 characters.', maxLength: 50 },
+              firstName: { type: 'string', description: '2 to 50 characters.'},
+              lastName: { type: 'string', description: '2 to 50 characters.'},
               age: { type: 'integer', minimum: 13, maximum: 120 },
               email: { type: 'string', format: 'email' },
               phone: { type: 'string', example: '+212612345678' },
@@ -71,8 +71,8 @@ defineRouteMeta({
             type: 'object',
             required: ['firstName', 'lastName', 'age', 'email', 'phone', 'password', 'confirmPassword'],
             properties: {
-              firstName: { type: 'string', description: '2 to 50 characters.', maxLength: 50, example: 'John' },
-              lastName: { type: 'string', description: '2 to 50 characters.', maxLength: 50, example: 'Doe' },
+              firstName: { type: 'string', description: '2 to 50 characters.', example: 'John' },
+              lastName: { type: 'string', description: '2 to 50 characters.', example: 'Doe' },
               age: { type: 'integer', minimum: 13, maximum: 120, example: 25 },
               email: { type: 'string', format: 'email', example: 'john@example.com' },
               phone: { type: 'string', example: '+212612345678', description: 'E.164 phone number.' },
@@ -83,6 +83,45 @@ defineRouteMeta({
               },
               confirmPassword: { type: 'string', description: 'Confirm the password.', example: 'P@ssw0rd!' },
               profilePicture: { type: 'string', format: 'binary', description: 'Optional avatar upload.' },
+            },
+          },
+          MessageSuccessResponse: {
+            type: 'object',
+            required: ['success', 'data'],
+            properties: {
+              success: { type: 'boolean', const: true },
+              data: {
+                type: 'object',
+                required: ['message'],
+                properties: { message: { type: 'string' } },
+              },
+            },
+          },
+          ForgotPasswordRequest: {
+            type: 'object',
+            required: ['email'],
+            properties: {
+              email: { type: 'string', format: 'email', example: 'john@example.com' },
+            },
+          },
+          EmailValidationRequest: {
+            type: 'object',
+            required: ['token'],
+            properties: {
+              token: { type: 'string', example: 'a1b2c3d4e5f6' },
+            },
+          },
+          ResetPasswordRequest: {
+            type: 'object',
+            required: ['token', 'password', 'confirmPassword'],
+            properties: {
+              token: { type: 'string', example: 'a1b2c3d4e5f6' },
+              password: {
+                type: 'string',
+                description: 'At least 8 characters including uppercase, lowercase, number, and special character.',
+                example: 'NewP@ssw0rd!',
+              },
+              confirmPassword: { type: 'string', example: 'NewP@ssw0rd!' },
             },
           },
         },
@@ -203,46 +242,7 @@ defineRouteMeta({
                 },
               },
             },
-          },
-          MessageSuccessResponse: {
-            type: 'object',
-            required: ['success', 'data'],
-            properties: {
-              success: { type: 'boolean', const: true },
-              data: {
-                type: 'object',
-                required: ['message'],
-                properties: { message: { type: 'string' } },
-              },
-            },
-          },
-          ForgotPasswordRequest: {
-            type: 'object',
-            required: ['email'],
-            properties: {
-              email: { type: 'string', format: 'email', example: 'john@example.com' },
-            },
-          },
-          EmailValidationRequest: {
-            type: 'object',
-            required: ['token'],
-            properties: {
-              token: { type: 'string', example: 'a1b2c3d4e5f6' },
-            },
-          },
-          ResetPasswordRequest: {
-            type: 'object',
-            required: ['token', 'password', 'confirmPassword'],
-            properties: {
-              token: { type: 'string', example: 'a1b2c3d4e5f6' },
-              password: {
-                type: 'string',
-                description: 'At least 8 characters including uppercase, lowercase, number, and special character.',
-                example: 'NewP@ssw0rd!',
-              },
-              confirmPassword: { type: 'string', example: 'NewP@ssw0rd!' },
-            },
-          },
+          }
         },
       },
     },
