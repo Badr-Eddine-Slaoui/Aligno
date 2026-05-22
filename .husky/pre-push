@@ -1,3 +1,4 @@
 #!/bin/sh
 echo "🧪 Running tests in docker container before push..."
+docker compose exec -T app npx vue-tsc --noEmit
 docker compose exec -T app npx vitest run
