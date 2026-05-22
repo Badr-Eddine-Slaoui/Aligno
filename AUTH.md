@@ -106,6 +106,14 @@ docker compose exec -T app npx vue-tsc --noEmit
 ```
 
 ### Running Test Suites
+
+Run the full modular suite (sequentially via `vitest.config.ts` to avoid database races):
 ```bash
 docker compose exec -T app npx vitest run
 ```
+
+Run a specific endpoint's test file:
+```bash
+docker compose exec -T app npx vitest run server/test/auth/login.test.ts
+```
+
