@@ -9,9 +9,56 @@ const PROTECTED_ROUTES = [
   { path: '/api/auth/logout', method: 'POST' },
 ]
 
+const GUEST_ROUTES = [
+  { path: '/api/auth/register', method: 'POST' },
+  { path: '/api/auth/login', method: 'POST' },
+  { path: '/api/auth/email/validation', method: 'POST' },
+  { path: '/api/auth/forgot-password', method: 'POST' },
+  { path: '/api/auth/reset-password', method: 'POST' },
+]
+
 export default defineEventHandler(async (event) => {
   const path = getRequestURL(event).pathname
   const method = getMethod(event)
+
+  const isGuest = GUEST_ROUTES.some(
+    (r) => path === r.path && method === r.method,
+  )
+
+  if (isGuest) {
+    const authHeader = getHeader(event, 'authorization')
+    const accessToken = authHeader?.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : null
+
+    if (accessToken) {
+      try {
+        tokenService.verifyAccessToken(accessToken)
+        logger.warn(`Authenticated user attempted to access guest route ${method} ${path}`)
+        throw createError({ statusCode: 403, statusMessage: 'Guests only' })
+      } catch (err: any) {
+        if (err.statusCode === 403) throw err
+      }
+    }
+
+    const refreshToken = getCookie(event, 'refresh_token')
+    if (refreshToken) {
+      try {
+        const payload = tokenService.verifyRefreshToken(refreshToken)
+        const user = await userRepository.findById(payload.userId)
+        if (user && user.refreshToken) {
+          const hashedIncoming = hashToken(refreshToken)
+          if (hashedIncoming === user.refreshToken) {
+            logger.warn(`Authenticated user with valid refresh token attempted to access guest route ${method} ${path}`)
+            throw createError({ statusCode: 403, statusMessage: 'Guests only' })
+          }
+        }
+      } catch (err: any) {
+        if (err.statusCode === 403) throw err
+      }
+    }
+    return
+  }
 
   const isProtected = PROTECTED_ROUTES.some(
     (r) => path === r.path && method === r.method,
@@ -64,3 +111,4 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Authentication required' })
   }
 })
+
