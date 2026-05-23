@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client'
-import type { IUserDAO, CreateUserData } from '../dao/user.dao'
+import type { IUserDAO, CreateUserData, UpdateProfileData } from '../dao/user.dao'
 import { prisma } from '../utils/prisma'
 
 export class UserRepository implements IUserDAO {
@@ -77,6 +77,14 @@ export class UserRepository implements IUserDAO {
       },
     })
   }
+
+  async updateProfile(id: string, data: UpdateProfileData): Promise<User> {
+    return prisma.user.update({
+      where: { id },
+      data,
+    })
+  }
 }
 
 export const userRepository = new UserRepository()
+
