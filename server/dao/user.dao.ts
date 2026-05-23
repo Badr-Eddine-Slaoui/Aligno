@@ -12,6 +12,15 @@ export interface CreateUserData {
   emailVerifyExpires?: Date
 }
 
+export interface UpdateProfileData {
+  firstName?: string
+  lastName?: string
+  age?: number
+  email?: string
+  phone?: string
+  profilePictureUrl?: string | null
+}
+
 export interface IUserDAO {
   create(data: CreateUserData): Promise<User>
   findById(id: string): Promise<User | null>
@@ -24,4 +33,6 @@ export interface IUserDAO {
   updateEmailVerifyToken(id: string, token: string | null, expires: Date | null): Promise<User>
   updateResetPasswordToken(id: string, token: string | null, expires: Date | null): Promise<User>
   updatePassword(id: string, passwordHash: string): Promise<User>
+  updateProfile(id: string, data: UpdateProfileData): Promise<User>
 }
+
