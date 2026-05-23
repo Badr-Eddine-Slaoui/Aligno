@@ -131,6 +131,7 @@ All endpoints are documented in Swagger UI (`/_swagger`) and OpenAPI JSON (`/_op
 | `/api/auth/register` | `POST` | ❌ Guest Only | `multipart/form-data` | 201, 400, 403, 409, 422 | Register user, upload avatar, send verification email |
 | `/api/auth/login` | `POST` | ❌ Guest Only | `application/json` | 200, 401, 403, 422 | Authenticate and issue token pair |
 | `/api/auth/me` | `GET` | ✅ Bearer JWT | — | 200, 401, 404 | Fetch sanitized user profile |
+| `/api/auth/profile` | `PUT` | ✅ Bearer JWT | `multipart/form-data` | 200, 400, 401, 409, 422 | Update profile details and/or optimized avatar picture |
 | `/api/auth/logout` | `POST` | ✅ Bearer JWT | — | 200, 401 | Clear session and revoke refresh token |
 | `/api/auth/email/validation` | `POST` | ❌ Guest Only | `application/json` | 200, 400, 422 | Verify email via token |
 | `/api/auth/forgot-password` | `POST` | ❌ Guest Only | `application/json` | 200, 422 | Request password reset email |
@@ -152,7 +153,7 @@ All endpoints are documented in Swagger UI (`/_swagger`) and OpenAPI JSON (`/_op
 The global auth middleware (`server/middleware/auth.ts`) enforces two distinct route policies:
 
 ### Protected Routes (Auth Required)
-Routes: `GET /api/auth/me`, `POST /api/auth/logout`
+Routes: `GET /api/auth/me`, `PUT /api/auth/profile`, `POST /api/auth/logout`
 
 1. Extract `Authorization: Bearer <token>` from the request header.
 2. If the access token is **valid**, set `event.context.userId` and proceed.
@@ -210,6 +211,17 @@ All payloads are validated with **Zod** schemas (`server/validations/auth.zod.ts
 | :--- | :--- |
 | `token` | Non-empty string |
 
+### Update Profile Schema
+*(All fields are optional, but validated if provided)*
+
+| Field | Rules |
+| :--- | :--- |
+| `firstName` | String, 2–50 chars, trimmed |
+| `lastName` | String, 2–50 chars, trimmed |
+| `age` | Integer, 13–120 |
+| `email` | Valid email, lowercased, trimmed, unique check |
+| `phone` | E.164 format (`+[1-9]\d{1,14}`), unique check |
+
 ---
 
 ## 7. Security Controls
@@ -223,7 +235,7 @@ All payloads are validated with **Zod** schemas (`server/validations/auth.zod.ts
 | **Silent Cookie Refresh** | Expired access tokens trigger automatic refresh via the cookie. A new access token is returned in the `X-Access-Token` response header. |
 | **Guest Route Shielding** | Authenticated users are blocked from guest-only routes with `403 Guests only` to prevent double-login issues. |
 | **Anti-User Enumeration** | `POST /api/auth/forgot-password` returns an identical success response regardless of whether the email exists. |
-| **Image Processing** | Profile pictures are compressed via Sharp, resized to 400×400, converted to WebP at 80% quality, and stored to `public/uploads/avatars/`. |
+| **Image Processing** | Profile pictures are compressed via Sharp, resized to 400×400, converted to WebP at 80% quality, and stored to `public/uploads/avatars/`. During profile updates, any previous local profile picture is deleted/unlinked from the disk to prevent storage leaks. |
 | **Input Sanitization** | All payloads are validated with Zod. Invalid payloads are rejected immediately with `422`. |
 | **Sensitive Field Stripping** | `UserMapper.toResponseDto()` strips `passwordHash`, `refreshToken`, `emailVerifyToken`, `resetPasswordToken`, and expiry fields from all API responses. |
 
