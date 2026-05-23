@@ -6,6 +6,7 @@ import {
   forgotPasswordSchema,
   resetPasswordSchema,
   emailValidationSchema,
+  updateProfileSchema,
 } from '../validations/auth.zod'
 import type { ZodError } from 'zod'
 import { logger } from '../utils/logger'
@@ -216,6 +217,65 @@ export class AuthController {
       const data = await authService.resetPassword(result.data)
       logger.info('Password reset completed successfully')
       return { success: true, data }
+    } catch (error: any) {
+      if (error.statusCode && error.statusCode < 500) {
+        throw error
+      }
+      sentry.captureException(error)
+      throw error
+    }
+  }
+
+  async updateProfile(event: H3Event) {
+    logger.info('Handling profile update request')
+    try {
+      const userId = event.context.userId as string
+      if (!userId) {
+        throw createError({ statusCode: 401, statusMessage: 'Authentication required' })
+      }
+
+      const formData = await readMultipartFormData(event)
+      if (!formData) {
+        logger.warn('Empty profile update request body')
+        throw createError({ statusCode: 400, statusMessage: 'Request body is required' })
+      }
+
+      const fields: Record<string, string> = {}
+      let profilePicBuffer: Buffer | undefined
+      let profilePicName: string | undefined
+
+      for (const part of formData) {
+        if (part.name === 'profilePicture' && part.filename) {
+          profilePicBuffer = part.data
+          profilePicName = part.filename
+        } else if (part.name) {
+          fields[part.name] = part.data.toString('utf-8')
+        }
+      }
+
+      const result = updateProfileSchema.safeParse({
+        ...fields,
+        age: fields.age ? Number(fields.age) : undefined,
+      })
+
+      if (!result.success) {
+        logger.warn('Profile update validation failed')
+        throw createError({
+          statusCode: 422,
+          statusMessage: 'Validation failed',
+          data: { success: false, message: 'Validation failed', errors: formatZodErrors(result.error) },
+        })
+      }
+
+      const updatedUser = await authService.updateProfile(
+        userId,
+        result.data,
+        profilePicBuffer,
+        profilePicName,
+      )
+
+      logger.info(`Profile updated successfully for user ID: ${userId}`)
+      return { success: true, data: updatedUser }
     } catch (error: any) {
       if (error.statusCode && error.statusCode < 500) {
         throw error
