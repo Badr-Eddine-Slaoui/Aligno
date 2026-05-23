@@ -63,8 +63,8 @@ defineRouteMeta({
           UpdateProfileRequest: {
             type: 'object',
             properties: {
-              firstName: { type: 'string', description: '2 to 50 characters.', maxLength: 50, example: 'John' },
-              lastName: { type: 'string', description: '2 to 50 characters.', maxLength: 50, example: 'Doe' },
+              firstName: { type: 'string', description: '2 to 50 characters.', example: 'John' },
+              lastName: { type: 'string', description: '2 to 50 characters.', example: 'Doe' },
               age: { type: 'integer', minimum: 13, maximum: 120, example: 25 },
               email: { type: 'string', format: 'email', example: 'john@example.com' },
               phone: { type: 'string', example: '+212612345678', description: 'E.164 phone number.' },
