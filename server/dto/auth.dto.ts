@@ -44,3 +44,12 @@ export interface ResetPasswordRequestDto {
 export interface EmailValidationRequestDto {
   token: string
 }
+
+export interface UpdateProfileRequestDto {
+  firstName?: string
+  lastName?: string
+  age?: number
+  email?: string
+  phone?: string
+}
+
