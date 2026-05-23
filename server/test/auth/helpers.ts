@@ -19,7 +19,8 @@ export function buildFormData(fields: Record<string, string>) {
   return fd
 }
 
-export async function createVerifiedUser(overrides: Partial<typeof validUser> = {}) {
+export async function createVerifiedUser(overrides: Partial<any> = {}) {
+  const { password, confirmPassword, ...rest } = overrides
   const data = { ...validUser, ...overrides }
   const passwordHash = await bcrypt.hash(data.password, 10)
   return prisma.user.create({
@@ -31,11 +32,13 @@ export async function createVerifiedUser(overrides: Partial<typeof validUser> = 
       phone: data.phone,
       passwordHash,
       emailVerified: true,
+      ...rest,
     },
   })
 }
 
-export async function createUnverifiedUser(overrides: Partial<typeof validUser> = {}) {
+export async function createUnverifiedUser(overrides: Partial<any> = {}) {
+  const { password, confirmPassword, ...rest } = overrides
   const data = { ...validUser, ...overrides }
   const passwordHash = await bcrypt.hash(data.password, 10)
   return prisma.user.create({
@@ -47,6 +50,7 @@ export async function createUnverifiedUser(overrides: Partial<typeof validUser> 
       phone: data.phone,
       passwordHash,
       emailVerified: false,
+      ...rest,
     },
   })
 }
