@@ -7,6 +7,7 @@ import { sentry } from '../utils/sentry'
 const PROTECTED_ROUTES = [
   { path: '/api/auth/me', method: 'GET' },
   { path: '/api/auth/logout', method: 'POST' },
+  { path: '/api/auth/profile', method: 'PUT' },
 ]
 
 const GUEST_ROUTES = [
