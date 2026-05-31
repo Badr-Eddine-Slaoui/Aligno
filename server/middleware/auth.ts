@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
 
   const isProtected = PROTECTED_ROUTES.some(
     (r) => path === r.path && method === r.method,
-  )
+  ) || path.startsWith('/api/project-management/')
 
   if (!isProtected) return
 
