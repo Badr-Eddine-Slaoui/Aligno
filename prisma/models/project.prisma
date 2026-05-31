@@ -1,0 +1,19 @@
+model Project {
+  id                  String          @id @default(cuid())
+  name                String
+  description         String?
+  dueDate             DateTime?       @map("due_date")
+  colorCode           String          @default("#6366f1") @map("color_code")
+  isArchived          Boolean         @default(false) @map("is_archived")
+  dueDateReminderSent Boolean         @default(false) @map("due_date_reminder_sent")
+  ownerId             String          @map("owner_id")
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+
+  owner               User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members             ProjectMember[]
+  columns             KanbanColumn[]
+  labels              CardLabel[]
+
+  @@map("projects")
+}
