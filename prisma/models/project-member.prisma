@@ -1,0 +1,19 @@
+model ProjectMember {
+  id              String    @id @default(cuid())
+  role            String
+  userId          String    @map("user_id")
+  projectId       String    @map("project_id")
+  invitedByUserId String?   @map("invited_by_user_id")
+  inviteStatus    String    @default("PENDING") @map("invite_status")
+  inviteToken     String?   @map("invite_token")
+  inviteExpires   DateTime? @map("invite_expires")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user            User      @relation("UserMemberships", fields: [userId], references: [id], onDelete: Cascade)
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invitedBy       User?     @relation("UserInvites", fields: [invitedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, projectId])
+  @@map("project_members")
+}
