@@ -1,0 +1,13 @@
+model Subtask {
+  id          String     @id @default(cuid())
+  title       String
+  isCompleted Boolean    @default(false) @map("is_completed")
+  position    Int
+  cardId      String     @map("card_id")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  card        KanbanCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@map("subtasks")
+}
