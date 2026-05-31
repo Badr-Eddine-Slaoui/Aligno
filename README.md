@@ -1,598 +1,164 @@
-# Nuxt 4 + Prisma + PostgreSQL + pgAdmin + Docker Starter
+# Aligno Backend Service
 
-A full-stack starter template using:
+Aligno is a full-stack, production-ready backend productivity API engineered with Nuxt 4, Prisma, PostgreSQL, Redis, Socket.IO, and BullMQ. 
 
-- Nuxt 4
-- Prisma ORM
-- PostgreSQL
-- pgAdmin
-- Docker & Docker Compose
-- JWT Authentication Ready
-- Prisma Seeders
-- Socket.IO Ready
-- Redis Ready
+Aligno helps users balance time, task, and finances. The backend services power a collaborative workspace offering JWT session management, robust role-based access control, real-time board updates, automated email notifications, and background scheduled worker queues.
 
 ---
 
-# 📦 Stack
+## 🚀 Key Modules & Architecture
 
-- :contentReference[oaicite:0]{index=0}
-- :contentReference[oaicite:1]{index=1}
-- :contentReference[oaicite:2]{index=2}
-- :contentReference[oaicite:3]{index=3}
-- :contentReference[oaicite:4]{index=4}
-- :contentReference[oaicite:5]{index=5}
-- :contentReference[oaicite:6]{index=6}
+Aligno's backend is divided into two primary, fully-implemented modules following a clean, decoupled layered architecture:
+
+### 1. [Secure Authentication Module (AUTH.md)](file:///home/badr-eddine-slaoui/Documents/Aligno/AUTH.md)
+* **Secure Session Handshake**: Double-token protocol leveraging short-lived JWT Access Tokens (Header-scoped) alongside long-lived `HttpOnly`, `Secure`, `SameSite=Strict` Refresh Cookies.
+* **Verification & Recoveries**: Multi-phase secure registration with profile picture optimizations, account email verification CTAs, and secure password reset token hashing.
+* **Silent Cookie Refresh**: Automatic, frictionless background token exchanges.
+
+### 2. [Project Management Kanban Module (PROJECT_MANAGEMENT.md)](file:///home/badr-eddine-slaoui/Documents/Aligno/PROJECT_MANAGEMENT.md)
+* **Collaborative Boards & Roles**: Projects scoped by roles: `ADMIN` (board owners/managers), `MEMBER` (collaborators with card manipulation rights), and `VISITOR` (read-only view access).
+* **Board Mutations**: CRUD on lists, cards, checklist subtasks, and custom labels.
+* **Drag-and-Drop / Move Updates**: Cards can be dynamically sequenced or moved across columns.
+* **Real-time Event Broadcasts**: Structural changes broadcast instantaneously to project rooms using Socket.IO.
+* **Automated Due Date Reminders**: Background jobs handled by BullMQ and Redis that send email alerts 1 day prior to card/project deadlines.
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```bash
 .
-├── prisma
-│   ├── migrations
-│   ├── schema.prisma
-│   ├── seeders
-│   │   ├── seed.ts
-│   │   └── user.ts
-│
-├── server
-│   └── utils
-│       └── prisma.ts
-│
-├── docker-compose.yml
-├── Dockerfile
-├── prisma.config.ts
-├── nuxt.config.ts
-├── package.json
-└── .env
+├── .github/workflows/ci.yml       # GitHub Actions CI Workflow
+├── .husky/                        # Husky git hooks
+├── prisma/
+│   ├── migrations/                # Schema migration logs
+│   ├── models/                    # Segmented multi-file Prisma models
+│   │   ├── card-label.prisma
+│   │   ├── kanban-card.prisma
+│   │   ├── kanban-column.prisma
+│   │   ├── notification.prisma
+│   │   ├── project-member.prisma
+│   │   ├── project.prisma
+│   │   ├── subtask.prisma
+│   │   └── user.prisma
+│   ├── schema.prisma              # Combined Datasource generator schema
+│   └── seeders/                   # Seed fixtures
+│       ├── project.ts
+│       ├── seed.ts
+│       └── user.ts
+├── server/
+│   ├── api/                       # API HTTP Route Handlers
+│   │   ├── auth/                  # Authentication endpoints
+│   │   └── project-management/    # Kanban boards & notification endpoints
+│   ├── controller/                # Request validation and envelope mapping
+│   ├── dao/                       # Data access interface contracts
+│   ├── dto/                       # TypeScript request/response structures
+│   ├── emails/                    # vue-email branded templates
+│   ├── mapper/                    # Entity-to-DTO sanitizers
+│   ├── middleware/                # Route security and contextual role controllers
+│   ├── repository/                # Prisma-backed query implementations
+│   ├── service/                   # Core business logic orchestrators
+│   ├── utils/                     # Database, logger, Socket.IO, Redis & queue instances
+│   └── test/                      # E2E & integration test suites
+│       ├── auth/
+│       └── project-management/
+├── docker-compose.yml             # Docker infrastructure setup
+├── Dockerfile                     # Nuxt server execution target
+├── package.json                   # Dependencies listing
+└── tsconfig.json                  # Workspace compiler configuration
 ```
 
 ---
 
-# ⚙️ Requirements
+## ⚙️ Prerequisites
 
-Install:
-
-- Docker
-- Docker Compose
-
-Recommended:
-
-- Node.js LTS
-- VSCode
+Ensure you have the following installed locally:
+* **Docker & Docker Compose** (Recommended)
+* **Node.js LTS** (v20+ or v22+) & `npm`
 
 ---
 
-# 🚀 Setup From A to Z
+## 🛠️ Step-by-Step Setup
 
----
-
-# 1️⃣ Clone The Project
-
-```bash
-git clone <your-repository-url>
-
-cd <project-folder>
-```
-
----
-
-# 2️⃣ Create Environment File
-
-Copy:
-
+### 1. Configuration Setup
+Copy the template variables into your local environment:
 ```bash
 cp .env.example .env
 ```
 
----
-
-# 3️⃣ Environment Variables
-
-Your `.env` file:
-
+Review and adjust `.env` parameters if necessary (default values are ready to connect out-of-the-box inside Docker):
 ```env
 NUXT_PORT=4000
-
 DATABASE_URL="postgresql://postgres:postgres@db:5432/postgres"
-
-POSTGRES_DB=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_PORT=5432
-
-PGADMIN_DEFAULT_EMAIL="admin@example.com"
-PGADMIN_DEFAULT_PASSWORD=password
-PGADMIN_PORT=5555
-
-JWT_SECRET="your_super_secret_key"
+REDIS_URL="redis://redis:6379"
+REDIS_PORT=6379
+JWT_SECRET="super_secret_session_token"
+JWT_REFRESH_SECRET="super_secret_refresh_token"
+RESEND_API_KEY="re_sampleKey"
 ```
 
----
-
-# 4️⃣ Build Containers
-
-```bash
-docker compose build
-```
-
----
-
-# 5️⃣ Start Containers
-
-```bash
-docker compose up -d
-```
-
----
-
-# 6️⃣ Check Running Containers
-
-```bash
-docker ps
-```
-
-You should see:
-
-- nuxt
-- postgres_db
-- pgadmin
-
----
-
-# 🌍 Access Applications
-
-## Nuxt App
-
-```txt
-http://localhost:4000
-```
-
-## pgAdmin
-
-```txt
-http://localhost:5555
-```
-
-Login using:
-
-```txt
-Email: admin@example.com
-Password: password
-```
-
----
-
-# 🛢️ Connect pgAdmin To PostgreSQL
-
-Inside pgAdmin:
-
-## Create Server
-
-### General
-
-```txt
-Name: Local PostgreSQL
-```
-
-### Connection
-
-```txt
-Host: db
-Port: 5432
-Username: postgres
-Password: postgres
-```
-
-Click:
-
-```txt
-Save
-```
-
----
-
-# 🔥 Prisma Setup
-
----
-
-# 7️⃣ Generate Prisma Client
-
-Run inside container:
-
-```bash
-docker compose exec app npx prisma generate
-```
-
-This generates:
-
-```ts
-import { PrismaClient } from '@prisma/client'
-```
-
----
-
-# 8️⃣ Run Database Migration
-
-Create migration:
-
-```bash
-docker compose exec app npx prisma migrate dev --name init
-```
-
-This will:
-
-- Create tables
-- Generate migration files
-- Sync Prisma Client
-
----
-
-# 9️⃣ Run Seeders
-
-Run:
-
-```bash
-docker compose exec app npx prisma db seed
-```
-
-This executes:
-
-```ts
-prisma/seeders/seed.ts
-```
-
----
-
-# 👤 Default Seeded User
-
-The seeder creates:
-
-```txt
-Email: admin@example.com
-Password: SuperSecurePassword123!
-```
-
----
-
-# 🧠 Prisma Schema
-
-Current schema:
-
-```prisma
-model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-}
-```
-
----
-
-# ➕ Create New Migration After Schema Changes
-
-Whenever you edit:
-
-```txt
-prisma/schema.prisma
-```
-
-Run:
-
-```bash
-docker compose exec app npx prisma migrate dev --name your_migration_name
-```
-
-Example:
-
-```bash
-docker compose exec app npx prisma migrate dev --name add_profile_table
-```
-
----
-
-# 🔄 Reset Database
-
-⚠️ This deletes all data.
-
-```bash
-docker compose exec app npx prisma migrate reset
-```
-
-Prisma will:
-
-- Drop database
-- Recreate database
-- Run all migrations
-- Run seeders
-
----
-
-# 🧬 Prisma Client Usage
-
----
-
-# Prisma Client Singleton
-
-File:
-
-```txt
-server/utils/prisma.ts
-```
-
-```ts
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import pg from 'pg'
-
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL
-})
-
-const adapter = new PrismaPg(pool)
-
-export const prisma = new PrismaClient({
-  adapter
-})
-```
-
----
-
-# Example API Route
-
-Create:
-
-```txt
-server/api/users/index.get.ts
-```
-
-```ts
-import { prisma } from '~/server/utils/prisma'
-
-export default defineEventHandler(async () => {
-  const users = await prisma.user.findMany()
-
-  return users
-})
-```
-
----
-
-# Example Create User
-
-```ts
-await prisma.user.create({
-  data: {
-    username: 'badr',
-    email: 'badr@example.com',
-    password: 'hashed-password'
-  }
-})
-```
-
----
-
-# Example Find User
-
-```ts
-const user = await prisma.user.findUnique({
-  where: {
-    email: 'badr@example.com'
-  }
-})
-```
-
----
-
-# Example Update User
-
-```ts
-await prisma.user.update({
-  where: {
-    email: 'badr@example.com'
-  },
-  data: {
-    username: 'newUsername'
-  }
-})
-```
-
----
-
-# Example Delete User
-
-```ts
-await prisma.user.delete({
-  where: {
-    email: 'badr@example.com'
-  }
-})
-```
-
----
-
-# 🐳 Docker Commands
-
----
-
-# Stop Containers
-
-```bash
-docker compose down
-```
-
----
-
-# Stop + Remove Volumes
-
-⚠️ Deletes database data.
-
-```bash
-docker compose down -v
-```
-
----
-
-# Rebuild Containers
-
+### 2. Build & Launch Docker Services
+Spin up the application server, PostgreSQL 17, Redis, and pgAdmin containers in the background:
 ```bash
 docker compose up --build -d
 ```
 
----
-
-# Open Nuxt Container Shell
-
+Ensure everything started successfully:
 ```bash
-docker compose exec app sh
+docker compose ps
 ```
+You should see `nuxt`, `postgres_db`, and `redis` containers running.
 
----
-
-# Open PostgreSQL Shell
-
+### 3. Apply Schema Migrations
+Apply the initial table migrations inside the application container:
 ```bash
-docker compose exec db psql -U postgres
+docker compose exec -T app npx prisma migrate dev
 ```
 
----
-
-# 📡 Socket.IO
-
-Already installed:
-
+Generate the typed Prisma Client mapping:
 ```bash
-socket.io
-socket.io-client
+docker compose exec -T app npx prisma generate
 ```
 
----
-
-# 🔐 JWT
-
-Already installed:
-
-```bash
-jsonwebtoken
-```
-
-Example:
-
-```ts
-import jwt from 'jsonwebtoken'
-
-const token = jwt.sign(
-  { id: user.id },
-  process.env.JWT_SECRET!,
-  { expiresIn: '7d' }
-)
-```
-
----
-
-# 🔒 Password Hashing
-
-Using bcrypt:
-
-```ts
-import bcrypt from 'bcrypt'
-
-const hashed = await bcrypt.hash(password, 10)
-
-const valid = await bcrypt.compare(password, hashed)
-```
-
----
-
-# 🧹 Useful Prisma Commands
-
-## Generate Client
-
+*(Optional)* If you are working outside the Docker container in a local editor and encounter typing issues, run the local compiler generator once:
 ```bash
 npx prisma generate
 ```
 
-## Open Prisma Studio
-
+### 4. Database Seeding
+Populate the database with default test users, projects, columns, custom tasks, checklist subtasks, and labels:
 ```bash
-npx prisma studio
+docker compose exec -T app npx prisma db seed
 ```
 
-## Push Schema Without Migration
+Default credentials created:
+* **Admin Account**: `admin@example.com` / `SuperSecurePassword123!`
+* **Member Account**: `jane.doe@example.com` / `SuperSecurePassword123!`
+* **Visitor Account**: `mohamed.slaoui@example.com` / `SuperSecurePassword123!`
 
+---
+
+## 🧪 Running Verifications & Tests
+
+To ensure the backend service layer and integrations are working exactly as expected, run the following verification steps:
+
+### Type Checks
+Validate the workspace against TypeScript compiler errors:
 ```bash
-npx prisma db push
+docker compose exec -T app npx vue-tsc --noEmit
 ```
 
-## Pull Existing Database
-
+### Run Tests
+Execute the entire integration test suite (covering user login sessions, token exchanges, collaborative permissions, and board operations):
 ```bash
-npx prisma db pull
+docker compose exec -T app npx vitest run
 ```
 
 ---
 
-# 🧠 Notes
+## 🌐 API Exploration
 
-## Why Database Host Is `db`
-
-Inside Docker Compose, services communicate using service names.
-
-So:
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@db:5432/postgres"
-```
-
-`db` refers to:
-
-```yml
-services:
-  db:
-```
-
----
-
-# ⚠️ Important
-
-Do NOT use:
-
-```env
-localhost
-```
-
-inside Docker containers for database connection.
-
-Use:
-
-```env
-db
-```
-
-instead.
-
----
-
-# ❤️ Recommended Next Features
-
-- Authentication system
-- Access & Refresh Tokens
-- Email Verification
-- OAuth Login
-- Role Permissions
-- Realtime Chat
-- Notifications
-- File Uploads
-- Redis Cache
-- Rate Limiting
-- Queue System
-
----
-
-# 📜 License
-
-MIT License
+Once the Docker containers are running, explore the backend services locally:
+* **API Documentation (Swagger UI)**: Navigate to `http://localhost:4000/_swagger`
+* **JSON OpenAPI Specification**: Available at `http://localhost:4000/_openapi.json`
+* **pgAdmin Database View**: Access pgAdmin at `http://localhost:5555`
