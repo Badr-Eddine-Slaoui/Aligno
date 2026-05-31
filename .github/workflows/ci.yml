@@ -10,7 +10,7 @@ jobs:
   test-and-validate:
     runs-on: ubuntu-latest
 
-    # 1. Spin up a background PostgreSQL database container
+    # 1. Spin up background database containers
     services:
       postgres:
         image: postgres:16-alpine
@@ -26,9 +26,20 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     # 2. Global environment variables
     env:
       DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/test_db?schema=public"
+      REDIS_URL: "redis://localhost:6379"
       NODE_ENV: test
       JWT_SECRET: "test_secret_key_for_ci_validation_gate"
       JWT_REFRESH_SECRET: "test_refresh_secret_key_for_ci_gate"
