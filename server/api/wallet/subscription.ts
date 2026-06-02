@@ -1,7 +1,2 @@
-export function TotalWallet(TotalBank: number, TotalWallet: number) {
-    return TotalBank + TotalWallet
-}
-
-export function TotalBank(TotalBank: number) {
-    return TotalBank
-}
+// This file is intentionally left empty.
+// Subscription routes are handled under ./subscriptions/index.ts and ./subscriptions/[id].ts

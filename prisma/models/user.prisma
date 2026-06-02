@@ -21,6 +21,8 @@ model User {
   invitesSent          ProjectMember[]   @relation("UserInvites")
   assignedCards        KanbanCard[]
   notifications        Notification[]
+  bankAccounts         BankAccount[]
+  budgets              Budget[]
 
   @@map("users")
 }
