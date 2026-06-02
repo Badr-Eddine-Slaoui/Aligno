@@ -1,6 +1,8 @@
-import type { BankAccount } from '@prisma/client'
+import type { BankAccount, Prisma } from '@prisma/client'
 import type { IBankAccountDAO, CreateBankAccountData, UpdateBankAccountData } from '../dao/bankAccount.dao'
 import { prisma } from '../utils/prisma'
+
+type TransactionClient = Prisma.TransactionClient
 
 export class BankAccountRepository implements IBankAccountDAO {
   async create(data: CreateBankAccountData): Promise<BankAccount> {
@@ -23,7 +25,7 @@ export class BankAccountRepository implements IBankAccountDAO {
     return prisma.bankAccount.update({ where: { id }, data })
   }
 
-  async updateBalance(id: string, delta: number, tx = prisma): Promise<BankAccount> {
+  async updateBalance(id: string, delta: number, tx: TransactionClient = prisma): Promise<BankAccount> {
     return tx.bankAccount.update({
       where: { id },
       data: { balance: { increment: delta } },
