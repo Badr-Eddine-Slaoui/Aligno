@@ -60,4 +60,8 @@ model TimeBlock {
   updatedAt   DateTime @updatedAt
 
   @@map("time_blocks")
+
+  @@index([userId])
+  @@index([scheduleId])
+  @@index([templateId])
 }

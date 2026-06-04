@@ -15,4 +15,5 @@ model DailySchedule {
   updatedAt   DateTime @updatedAt
 
   @@map("daily_schedules")
+  @@index([userId, date])
 }
