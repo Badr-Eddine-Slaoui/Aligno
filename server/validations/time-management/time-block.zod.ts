@@ -1,54 +1,43 @@
 import { z } from "zod";
+import {
+  TimeCategoryEnum,
+  PriorityEnum,
+  RepeatTypeEnum
+} from "./enums";
+
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 export const createTimeBlockSchema = z.object({
-  title: z
-    .string()
-    .min(3, "Le titre doit contenir au moins 3 caractères")
-    .max(100),
+  title: z.string().min(3).max(100),
+  description: z.string().optional(),
 
-  description: z
-    .string()
-    .optional(),
+  startTime: z.string().regex(timeRegex),
+  endTime: z.string().regex(timeRegex),
 
-  startTime: z.string(),
+  duration: z.number().int().positive(),
 
-  endTime: z.string(),
-
-  duration: z
-    .number()
-    .positive(),
-
-  category: z.enum([
-    "WORK",
-    "STUDY",
-    "HEALTH",
-    "BREAK",
-    "PERSONAL",
-    "MEETING",
-    "OTHER"
-  ]),
-
-  priority: z.enum([
-    "LOW",
-    "MEDIUM",
-    "HIGH"
-  ]).default("MEDIUM"),
+  category: z.enum(TimeCategoryEnum),
+  priority: z.enum(PriorityEnum).default("MEDIUM"),
 
   position: z.number().default(0),
 
-  repeatType: z.enum([
-    "NONE",
-    "ONCE",
-    "DAILY",
-    "WEEKLY",
-    "MONTHLY"
-  ]).default("ONCE"),
+  isCompleted: z.boolean().default(false),
+  isLocked: z.boolean().default(false),
 
+  repeatType: z.enum(RepeatTypeEnum).default("ONCE"),
   repeatDays: z.string().optional(),
-
   repeatEnd: z.coerce.date().optional(),
 
+  templateId: z.string().optional(),
   scheduleId: z.string().optional(),
 
-  templateId: z.string().optional()
-});
+  userId: z.string()
+}).refine(
+  (data) => data.startTime < data.endTime,
+  {
+    message: "startTime doit être inférieur à endTime",
+    path: ["endTime"]
+  }
+);
+
+export const updateTimeBlockSchema = createTimeBlockSchema.partial();
