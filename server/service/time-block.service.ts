@@ -31,6 +31,13 @@ export class TimeBlockService {
   async getByUser(userId: string) {
     return this.repository.findByUser(userId)
   }
+  async getBySchedule(scheduleId: string) {
+    return this.repository.findBySchedule(scheduleId)
+  }
+
+  async getByTemplate(templateId: string) {
+    return this.repository.findByTemplate(templateId)
+  }
 
   async update(
     id: string,

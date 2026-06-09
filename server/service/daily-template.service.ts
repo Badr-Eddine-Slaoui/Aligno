@@ -25,6 +25,14 @@ export class DailyTemplateService {
     return this.repository.findByUser(userId)
   }
 
+  async getActive(userId: string) {
+    return this.repository.findActive(userId)
+  }
+
+  async getById(id: string) {
+    return this.repository.findById(id)
+  }
+
   async update(
     id: string,
     dto: UpdateDailyTemplateDTO

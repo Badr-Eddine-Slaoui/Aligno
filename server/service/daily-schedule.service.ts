@@ -22,6 +22,10 @@ export class DailyScheduleService {
     return this.repository.create(data)
   }
 
+  async getById(id: string) {
+    return this.repository.findById(id)
+  }
+
   async getByUser(userId: string) {
     return this.repository.findByUser(userId)
   }
