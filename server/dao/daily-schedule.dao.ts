@@ -15,6 +15,7 @@ export interface IDailyScheduleDAO {
   create(data: CreateDailyScheduleData): Promise<DailySchedule>
   findById(id: string): Promise<DailySchedule | null>
   findByUserIdAndDate(userId: string, date: Date): Promise<DailySchedule | null>
+  findByDate(userId: string, date: Date): Promise<DailySchedule | null>
   update(id: string, data: UpdateDailyScheduleData): Promise<DailySchedule>
   delete(id: string): Promise<void>
 }

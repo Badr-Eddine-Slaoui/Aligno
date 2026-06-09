@@ -54,6 +54,8 @@ export interface ITimeBlockDAO {
   create(data: CreateTimeBlockData): Promise<TimeBlock>;
   findById(id: string): Promise<TimeBlock | null>;
   findByUserId(userId: string): Promise<TimeBlock[]>;
+  findBySchedule(scheduleId: string): Promise<TimeBlock[]>;
+  findByTemplate(templateId: string): Promise<TimeBlock[]>;
   update(id: string, data: UpdateTimeBlockData): Promise<TimeBlock>;
   delete(id: string): Promise<void>;
 }
