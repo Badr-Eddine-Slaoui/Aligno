@@ -2,42 +2,40 @@ import type {
   CreateTimeBlockData,
   UpdateTimeBlockData
 } from '../dao/time-block.dao'
+import { prisma } from '../utils/prisma'
 
 import type { ITimeBlockDAO } from '../dao/time-block.dao'
 
-export class TimeBlockRepository {
-  constructor(
-    private readonly timeBlockDAO: ITimeBlockDAO
-  ) {}
+export class TimeBlockRepository implements ITimeBlockDAO {
 
   async create(data: CreateTimeBlockData) {
-    return this.timeBlockDAO.create(data)
+    return prisma.timeBlock.create({ data })
   }
 
   async findById(id: string) {
-    return this.timeBlockDAO.findById(id)
+    return prisma.timeBlock.findUnique({ where: { id } })
   }
 
   async findByUser(userId: string) {
-    return this.timeBlockDAO.findByUserId(userId)
+    return prisma.timeBlock.findMany({ where: { userId } })
   }
 
   async findBySchedule(scheduleId: string) {
-    return this.timeBlockDAO.findBySchedule(scheduleId)
+    return prisma.timeBlock.findMany({ where: { scheduleId } })
   }
 
   async findByTemplate(templateId: string) {
-    return this.timeBlockDAO.findByTemplate(templateId)
+    return prisma.timeBlock.findMany({ where: { templateId } })
   }
 
   async update(
     id: string,
     data: UpdateTimeBlockData
   ) {
-    return this.timeBlockDAO.update(id, data)
+    return prisma.timeBlock.update({ where: { id }, data })
   }
 
   async delete(id: string) {
-    return this.timeBlockDAO.delete(id)
+    return prisma.timeBlock.delete({ where: { id } })
   }
 }

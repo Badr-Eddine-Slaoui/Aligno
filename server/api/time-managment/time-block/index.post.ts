@@ -1,14 +1,68 @@
-import { createTimeBlockSchema } from '../../../validations/time-management/index';
+import { TimeBlockController } from '../../../controller/time-management.controller'
+import { TimeBlockService } from '../../../service/time-block.service'
+import { TimeBlockRepository } from '../../../repository/time-block.repository'
 
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+const repository = new TimeBlockRepository()
+const service = new TimeBlockService(repository)
+const timeBlockController = new TimeBlockController(service)
 
-  const dto = createTimeBlockSchema.parse(body)
+defineRouteMeta({
+  openAPI: {
+    tags: ['Time Management - Time Block'],
+    summary: 'Create a time block',
+    operationId: 'createTimeBlock',
+    security: [{ bearerAuth: [] }],
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: ['title', 'startTime', 'endTime', 'duration', 'category'],
+            properties: {
+              title: { type: 'string', minLength: 3, maxLength: 100 },
+              description: { type: 'string' },
 
-  const userId = event.context.user.id
+              startTime: { type: 'string', example: '09:00' },
+              endTime: { type: 'string', example: '10:30' },
 
-  return await timeBlockController.create(
-    dto,
-    userId
-  )
+              duration: { type: 'number', minimum: 1 },
+
+              category: {
+                type: 'string',
+                enum: ['WORK', 'STUDY', 'HEALTH', 'BREAK', 'PERSONAL', 'MEETING', 'OTHER']
+              },
+
+              priority: {
+                type: 'string',
+                enum: ['LOW', 'MEDIUM', 'HIGH']
+              },
+
+              position: { type: 'number' },
+
+              repeatType: {
+                type: 'string',
+                enum: ['NONE', 'ONCE', 'DAILY', 'WEEKLY', 'MONTHLY']
+              },
+
+              repeatDays: { type: 'string' },
+              repeatEnd: { type: 'string', format: 'date-time' },
+
+              templateId: { type: 'string' },
+              scheduleId: { type: 'string' }
+            }
+          }
+        }
+      }
+    },
+    responses: {
+      201: { description: 'Time block created successfully' },
+      422: { description: 'Validation failed' },
+      401: { description: 'Authentication required' }
+    }
+  } as any
 })
+
+export default defineEventHandler((event) =>
+  timeBlockController.create(event)
+)
