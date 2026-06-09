@@ -16,7 +16,8 @@ export class TimeBlockRepository implements ITimeBlockDAO {
     return prisma.timeBlock.findUnique({ where: { id } })
   }
 
-  async findByUser(userId: string) {
+
+  async findByUserId(userId: string) {
     return prisma.timeBlock.findMany({ where: { userId } })
   }
 
@@ -36,6 +37,6 @@ export class TimeBlockRepository implements ITimeBlockDAO {
   }
 
   async delete(id: string) {
-    return prisma.timeBlock.delete({ where: { id } })
+    await prisma.timeBlock.delete({ where: { id } })
   }
 }

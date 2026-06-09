@@ -2,38 +2,36 @@ import type {
   CreateDailyTemplateData,
   UpdateDailyTemplateData
 } from '../dao/daily-template.dao'
+import { prisma } from '../utils/prisma'
 
 import type { IDailyTemplateDAO } from '../dao/daily-template.dao'
 
-export class DailyTemplateRepository {
-  constructor(
-    private readonly dailyTemplateDAO: IDailyTemplateDAO
-  ) {}
+export class DailyTemplateRepository implements IDailyTemplateDAO {
 
   async create(data: CreateDailyTemplateData) {
-    return this.dailyTemplateDAO.create(data)
+    return prisma.dailyTemplate.create({ data })
   }
 
   async findById(id: string) {
-    return this.dailyTemplateDAO.findById(id)
+    return prisma.dailyTemplate.findUnique({ where: { id } })
   }
 
-  async findByUser(userId: string) {
-    return this.dailyTemplateDAO.findByUserId(userId)
+  async findByUserId(userId: string) {
+    return prisma.dailyTemplate.findMany({ where: { userId } })
   }
 
   async findActive(userId: string) {
-    return this.dailyTemplateDAO.findActive(userId)
+    return prisma.dailyTemplate.findFirst({ where: { userId, isActive: true } })
   }
 
   async update(
     id: string,
     data: UpdateDailyTemplateData
   ) {
-    return this.dailyTemplateDAO.update(id, data)
+    return prisma.dailyTemplate.update({ where: { id }, data })
   }
 
   async delete(id: string) {
-    return this.dailyTemplateDAO.delete(id)
+    await prisma.dailyTemplate.delete({ where: { id } })
   }
 }

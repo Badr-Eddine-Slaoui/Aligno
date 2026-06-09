@@ -29,7 +29,7 @@ export class TimeBlockService {
   }
 
   async getByUser(userId: string) {
-    return this.repository.findByUser(userId)
+    return this.repository.findByUserId(userId)
   }
   async getBySchedule(scheduleId: string) {
     return this.repository.findBySchedule(scheduleId)
