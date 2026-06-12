@@ -17,7 +17,7 @@ export const useApiService = () => {
         })
       },
 
-      async register(payload: Record<string, any>): Promise<ApiResponse<RegisterResponse>> {
+      async register(payload: Record<string, any> | FormData): Promise<ApiResponse<RegisterResponse>> {
         return apiFetch('/auth/register', {
           method: 'POST',
           body: payload,
@@ -57,7 +57,7 @@ export const useApiService = () => {
         })
       },
 
-      async updateProfile(payload: Record<string, any>): Promise<ApiResponse<{ user: User }>> {
+      async updateProfile(payload: Record<string, any> | FormData): Promise<ApiResponse<{ user: User }>> {
         return apiFetch('/auth/profile', {
           method: 'PUT',
           body: payload,
