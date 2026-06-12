@@ -62,6 +62,38 @@ export const useAuth = () => {
     }
   }
 
+  async function updateProfile(payload: Record<string, any> | FormData) {
+    authStore.isLoading = true
+    try {
+      const res = await apiService.auth.updateProfile(payload)
+      if (res.success && res.data) {
+        // The endpoint returns the updated user inside the response envelope
+        authStore.setUser(res.data)
+      }
+      return res
+    } finally {
+      authStore.isLoading = false
+    }
+  }
+
+  async function forgotPassword(email: string) {
+    authStore.isLoading = true
+    try {
+      return await apiService.auth.forgotPassword(email)
+    } finally {
+      authStore.isLoading = false
+    }
+  }
+
+  async function resetPassword(payload: Record<string, any>) {
+    authStore.isLoading = true
+    try {
+      return await apiService.auth.resetPassword(payload)
+    } finally {
+      authStore.isLoading = false
+    }
+  }
+
   return {
     user,
     isAuthenticated,
@@ -70,5 +102,8 @@ export const useAuth = () => {
     register,
     logout,
     fetchUser,
+    updateProfile,
+    forgotPassword,
+    resetPassword,
   }
 }
