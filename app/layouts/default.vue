@@ -30,17 +30,26 @@ const toggleSidebar = () => {
           <Icon name="heroicons:squares-2x2" class="w-5 h-5 flex-shrink-0" />
           <span v-if="isSidebarOpen" class="text-sm">Dashboard</span>
         </NuxtLink>
+
+        <NuxtLink
+          to="/profile"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-container-high transition-colors"
+          active-class="bg-primary-container/10 text-primary-container font-medium border border-primary-container/20"
+        >
+          <Icon name="heroicons:user" class="w-5 h-5 flex-shrink-0" />
+          <span v-if="isSidebarOpen" class="text-sm">Profile</span>
+        </NuxtLink>
       </nav>
 
       <!-- User footer profile -->
       <div class="p-4 border-t border-outline-variant flex items-center justify-between">
-        <div class="flex items-center gap-3 overflow-hidden">
+        <NuxtLink to="/profile" class="flex items-center gap-3 overflow-hidden hover:opacity-80 transition-opacity">
           <AppAvatar :src="auth.user.value?.profilePictureUrl" :first-name="auth.user.value?.firstName" :last-name="auth.user.value?.lastName" size="sm" />
           <div v-if="isSidebarOpen" class="flex flex-col overflow-hidden">
-            <span class="text-sm font-semibold truncate">{{ auth.user.value?.firstName }} {{ auth.user.value?.lastName }}</span>
+            <span class="text-sm font-semibold truncate text-on-surface">{{ auth.user.value?.firstName }} {{ auth.user.value?.lastName }}</span>
             <span class="text-xs text-on-surface-variant truncate">{{ auth.user.value?.email }}</span>
           </div>
-        </div>
+        </NuxtLink>
         <button
           v-if="isSidebarOpen"
           @click="auth.logout()"

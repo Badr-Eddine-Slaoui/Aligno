@@ -17,7 +17,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isGuestRoute = GUEST_ROUTES.includes(to.path)
 
   if (!authStore.isAuthenticated && !isGuestRoute) {
-    return navigateTo('/login')
+    return navigateTo({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
   }
 
   if (authStore.isAuthenticated && isGuestRoute) {

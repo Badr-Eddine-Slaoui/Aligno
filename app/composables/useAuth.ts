@@ -17,7 +17,10 @@ export const useAuth = () => {
       if (res.success && res.data) {
         authStore.setUser(res.data.user)
         authStore.setToken(res.data.accessToken)
-        await router.push('/dashboard')
+        
+        const route = useRoute()
+        const redirectPath = (route.query.redirect as string) || '/dashboard'
+        await router.push(redirectPath)
       }
       return res
     } finally {
