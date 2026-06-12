@@ -54,7 +54,21 @@ onMounted(() => {
 <template>
   <div class="animate-enter w-full max-w-md mx-auto">
     <AppCard class="w-full shadow-2xl border border-outline-variant/30 backdrop-blur-md bg-surface-container/60">
-      
+      <template #header v-if="verificationStatus === 'idle' || verificationStatus === 'error'">
+        <div class="flex flex-col items-center gap-3">
+          <div v-if="verificationStatus === 'error'" class="w-12 h-12 flex items-center justify-center bg-error/10 rounded-full border border-error/20">
+            <svg class="w-6 h-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          
+          <h2 class="font-display font-semibold text-2xl text-center text-primary-container tracking-tight">Confirm Email</h2>
+          <p class="text-xs text-on-surface-variant text-center leading-relaxed font-body">
+            {{ verificationStatus === 'error' ? 'The verification token provided was invalid or has expired.' : 'Provide verification credentials to validate identity.' }}
+          </p>
+        </div>
+      </template>
+
       <!-- Auto-verifying Loader -->
       <div v-if="verificationStatus === 'verifying'" class="flex flex-col items-center justify-center py-10 gap-4">
         <div class="w-12 h-12 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
@@ -86,37 +100,20 @@ onMounted(() => {
       </div>
 
       <!-- Error / Manual input state -->
-      <div v-else class="flex flex-col gap-5">
-        <template #header>
-          <div class="flex flex-col items-center gap-3">
-            <div v-if="verificationStatus === 'error'" class="w-12 h-12 flex items-center justify-center bg-error/10 rounded-full border border-error/20">
-              <svg class="w-6 h-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            
-            <h2 class="font-display font-semibold text-2xl text-center text-primary-container tracking-tight">Confirm Email</h2>
-            <p class="text-xs text-on-surface-variant text-center leading-relaxed font-body">
-              {{ verificationStatus === 'error' ? 'The verification token provided was invalid or has expired.' : 'Provide verification credentials to validate identity.' }}
-            </p>
-          </div>
-        </template>
+      <div v-else class="flex flex-col gap-4 mt-2">
+        <AppInput
+          id="token"
+          v-model="token"
+          label="Verification Token / Code"
+          type="text"
+          placeholder="Enter verification code"
+          :error="errorMessage"
+          required
+        />
 
-        <div class="flex flex-col gap-4 mt-2">
-          <AppInput
-            id="token"
-            v-model="token"
-            label="Verification Token / Code"
-            type="text"
-            placeholder="Enter verification code"
-            :error="errorMessage"
-            required
-          />
-
-          <AppButton @click="verifyCode" :loading="isLoading" class="w-full mt-2 bg-primary-container text-on-primary-container glow-primary-hover hover:scale-[1.02] transition-transform duration-300">
-            Validate Account
-          </AppButton>
-        </div>
+        <AppButton @click="verifyCode" :loading="isLoading" class="w-full mt-2 bg-primary-container text-on-primary-container glow-primary-hover hover:scale-[1.02] transition-transform duration-300">
+          Validate Account
+        </AppButton>
       </div>
     </AppCard>
   </div>

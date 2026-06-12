@@ -82,7 +82,11 @@ const onSubmit = async () => {
 <template>
   <div class="animate-enter w-full max-w-md mx-auto">
     <AppCard class="w-full shadow-2xl border border-outline-variant/30 backdrop-blur-md bg-surface-container/60">
-      
+      <template #header v-if="token">
+        <h2 class="font-display font-semibold text-2xl text-center text-primary-container tracking-tight">New Credentials</h2>
+        <p class="text-xs text-on-surface-variant text-center mt-2 font-body">Provide a strong password replacement.</p>
+      </template>
+
       <!-- Invalid or Missing Token State -->
       <div v-if="!token" class="flex flex-col gap-5 text-center py-6">
         <div class="w-16 h-16 mx-auto flex items-center justify-center bg-error/10 rounded-full border border-error/20">
@@ -106,40 +110,33 @@ const onSubmit = async () => {
       </div>
 
       <!-- Valid Form State -->
-      <template v-else>
-        <template #header>
-          <h2 class="font-display font-semibold text-2xl text-center text-primary-container tracking-tight">New Credentials</h2>
-          <p class="text-xs text-on-surface-variant text-center mt-2 font-body">Provide a strong password replacement.</p>
-        </template>
+      <form v-else @submit.prevent="onSubmit" class="flex flex-col gap-4 mt-2">
+        <AppInput
+          id="password"
+          v-model="form.password"
+          label="New Password"
+          type="password"
+          placeholder="••••••••"
+          :error="errors.password"
+          required
+        />
 
-        <form @submit.prevent="onSubmit" class="flex flex-col gap-4 mt-2">
-          <AppInput
-            id="password"
-            v-model="form.password"
-            label="New Password"
-            type="password"
-            placeholder="••••••••"
-            :error="errors.password"
-            required
-          />
+        <AppInput
+          id="confirmPassword"
+          v-model="form.confirmPassword"
+          label="Confirm New Password"
+          type="password"
+          placeholder="••••••••"
+          :error="errors.confirmPassword"
+          required
+        />
 
-          <AppInput
-            id="confirmPassword"
-            v-model="form.confirmPassword"
-            label="Confirm New Password"
-            type="password"
-            placeholder="••••••••"
-            :error="errors.confirmPassword"
-            required
-          />
+        <PasswordStrength :password="form.password" class="mt-1" />
 
-          <PasswordStrength :password="form.password" class="mt-1" />
-
-          <AppButton type="submit" :loading="isLoading" class="w-full mt-4 bg-primary-container text-on-primary-container glow-primary-hover hover:scale-[1.02] transition-transform duration-300">
-            Reset Password
-          </AppButton>
-        </form>
-      </template>
+        <AppButton type="submit" :loading="isLoading" class="w-full mt-4 bg-primary-container text-on-primary-container glow-primary-hover hover:scale-[1.02] transition-transform duration-300">
+          Reset Password
+        </AppButton>
+      </form>
     </AppCard>
   </div>
 </template>
