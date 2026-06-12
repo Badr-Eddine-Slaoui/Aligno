@@ -69,9 +69,9 @@ export const useAuth = () => {
     authStore.isLoading = true
     try {
       const res = await apiService.auth.updateProfile(payload)
-      if (res.success && res.data) {
+      if (res.success && res.data?.user) {
         // The endpoint returns the updated user inside the response envelope
-        authStore.setUser(res.data)
+        authStore.setUser(res.data.user)
       }
       return res
     } finally {

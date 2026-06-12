@@ -18,8 +18,8 @@ const selectedFile = ref<File | null>(null)
 const imagePreview = ref<string | null>(auth.user.value?.profilePictureUrl || null)
 
 const memberSince = computed(() => {
-  if (!auth.user.value?.created_at && !auth.user.value?.createdAt) return 'Recent Member'
-  const dateStr = auth.user.value.created_at || auth.user.value.createdAt
+  if (!auth.user.value?.createdAt) return 'Recent Member'
+  const dateStr = auth.user.value.createdAt
   const date = new Date(dateStr)
   return `Member since ${date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}`
 })
@@ -105,8 +105,8 @@ const onSubmit = async () => {
     if (res.success) {
       notifications.success('Profile updated successfully!')
       // Refresh local preview with backend url if updated
-      if (res.data?.profilePictureUrl) {
-        imagePreview.value = res.data.profilePictureUrl
+      if (res.data?.user?.profilePictureUrl) {
+        imagePreview.value = res.data.user.profilePictureUrl
       }
       selectedFile.value = null
     }
