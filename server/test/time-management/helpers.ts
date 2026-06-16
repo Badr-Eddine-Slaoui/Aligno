@@ -16,7 +16,7 @@ export const testUser = {
 }
 
 /* ─────────────────────────────
-   CLEAN DB
+   CLEAN DATABASE
 ───────────────────────────── */
 
 export async function clearTimeManagementData() {
@@ -61,11 +61,12 @@ export async function getAuthToken() {
     },
   })
 
+  // backend already returns { data: { accessToken } }
   return (res as any).data.accessToken
 }
 
 /* ─────────────────────────────
-   TIME BLOCK API
+   TIME BLOCK
 ───────────────────────────── */
 
 export async function createTimeBlockAPI(token: string, overrides: any = {}) {
@@ -86,7 +87,7 @@ export async function createTimeBlockAPI(token: string, overrides: any = {}) {
 }
 
 /* ─────────────────────────────
-   DAILY TEMPLATE API
+   DAILY TEMPLATE
 ───────────────────────────── */
 
 export async function createDailyTemplateAPI(token: string, overrides: any = {}) {
@@ -104,7 +105,7 @@ export async function createDailyTemplateAPI(token: string, overrides: any = {})
 }
 
 /* ─────────────────────────────
-   DAILY SCHEDULE API
+   DAILY SCHEDULE
 ───────────────────────────── */
 
 export async function createDailyScheduleAPI(token: string, overrides: any = {}) {
