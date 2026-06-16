@@ -4,30 +4,30 @@ import { setup, $fetch } from '@nuxt/test-utils/e2e'
 
 import {
   clearTimeManagementData,
+  createTestUser,
+  getAuthToken,
   createDailyTemplateAPI,
 } from './helpers'
 
-import { createWalletUser, testUser, getAuthToken } from '../wallet/helpers'
-
-describe('Time Management API — DailyTemplate', async () => {
+describe('Time Management — DailyTemplate', async () => {
   await setup({})
 
   let token: string
 
   beforeEach(async () => {
     await clearTimeManagementData()
-    await createWalletUser(testUser)
+    await createTestUser()
 
-    token = await getAuthToken(testUser.email)
+    token = await getAuthToken()
   })
 
   it('should create a daily template', async () => {
     const res = await createDailyTemplateAPI(token)
 
-    expect((res as any).name).toBe('Morning Routine')
+    expect((res as any).data.name).toBe('Morning Routine')
   })
 
-  it('should get user templates', async () => {
+  it('should get templates', async () => {
     await createDailyTemplateAPI(token)
 
     const res = await $fetch('/api/time-management/daily-templates', {
@@ -37,7 +37,7 @@ describe('Time Management API — DailyTemplate', async () => {
     expect((res as any).length).toBeGreaterThanOrEqual(1)
   })
 
-  it('should return 422 when name is missing', async () => {
+  it('should return 422 when name missing', async () => {
     const res = await $fetch('/api/time-management/daily-templates', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },

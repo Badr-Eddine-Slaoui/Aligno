@@ -1,122 +1,120 @@
 import { prisma } from '../../utils/prisma'
 import { $fetch } from '@nuxt/test-utils/e2e'
+import bcrypt from 'bcrypt'
 
-/* =========================
-   TEST DATA (FIXED)
-========================= */
+/* ─────────────────────────────
+   TEST USER (ONLY FOR TIME MGMT)
+───────────────────────────── */
 
-export const testTimeBlock = {
-  title: 'Study Session',
-  description: 'Math revision',
-  startTime: '10:00',
-  endTime: '11:00',
-  duration: 60,
-  category: 'STUDY',
-  priority: 'MEDIUM',
-  position: 0,
-  isCompleted: false,
-  isLocked: false,
-  repeatType: 'ONCE',
+export const testUser = {
+  firstName: 'Time',
+  lastName: 'Tester',
+  age: 25,
+  email: 'time.test@example.com',
+  phone: '+212600000099',
+  password: 'TestPassword123!',
 }
 
-export const testDailyTemplate = {
-  name: 'Morning Routine',
-  description: 'Daily structure',
-  isActive: true,
-}
-
-export const testDailySchedule = {
-  date: new Date(),
-}
-
-/* =========================
-   CLEAN DATABASE
-========================= */
+/* ─────────────────────────────
+   CLEAN DATABASE (ONLY TIME MGMT)
+───────────────────────────── */
 
 export async function clearTimeManagementData() {
   await prisma.timeBlock.deleteMany()
   await prisma.dailySchedule.deleteMany()
   await prisma.dailyTemplate.deleteMany()
+  await prisma.user.deleteMany()
 }
 
-/* =========================
-   DB HELPERS (UNIT TEST)
-========================= */
+/* ─────────────────────────────
+   CREATE USER (SAFE)
+───────────────────────────── */
 
-export async function createUserForTimeManagement(userId: string) {
-  // juste pour assurer existence si besoin
-  return prisma.user.findUnique({
-    where: { id: userId },
-  })
-}
+export async function createTestUser() {
+  const passwordHash = await bcrypt.hash(testUser.password, 10)
 
-export async function createTimeBlock(userId: string, overrides: any = {}) {
-  return prisma.timeBlock.create({
-    data: {
-      ...testTimeBlock,
-      userId,
-      ...overrides,
+  return prisma.user.upsert({
+    where: { email: testUser.email },
+    update: {},
+    create: {
+      firstName: testUser.firstName,
+      lastName: testUser.lastName,
+      age: testUser.age,
+      email: testUser.email,
+      phone: testUser.phone,
+      passwordHash,
+      emailVerified: true,
     },
   })
 }
 
-export async function createDailyTemplate(userId: string, overrides: any = {}) {
-  return prisma.dailyTemplate.create({
-    data: {
-      ...testDailyTemplate,
-      userId,
-      ...overrides,
+/* ─────────────────────────────
+   AUTH TOKEN
+───────────────────────────── */
+
+export async function getAuthToken() {
+  const res = await $fetch('/api/auth/login', {
+    method: 'POST',
+    body: {
+      email: testUser.email,
+      password: testUser.password,
     },
   })
+
+  return (res as any).data.accessToken
 }
 
-export async function createDailySchedule(
-  userId: string,
-  templateId?: string,
-  overrides: any = {}
-) {
-  return prisma.dailySchedule.create({
-    data: {
-      ...testDailySchedule,
-      userId,
-      templateId,
-      ...overrides,
-    },
-  })
-}
-
-/* =========================
-   API HELPERS (E2E TEST)
-========================= */
+/* ─────────────────────────────
+   TIME BLOCK API
+───────────────────────────── */
 
 export async function createTimeBlockAPI(token: string, overrides: any = {}) {
   return $fetch('/api/time-management/time-blocks', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: {
-      ...testTimeBlock,
+      title: 'Study Session',
+      startTime: '10:00',
+      endTime: '11:00',
+      duration: 60,
+      category: 'STUDY',
       ...overrides,
     },
   })
 }
+
+/* ─────────────────────────────
+   DAILY TEMPLATE API
+───────────────────────────── */
 
 export async function createDailyTemplateAPI(token: string, overrides: any = {}) {
   return $fetch('/api/time-management/daily-templates', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: {
-      ...testDailyTemplate,
+      name: 'Morning Routine',
+      isActive: true,
       ...overrides,
     },
   })
 }
 
+/* ─────────────────────────────
+   DAILY SCHEDULE API
+───────────────────────────── */
+
 export async function createDailyScheduleAPI(token: string, overrides: any = {}) {
   return $fetch('/api/time-management/daily-schedules', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: {
-      ...testDailySchedule,
+      date: new Date(),
       ...overrides,
     },
   })

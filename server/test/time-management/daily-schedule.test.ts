@@ -4,13 +4,13 @@ import { setup, $fetch } from '@nuxt/test-utils/e2e'
 
 import {
   clearTimeManagementData,
-  createDailyScheduleAPI,
+  createTestUser,
+  getAuthToken,
   createDailyTemplateAPI,
+  createDailyScheduleAPI,
 } from './helpers'
 
-import { createWalletUser, testUser, getAuthToken } from '../wallet/helpers'
-
-describe('Time Management API — DailySchedule', async () => {
+describe('Time Management — DailySchedule', async () => {
   await setup({})
 
   let token: string
@@ -18,27 +18,23 @@ describe('Time Management API — DailySchedule', async () => {
 
   beforeEach(async () => {
     await clearTimeManagementData()
-    await createWalletUser(testUser)
+    await createTestUser()
 
-    token = await getAuthToken(testUser.email)
+    token = await getAuthToken()
 
     const template = await createDailyTemplateAPI(token)
-    templateId = (template as any).id
+    templateId = (template as any).data.id
   })
 
-  // ─── CREATE ─────────────────────────────
-
-  it('should create a daily schedule', async () => {
+  it('should create schedule', async () => {
     const res = await createDailyScheduleAPI(token, {
       templateId,
     })
 
-    expect((res as any).templateId).toBe(templateId)
+    expect((res as any).data.templateId).toBe(templateId)
   })
 
-  // ─── GET ─────────────────────────────
-
-  it('should get user schedules', async () => {
+  it('should get schedules', async () => {
     await createDailyScheduleAPI(token, { templateId })
 
     const res = await $fetch('/api/time-management/daily-schedules', {
@@ -48,9 +44,7 @@ describe('Time Management API — DailySchedule', async () => {
     expect((res as any).length).toBeGreaterThanOrEqual(1)
   })
 
-  // ─── VALIDATION ─────────────────────────────
-
-  it('should return 422 when date is missing', async () => {
+  it('should return 422 when date missing', async () => {
     const res = await $fetch('/api/time-management/daily-schedules', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
