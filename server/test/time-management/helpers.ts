@@ -3,7 +3,7 @@ import { $fetch } from '@nuxt/test-utils/e2e'
 import bcrypt from 'bcrypt'
 
 /* ─────────────────────────────
-   TEST USER (ONLY FOR TIME MGMT)
+   TEST USER
 ───────────────────────────── */
 
 export const testUser = {
@@ -16,7 +16,7 @@ export const testUser = {
 }
 
 /* ─────────────────────────────
-   CLEAN DATABASE (ONLY TIME MGMT)
+   CLEAN DB
 ───────────────────────────── */
 
 export async function clearTimeManagementData() {
@@ -27,7 +27,7 @@ export async function clearTimeManagementData() {
 }
 
 /* ─────────────────────────────
-   CREATE USER (SAFE)
+   CREATE USER
 ───────────────────────────── */
 
 export async function createTestUser() {
@@ -69,7 +69,7 @@ export async function getAuthToken() {
 ───────────────────────────── */
 
 export async function createTimeBlockAPI(token: string, overrides: any = {}) {
-  return $fetch('/api/time-management/time-blocks', {
+  return await $fetch('/api/time-management/time-blocks', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ export async function createTimeBlockAPI(token: string, overrides: any = {}) {
 ───────────────────────────── */
 
 export async function createDailyTemplateAPI(token: string, overrides: any = {}) {
-  return $fetch('/api/time-management/daily-templates', {
+  return await $fetch('/api/time-management/daily-templates', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ export async function createDailyTemplateAPI(token: string, overrides: any = {})
 ───────────────────────────── */
 
 export async function createDailyScheduleAPI(token: string, overrides: any = {}) {
-  return $fetch('/api/time-management/daily-schedules', {
+  return await $fetch('/api/time-management/daily-schedules', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
