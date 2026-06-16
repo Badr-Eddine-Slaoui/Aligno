@@ -22,7 +22,7 @@ export class DailyTemplateService {
   }
 
   async getByUser(userId: string) {
-    return this.repository.findByUser(userId)
+    return this.repository.findByUserId(userId)
   }
 
   async getActive(userId: string) {

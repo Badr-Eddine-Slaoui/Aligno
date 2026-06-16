@@ -2,44 +2,63 @@ import type {
   CreateDailyScheduleData,
   UpdateDailyScheduleData
 } from '../dao/daily-schedule.dao'
+import { prisma } from '../utils/prisma'
+
 
 import type { IDailyScheduleDAO } from '../dao/daily-schedule.dao'
 
-export class DailyScheduleRepository {
-  constructor(
-    private readonly dailyScheduleDAO: IDailyScheduleDAO
-  ) {}
+export class DailyScheduleRepository implements IDailyScheduleDAO {
 
   async create(data: CreateDailyScheduleData) {
-    return this.dailyScheduleDAO.create(data)
+    return await prisma.dailySchedule.create({data})
+  }
+
+  async findByUserIdAndDate(userId: string, date: Date) {
+    return prisma.dailySchedule.findFirst({
+      where: {
+        userId,
+        date,
+      },
+    })
   }
 
   async findById(id: string) {
-    return this.dailyScheduleDAO.findById(id)
+    return prisma.dailySchedule.findUnique({
+      where: { id },
+    })
   }
 
   async findByUser(userId: string) {
-    return this.dailyScheduleDAO.findByUserIdAndDate(userId, new Date())
+    return prisma.dailySchedule.findMany({
+      where: { userId },
+    })
   }
 
   async findByDate(
     userId: string,
     date: Date
   ) {
-    return this.dailyScheduleDAO.findByDate(
-      userId,
-      date
-    )
+    return prisma.dailySchedule.findFirst({
+      where: {
+        userId,
+        date,
+      },
+    })
   }
 
   async update(
     id: string,
     data: UpdateDailyScheduleData
   ) {
-    return this.dailyScheduleDAO.update(id, data)
+    return await prisma.dailySchedule.update({
+      where: { id },
+      data,
+    })
   }
 
   async delete(id: string) {
-    return this.dailyScheduleDAO.delete(id)
+    await prisma.dailySchedule.delete({
+      where: { id },
+    })
   }
 }
