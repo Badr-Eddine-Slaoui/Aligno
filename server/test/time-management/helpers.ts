@@ -1,10 +1,76 @@
+import { prisma } from '../../utils/prisma'
 import { $fetch } from '@nuxt/test-utils/e2e'
+import bcrypt from 'bcrypt'
 
-const API = '/api'
+/* ─────────────────────────────
+   TEST USER
+───────────────────────────── */
 
-/* TIME BLOCK */
+export const testUser = {
+  firstName: 'Time',
+  lastName: 'Tester',
+  age: 25,
+  email: 'time.test@example.com',
+  phone: '+212600000099',
+  password: 'TestPassword123!',
+}
+
+/* ─────────────────────────────
+   CLEAN DATABASE
+───────────────────────────── */
+
+export async function clearTimeManagementData() {
+  await prisma.timeBlock.deleteMany()
+  await prisma.dailySchedule.deleteMany()
+  await prisma.dailyTemplate.deleteMany()
+  await prisma.user.deleteMany()
+}
+
+/* ─────────────────────────────
+   CREATE USER
+───────────────────────────── */
+
+export async function createTestUser() {
+  const passwordHash = await bcrypt.hash(testUser.password, 10)
+
+  return prisma.user.upsert({
+    where: { email: testUser.email },
+    update: {},
+    create: {
+      firstName: testUser.firstName,
+      lastName: testUser.lastName,
+      age: testUser.age,
+      email: testUser.email,
+      phone: testUser.phone,
+      passwordHash,
+      emailVerified: true,
+    },
+  })
+}
+
+/* ─────────────────────────────
+   AUTH TOKEN
+───────────────────────────── */
+
+export async function getAuthToken() {
+  const res = await $fetch('/api/auth/login', {
+    method: 'POST',
+    body: {
+      email: testUser.email,
+      password: testUser.password,
+    },
+  })
+
+  // backend already returns { data: { accessToken } }
+  return (res as any).data.accessToken
+}
+
+/* ─────────────────────────────
+   TIME BLOCK
+───────────────────────────── */
+
 export async function createTimeBlockAPI(token: string, overrides: any = {}) {
-  return await $fetch(`${API}/time-management/time-blocks`, {
+  return await $fetch('/api/time-management/time-blocks', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -20,9 +86,12 @@ export async function createTimeBlockAPI(token: string, overrides: any = {}) {
   })
 }
 
-/* DAILY TEMPLATE */
+/* ─────────────────────────────
+   DAILY TEMPLATE
+───────────────────────────── */
+
 export async function createDailyTemplateAPI(token: string, overrides: any = {}) {
-  return await $fetch(`${API}/time-management/daily-templates`, {
+  return await $fetch('/api/time-management/daily-templates', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,9 +104,12 @@ export async function createDailyTemplateAPI(token: string, overrides: any = {})
   })
 }
 
-/* DAILY SCHEDULE */
+/* ─────────────────────────────
+   DAILY SCHEDULE
+───────────────────────────── */
+
 export async function createDailyScheduleAPI(token: string, overrides: any = {}) {
-  return await $fetch(`${API}/time-management/daily-schedules`, {
+  return await $fetch('/api/time-management/daily-schedules', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
