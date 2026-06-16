@@ -35,14 +35,19 @@ export class TimeBlockController {
       })
     }
 
-    return await this.timeBlockService.create(dto, userId)
+    const result = await this.timeBlockService.create(dto, userId)
+    return {
+       data: result
+    }
   }
 
   async getById(event: H3Event) {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400, statusMessage: 'Missing id' })
 
-    return await this.timeBlockService.getById(id)
+    return {
+      data: await this.timeBlockService.getById(id)
+    }
   }
 
   async getByUser(event: H3Event) {
@@ -55,21 +60,27 @@ export class TimeBlockController {
       })
     }
 
-    return await this.timeBlockService.getByUser(userId)
+    return {
+      data: await this.timeBlockService.getByUser(userId)
+    }
   }
 
   async getBySchedule(event: H3Event) {
     const scheduleId = getRouterParam(event, 'scheduleId')
     if (!scheduleId) throw createError({ statusCode: 400 })
 
-    return await this.timeBlockService.getBySchedule(scheduleId)
+    return {
+      data: await this.timeBlockService.getBySchedule(scheduleId)
+    }
   }
 
   async getByTemplate(event: H3Event) {
     const templateId = getRouterParam(event, 'templateId')
     if (!templateId) throw createError({ statusCode: 400 })
 
-    return await this.timeBlockService.getByTemplate(templateId)
+    return {
+      data: await this.timeBlockService.getByTemplate(templateId)
+    }
   }
 
   async update(event: H3Event) {
@@ -78,17 +89,21 @@ export class TimeBlockController {
 
     const body = await readBody(event)
 
-    return await this.timeBlockService.update(
-      id,
-      body as UpdateTimeBlockDTO
-    )
+    return {
+      data: await this.timeBlockService.update(
+        id,
+        body as UpdateTimeBlockDTO
+      )
+    }
   }
 
   async delete(event: H3Event) {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.timeBlockService.delete(id)
+    return {
+      data: await this.timeBlockService.delete(id)
+    }
   }
 }
 
@@ -109,17 +124,23 @@ export class DailyTemplateController {
       })
     }
 
-    return await this.dailyTemplateService.create(
+    const result = await this.dailyTemplateService.create(
       body as CreateDailyTemplateDTO,
       userId
     )
+
+    return {
+      data: result
+    }
   }
 
   async getById(event: H3Event) {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.dailyTemplateService.getById(id)
+    return {
+      data: await this.dailyTemplateService.getById(id)
+    }
   }
 
   async getByUser(event: H3Event) {
@@ -129,7 +150,9 @@ export class DailyTemplateController {
       throw createError({ statusCode: 401 })
     }
 
-    return await this.dailyTemplateService.getByUser(userId)
+    return {
+      data: await this.dailyTemplateService.getByUser(userId)
+    }
   }
 
   async getActive(event: H3Event) {
@@ -139,7 +162,9 @@ export class DailyTemplateController {
       throw createError({ statusCode: 401 })
     }
 
-    return await this.dailyTemplateService.getActive(userId)
+    return {
+      data: await this.dailyTemplateService.getActive(userId)
+    }
   }
 
   async update(event: H3Event) {
@@ -148,17 +173,21 @@ export class DailyTemplateController {
 
     const body = await readBody(event)
 
-    return await this.dailyTemplateService.update(
-      id,
-      body as UpdateDailyTemplateDTO
-    )
+    return {
+      data: await this.dailyTemplateService.update(
+        id,
+        body as UpdateDailyTemplateDTO
+      )
+    }
   }
 
   async delete(event: H3Event) {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.dailyTemplateService.delete(id)
+    return {
+      data: await this.dailyTemplateService.delete(id)
+    }
   }
 }
 
@@ -178,17 +207,23 @@ export class DailyScheduleController {
       })
     }
 
-    return await this.dailyScheduleService.create(
+    const result = await this.dailyScheduleService.create(
       body as CreateDailyScheduleDTO,
       userId
     )
+
+    return {
+      data: result
+    }
   }
 
   async getById(event: H3Event) {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.dailyScheduleService.getById(id)
+    return {
+      data: await this.dailyScheduleService.getById(id)
+    }
   }
 
   async getByUser(event: H3Event) {
@@ -198,7 +233,9 @@ export class DailyScheduleController {
       throw createError({ statusCode: 401 })
     }
 
-    return await this.dailyScheduleService.getByUser(userId)
+    return {
+      data: await this.dailyScheduleService.getByUser(userId)
+    }
   }
 
   async getByDate(event: H3Event) {
@@ -209,10 +246,12 @@ export class DailyScheduleController {
       throw createError({ statusCode: 400 })
     }
 
-    return await this.dailyScheduleService.getByDate(
-      userId,
-      new Date(date)
-    )
+    return {
+      data: await this.dailyScheduleService.getByDate(
+        userId,
+        new Date(date)
+      )
+    }
   }
 
   async update(event: H3Event) {
@@ -221,10 +260,12 @@ export class DailyScheduleController {
 
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.dailyScheduleService.update(
-      id,
-      body as UpdateDailyScheduleDTO
-    )
+    return {
+      data: await this.dailyScheduleService.update(
+        id,
+        body as UpdateDailyScheduleDTO
+      )
+    }
   }
 
   async delete(event: H3Event) {
@@ -232,6 +273,8 @@ export class DailyScheduleController {
 
     if (!id) throw createError({ statusCode: 400 })
 
-    return await this.dailyScheduleService.delete(id)
+    return {
+      data: await this.dailyScheduleService.delete(id)
+    }
   }
 }
