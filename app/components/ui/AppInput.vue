@@ -59,7 +59,7 @@ const inputType = computed(() => {
         @focus="$emit('focus', $event)"
         class="w-full bg-surface-container-low text-on-surface rounded-xl pl-4 pr-10 py-3 text-sm transition-all duration-300 border border-outline-variant focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 disabled:opacity-50 disabled:cursor-not-allowed"
         :class="[
-          error ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant'
+          props.error ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant'
         ]"
       />
       <button
@@ -80,8 +80,8 @@ const inputType = computed(() => {
       </button>
     </div>
 
-    <p v-if="error" class="text-error text-xs font-mono mt-1 font-medium">
-      {{ error }}
+    <p v-if="props.error" class="text-error text-xs font-mono mt-1 font-medium">
+      {{ props.error }}
     </p>
   </div>
 </template>

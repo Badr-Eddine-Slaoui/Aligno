@@ -13,7 +13,7 @@ import { sentry } from '../utils/sentry'
 
 export class EmailService {
   private resend: Resend
-  private from = 'onboarding@resend.dev'
+  private from = process.env.EMAIL_FROM || 'onboarding@resend.dev'
 
   constructor() {
     if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is not set')
@@ -32,7 +32,9 @@ export class EmailService {
 
     try {
       const appUrl = process.env.APP_URL || 'http://localhost:4000'
-      const url = `${appUrl}/api/auth/email/validation?token=${token}`
+      const url = `${appUrl}/verify-email?token=${token}`
+
+      logger.info(`[Verification Link]: ${url}`)
 
       const vnode = h(VerificationEmail, { firstName, url })
       const { html } = await useRender(vnode)
@@ -65,7 +67,9 @@ export class EmailService {
 
     try {
       const appUrl = process.env.APP_URL || 'http://localhost:4000'
-      const url = `${appUrl}/auth/reset-password?token=${token}`
+      const url = `${appUrl}/reset-password?token=${token}`
+
+      logger.info(`[Password Reset Link]: ${url}`)
 
       const vnode = h(PasswordResetEmail, { firstName, url })
       const { html } = await useRender(vnode)
@@ -103,6 +107,9 @@ export class EmailService {
       const appUrl = process.env.APP_URL || 'http://localhost:4000'
       const acceptUrl = `${appUrl}/api/project-management/members/invite/accept?token=${acceptToken}`
       const declineUrl = `${appUrl}/api/project-management/members/invite/decline?token=${acceptToken}`
+
+      logger.info(`[Project Invite Accept Link]: ${acceptUrl}`)
+      logger.info(`[Project Invite Decline Link]: ${declineUrl}`)
 
       const vnode = h(ProjectInviteEmail, {
         inviteeName,

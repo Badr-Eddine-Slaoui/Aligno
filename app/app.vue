@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { Notivue, NotivueSwipe } from 'notivue'
 import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()
+const isMounted = ref(false)
+
+onMounted(() => {
+  isMounted.value = true
+})
 </script>
 
 <template>
@@ -10,29 +16,31 @@ const authStore = useAuthStore()
     <NuxtRouteAnnouncer />
     
     <!-- Fullscreen Loading Screen during session restore -->
-    <div v-if="authStore.isLoading && !authStore.isAuthenticated" class="fixed inset-0 bg-surface z-50 flex flex-col items-center justify-center gap-4">
+    <div v-if="isMounted && authStore.isSessionRestoring" class="fixed inset-0 bg-surface z-50 flex flex-col items-center justify-center gap-4">
       <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       <p class="font-display font-semibold text-lg text-primary tracking-widest animate-pulse">ALIGNO</p>
     </div>
 
-    <NuxtLayout v-else>
+    <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
 
     <!-- Global Toast Container -->
-    <Notivue v-slot="elements">
-      <div v-for="item in (elements as any).entries" :key="item.id">
-        <NotivueSwipe :item="item">
-          <div class="glass rounded-xl shadow-2xl border border-primary-container/20 text-on-surface p-4 flex flex-col gap-1 max-w-sm">
-            <h4 v-if="item.title" class="font-display font-bold text-sm text-primary">
-              {{ item.title }}
-            </h4>
-            <p class="text-xs text-on-surface-variant">
-              {{ item.message }}
-            </p>
-          </div>
-        </NotivueSwipe>
-      </div>
-    </Notivue>
+    <ClientOnly>
+      <Notivue v-slot="elements">
+        <div v-for="item in (elements as any).entries" :key="item.id">
+          <NotivueSwipe :item="item">
+            <div class="glass rounded-xl shadow-2xl border border-primary-container/20 text-on-surface p-4 flex flex-col gap-1 max-w-sm">
+              <h4 v-if="item.title" class="font-display font-bold text-sm text-primary">
+                {{ item.title }}
+              </h4>
+              <p class="text-xs text-on-surface-variant">
+                {{ item.message }}
+              </p>
+            </div>
+          </NotivueSwipe>
+        </div>
+      </Notivue>
+    </ClientOnly>
   </div>
 </template>

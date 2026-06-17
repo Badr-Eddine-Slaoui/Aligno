@@ -30,7 +30,7 @@ export const useApiService = () => {
         })
       },
 
-      async me(): Promise<ApiResponse<{ user: User }>> {
+      async me(): Promise<ApiResponse<User>> {
         return apiFetch('/auth/me', {
           method: 'GET',
         })

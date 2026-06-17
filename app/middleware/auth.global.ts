@@ -8,11 +8,14 @@ const GUEST_ROUTES = [
   '/verify-email',
 ]
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
   const authStore = useAuthStore()
 
   // Skip middleware during server build or prerendering to prevent execution delays
   if (process.server) return
+
+  // Wait for session restoration to complete before enforcing route protection
+  if (authStore.isSessionRestoring) return
 
   const isGuestRoute = GUEST_ROUTES.includes(to.path)
 

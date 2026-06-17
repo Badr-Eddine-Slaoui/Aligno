@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { parseApiError } from '~/utils/errors'
 
 const auth = useAuth()
 const notifications = useNotifications()
@@ -16,6 +17,19 @@ const errors = ref<Record<string, string>>({})
 const isLoading = ref(false)
 const selectedFile = ref<File | null>(null)
 const imagePreview = ref<string | null>(auth.user.value?.profilePictureUrl || null)
+
+watch(() => auth.user.value, (newUser) => {
+  if (newUser) {
+    form.value.firstName = newUser.firstName || ''
+    form.value.lastName = newUser.lastName || ''
+    form.value.email = newUser.email || ''
+    form.value.phone = newUser.phone || ''
+    form.value.age = newUser.age || null
+    if (!selectedFile.value) {
+      imagePreview.value = newUser.profilePictureUrl || null
+    }
+  }
+}, { immediate: true })
 
 const memberSince = computed(() => {
   if (!auth.user.value?.createdAt) return 'Recent Member'
@@ -111,13 +125,14 @@ const onSubmit = async () => {
       selectedFile.value = null
     }
   } catch (err: any) {
-    if (err.data?.errors) {
-      const apiErrors = err.data.errors
+    const { message, errors: apiErrors } = parseApiError(err)
+    if (apiErrors) {
       Object.keys(apiErrors).forEach(key => {
         errors.value[key] = apiErrors[key][0]
       })
+      notifications.error('Please correct the validation errors')
     } else {
-      notifications.error(err.statusMessage || 'Failed to update profile')
+      notifications.error(message)
     }
   } finally {
     isLoading.value = false
@@ -126,66 +141,73 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto space-y-6">
-    <header class="flex justify-between items-center">
+  <div class="max-w-4xl mx-auto space-y-8 animate-enter">
+    <header class="flex justify-between items-center border-b border-white/5 pb-4">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight font-display text-primary">Profile Management</h1>
-        <p class="text-xs text-on-surface-variant font-body">Manage your profile details, avatar, and credentials.</p>
+        <h1 class="text-3xl font-extrabold tracking-tight font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container drop-shadow-sm">Profile Settings</h1>
+        <p class="text-xs text-on-surface-variant font-body mt-1">Manage your personal details, avatar, and security configurations.</p>
       </div>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       
       <!-- Profile Header / Avatar Card -->
-      <div class="md:col-span-1 space-y-4">
-        <AppCard class="glass border border-outline-variant/30 text-center py-6 flex flex-col items-center gap-4">
-          <div class="relative group cursor-pointer w-28 h-28 rounded-full overflow-hidden border border-outline-variant hover:border-primary-container transition-all">
+      <div class="md:col-span-1 space-y-6">
+        <AppCard class="glass border border-white/5 shadow-2xl text-center py-8 flex flex-col items-center gap-6 relative overflow-hidden rounded-2xl">
+          <!-- Glow Accent -->
+          <div class="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-primary-container/20 to-transparent" />
+          
+          <div class="relative group cursor-pointer w-28 h-28 rounded-full overflow-hidden border-2 border-outline-variant/60 hover:border-primary-container transition-all duration-300 shadow-lg">
             <!-- Loading Indicator overlay -->
-            <div v-if="isLoading" class="absolute inset-0 bg-surface/75 flex items-center justify-center z-10">
+            <div v-if="isLoading" class="absolute inset-0 bg-surface/80 flex items-center justify-center z-10">
               <div class="w-6 h-6 border-2 border-primary-container border-t-transparent rounded-full animate-spin"></div>
             </div>
             
             <img 
               v-if="imagePreview" 
               :src="imagePreview" 
-              class="w-full h-full object-cover" 
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
               alt="Profile avatar" 
             />
-            <div v-else class="w-full h-full flex items-center justify-center bg-surface-container-high text-primary-container text-2xl font-bold">
+            <div v-else class="w-full h-full flex items-center justify-center bg-surface-container-high text-primary-container text-3xl font-bold">
               {{ (auth.user.value?.firstName?.charAt(0) || '') + (auth.user.value?.lastName?.charAt(0) || '') }}
             </div>
 
             <!-- Upload Hover Overlay -->
-            <label class="absolute inset-0 bg-surface/80 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity cursor-pointer">
-              <svg class="w-6 h-6 text-primary-container mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <label class="absolute inset-0 bg-surface/90 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity duration-300 cursor-pointer">
+              <svg class="w-6 h-6 text-primary-container mb-1 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span class="text-[9px] uppercase tracking-wider font-semibold font-display text-primary-container">Change</span>
+              <span class="text-[9px] uppercase tracking-widest font-bold font-mono text-primary-container">Update</span>
               <input type="file" accept="image/*" class="hidden" @change="onFileChange" />
             </label>
           </div>
 
-          <div class="space-y-1">
-            <h3 class="font-display font-semibold text-lg">{{ auth.user.value?.firstName }} {{ auth.user.value?.lastName }}</h3>
-            <p class="text-xs text-on-surface-variant font-mono">{{ auth.user.value?.email }}</p>
-            <p class="text-[10px] text-primary-container/80 font-semibold uppercase tracking-wider mt-1">{{ memberSince }}</p>
+          <div class="space-y-2">
+            <h3 class="font-display font-bold text-xl text-on-surface">{{ auth.user.value?.firstName }} {{ auth.user.value?.lastName }}</h3>
+            <p class="text-xs text-on-surface-variant font-mono bg-surface-container-low px-3 py-1.5 rounded-xl border border-white/5 inline-block">{{ auth.user.value?.email }}</p>
+            <p class="text-[10px] text-primary/80 font-semibold uppercase tracking-widest mt-2">{{ memberSince }}</p>
           </div>
 
-          <div v-if="errors.profilePicture" class="text-xs text-error font-mono text-center px-4">{{ errors.profilePicture }}</div>
+          <div v-if="errors.profilePicture" class="text-xs text-error font-mono text-center px-4 mt-2">{{ errors.profilePicture }}</div>
         </AppCard>
       </div>
 
       <!-- Account Settings Form Card -->
       <div class="md:col-span-2">
-        <AppCard class="glass border border-outline-variant/30">
+        <AppCard class="glass border border-white/5 shadow-2xl rounded-2xl relative overflow-hidden">
+          <div class="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-primary-container/20 to-transparent" />
+          
           <template #header>
-            <h3 class="font-display font-semibold text-lg text-primary-container">Edit Profile Details</h3>
-            <p class="text-xs text-on-surface-variant font-body">Update your personal account details below.</p>
+            <div class="space-y-1">
+              <h3 class="font-display font-bold text-lg text-primary">Edit Profile Details</h3>
+              <p class="text-xs text-on-surface-variant font-body">Update your personal account details below.</p>
+            </div>
           </template>
 
-          <form @submit.prevent="onSubmit" class="space-y-5 mt-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form @submit.prevent="onSubmit" class="space-y-6 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <AppInput
                 id="firstName"
                 v-model="form.firstName"
@@ -211,7 +233,7 @@ const onSubmit = async () => {
               :error="errors.email"
             />
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <AppInput
                 id="phone"
                 v-model="form.phone"
@@ -229,11 +251,11 @@ const onSubmit = async () => {
               />
             </div>
 
-            <div class="flex justify-end gap-3 pt-4 border-t border-outline-variant/30">
+            <div class="flex justify-end gap-3 pt-6 border-t border-white/5 mt-6">
               <AppButton 
                 type="submit" 
                 :loading="isLoading" 
-                class="bg-primary-container text-on-primary-container font-semibold px-6 hover:scale-[1.02] transition-transform duration-300"
+                class="bg-gradient-to-r from-primary-container to-inverse-primary text-on-primary-container font-bold px-8 py-3 rounded-xl glow-primary hover:glow-primary-hover hover:scale-[1.01] transition-all duration-300"
               >
                 Save Changes
               </AppButton>
@@ -245,3 +267,19 @@ const onSubmit = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-enter {
+  animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+</style>

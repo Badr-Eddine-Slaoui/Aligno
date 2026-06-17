@@ -5,6 +5,7 @@ export const useAuth = () => {
   const authStore = useAuthStore()
   const apiService = useApiService()
   const router = useRouter()
+  const route = useRoute()
 
   const user = computed(() => authStore.user)
   const isAuthenticated = computed(() => authStore.isAuthenticated)
@@ -18,7 +19,6 @@ export const useAuth = () => {
         authStore.setUser(res.data.user)
         authStore.setToken(res.data.accessToken)
         
-        const route = useRoute()
         const redirectPath = (route.query.redirect as string) || '/dashboard'
         await router.push(redirectPath)
       }
@@ -53,8 +53,8 @@ export const useAuth = () => {
     authStore.isLoading = true
     try {
       const res = await apiService.auth.me()
-      if (res.success && res.data?.user) {
-        authStore.setUser(res.data.user)
+      if (res.success && res.data) {
+        authStore.setUser(res.data as any)
       }
       return res
     } catch (err) {
