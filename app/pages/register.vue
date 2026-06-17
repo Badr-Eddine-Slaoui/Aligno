@@ -219,7 +219,8 @@ const onSubmit = async () => {
           />
           <AppInput
             id="age"
-            v-model="form.age"
+            :model-value="form.age !== null ? String(form.age) : ''"
+            @update:model-value="(v: string) => form.age = v !== '' ? Number(v) : null"
             label="Age"
             type="number"
             placeholder="Min 13"

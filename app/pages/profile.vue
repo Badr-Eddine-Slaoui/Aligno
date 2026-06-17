@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { parseApiError } from '~/utils/errors'
 
+
 const auth = useAuth()
 const notifications = useNotifications()
 
@@ -10,7 +11,7 @@ const form = ref({
   lastName: auth.user.value?.lastName || '',
   email: auth.user.value?.email || '',
   phone: auth.user.value?.phone || '',
-  age: auth.user.value?.age || null as number | null,
+  age: auth.user.value?.age ?? null as number | null,
 })
 
 const errors = ref<Record<string, string>>({})
@@ -243,7 +244,8 @@ const onSubmit = async () => {
               />
               <AppInput
                 id="age"
-                v-model="form.age"
+                :model-value="form.age !== null ? String(form.age) : ''"
+                @update:model-value="(v: string) => form.age = v !== '' ? Number(v) : null"
                 label="Age"
                 type="number"
                 placeholder="Enter age"

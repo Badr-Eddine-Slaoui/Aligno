@@ -1,7 +1,10 @@
 import { useAuthStore } from '~/stores/auth'
 import type { ApiError, ApiResponse } from '~/types'
 
-export const useApi = () => {
+// Simple fetch type that bypasses Nuxt's complex route-type-union generics
+type SimpleFetch = <T = any>(url: string, opts?: Record<string, any>) => Promise<T>
+
+export const useApi = (): SimpleFetch => {
   const runtimeConfig = useRuntimeConfig()
   const authStore = useAuthStore()
 
@@ -24,7 +27,7 @@ export const useApi = () => {
         authStore.setToken(rotatedToken)
       }
     },
-    async onResponseError({ response, options }) {
+    async onResponseError({ response, options }): Promise<void> {
       // Handle automatic token refresh if we get a 401 Unauthorized
       if (response.status === 401 && authStore.accessToken) {
         try {
@@ -32,22 +35,17 @@ export const useApi = () => {
           const refreshRes = await $fetch<ApiResponse<{ accessToken: string }>>('/api/auth/me', {
             baseURL: runtimeConfig.public.apiBase,
           })
-          
+
           if (refreshRes.success && refreshRes.data.accessToken) {
             authStore.setToken(refreshRes.data.accessToken)
-            
-            // Retry the original request
-            if (options.headers) {
-              (options.headers as any).Authorization = `Bearer ${refreshRes.data.accessToken}`
-            }
-            return $fetch(response.url as any, options as any)
+            // Token updated in store — next request via onRequest will use it automatically
           }
-        } catch (refreshErr) {
+        } catch {
           // Refresh failed, clear session
           authStore.logout()
         }
       }
-      
+
       const errorPayload: ApiError = {
         statusCode: response.status,
         statusMessage: response.statusText || 'API Error',
@@ -57,5 +55,5 @@ export const useApi = () => {
     }
   })
 
-  return apiFetch
+  return apiFetch as unknown as SimpleFetch
 }
