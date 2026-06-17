@@ -28,7 +28,7 @@ const project = computed(() => projectsHelper.currentProject.value)
 // Check current user's role on project
 const currentUserRole = computed(() => {
   if (!project.value || !auth.user.value) return 'VISITOR'
-  const member = project.value.members.find(m => m.userId === auth.value.id)
+  const member = project.value.members.find(m => m.userId === auth.user.value?.id)
   return member?.role || 'VISITOR'
 })
 
@@ -264,7 +264,7 @@ const assignedLabelIds = computed(() => {
         <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-on-surface-variant">Labels & Tags</span>
         <LabelManager 
           :project-id="project?.id || ''"
-          :assigned-labelIds="assignedLabelIds"
+          :assignedLabelIds="assignedLabelIds"
           @assign="handleAssignLabel"
           @unassign="handleUnassignLabel"
           @labels-updated="syncCardDetails"

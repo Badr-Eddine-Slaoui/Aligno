@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useDragAndDrop } from '@formkit/drag-and-drop/vue'
 import { animations } from '@formkit/drag-and-drop'
 import type { KanbanColumn, KanbanCard } from '~/types'
@@ -61,24 +61,25 @@ const submitQuickAdd = () => {
   showQuickAdd.value = false
 }
 
-// Drag and drop state
-const cardsList = ref([...props.column.cards])
-
-// Sync local cardsList when prop updates (e.g. from backend/store)
-watch(() => props.column.cards, (newCards) => {
-  cardsList.value = [...newCards]
-}, { deep: true })
-
-const [parent, cards] = useDragAndDrop(cardsList, {
+// Drag and drop state - useDragAndDrop requires a plain array (not a Ref)
+const [parent, dndCards] = useDragAndDrop<KanbanCard>([...props.column.cards], {
   group: 'cards',
   plugins: [animations()],
-  onTransfer(data) {
+  onTransfer(data: any) {
     emit('transfer', data)
   },
-  onSort(data) {
+  onSort(data: any) {
     emit('sort', data)
   }
 })
+
+// Sync dndCards when prop updates (e.g. store refresh after API response)
+watch(() => props.column.cards, (newCards) => {
+  dndCards.value = [...newCards]
+}, { deep: true })
+
+// Typed computed view for the template
+const cards = computed(() => dndCards.value as KanbanCard[])
 </script>
 
 <template>

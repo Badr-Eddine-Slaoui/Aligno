@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useApiService } from '~/services/api'
 import type { Project, ProjectMember, ProjectProgress } from '~/types'
 
 const props = defineProps<{

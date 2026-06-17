@@ -1,10 +1,22 @@
+import { storeToRefs } from 'pinia'
 import { useProjectsStore } from '~/stores/projects'
+import { useApiService } from '~/services/api'
 import { parseApiError } from '~/utils/errors'
 
 export const useProjects = () => {
   const api = useApiService()
   const store = useProjectsStore()
   const notifications = useNotifications()
+
+  const {
+    projects,
+    currentProject,
+    isLoading,
+    currentColumns,
+    activeProjects,
+    archivedProjects,
+    unreadNotificationCount
+  } = storeToRefs(store)
 
   // ─── Project CRUD ─────────────────────────────────────────────────────────
   async function fetchProjects(params?: { page?: number; limit?: number; isArchived?: boolean }) {
@@ -218,13 +230,13 @@ export const useProjects = () => {
 
   return {
     // State from store
-    projects: store.projects,
-    currentProject: store.currentProject,
-    isLoading: store.isLoading,
-    currentColumns: store.currentColumns,
-    activeProjects: store.activeProjects,
-    archivedProjects: store.archivedProjects,
-    unreadNotificationCount: store.unreadNotificationCount,
+    projects,
+    currentProject,
+    isLoading,
+    currentColumns,
+    activeProjects,
+    archivedProjects,
+    unreadNotificationCount,
     // Project
     fetchProjects,
     createProject,
