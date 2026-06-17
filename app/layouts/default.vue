@@ -32,6 +32,15 @@ const toggleSidebar = () => {
         </NuxtLink>
 
         <NuxtLink
+          to="/projects"
+          class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-container-high transition-colors"
+          active-class="bg-primary-container/10 text-primary-container font-medium border border-primary-container/20"
+        >
+          <Icon name="heroicons:folder" class="w-5 h-5 flex-shrink-0" />
+          <span v-if="isSidebarOpen" class="text-sm">Projects</span>
+        </NuxtLink>
+
+        <NuxtLink
           to="/profile"
           class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-container-high transition-colors"
           active-class="bg-primary-container/10 text-primary-container font-medium border border-primary-container/20"
