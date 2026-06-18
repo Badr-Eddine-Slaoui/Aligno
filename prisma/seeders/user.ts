@@ -4,6 +4,26 @@ import bcrypt from 'bcrypt'
 export async function seedUsers(prisma: PrismaClient) {
   const hashedPassword = await bcrypt.hash('SuperSecurePassword123!', 12)
 
+  // ── Cleanup in cascade order (children → parents) ─────────────────────────
+  // Wallet tables
+  await prisma.subscription.deleteMany()
+  await prisma.transaction.deleteMany()
+  await prisma.budget.deleteMany()
+  await prisma.bankAccount.deleteMany()
+
+  // Project tables
+  await prisma.subtask.deleteMany()
+  await prisma.kanbanCard.deleteMany()
+  await prisma.kanbanColumn.deleteMany()
+  await prisma.cardLabel.deleteMany()
+  await prisma.projectMember.deleteMany()
+  await prisma.project.deleteMany()
+
+  // Users (all email-verification tokens will cascade-delete too)
+  await prisma.user.deleteMany()
+
+  console.log('🧹  Cleared all existing seed data')
+
   const users = [
     {
       firstName: 'Admin',
@@ -38,12 +58,8 @@ export async function seedUsers(prisma: PrismaClient) {
   ]
 
   for (const user of users) {
-    await prisma.user.upsert({
-      where: { email: user.email },
-      update: {},
-      create: user,
-    })
+    await prisma.user.create({ data: user })
   }
 
-  console.log(`✅ Seeded ${users.length} users`)
+  console.log(`✅  Seeded ${users.length} users`)
 }

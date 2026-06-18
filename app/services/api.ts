@@ -14,6 +14,11 @@ import type {
   ProjectMember,
   PaginatedNotifications,
   AppNotification,
+  BankAccount,
+  Transaction,
+  Subscription,
+  Budget,
+  MonthlyChartResponse,
 } from '~/types'
 
 export const useApiService = () => {
@@ -177,6 +182,76 @@ export const useApiService = () => {
       async markAllRead(): Promise<ApiResponse<{ message: string }>> {
         return apiFetch(`${PM}/notifications/read-all`, { method: 'PUT' })
       },
+    },
+
+    // ─── Wallet ───────────────────────────────────────────────────────────────
+    wallet: {
+      async listBankAccounts(): Promise<ApiResponse<BankAccount[]>> {
+        return apiFetch('/wallet/bank-accounts', { method: 'GET' })
+      },
+      async createBankAccount(payload: { name: string; bankName?: string; accountNumber?: string; balance?: number; currency?: string }): Promise<ApiResponse<BankAccount>> {
+        return apiFetch('/wallet/bank-accounts', { method: 'POST', body: payload })
+      },
+      async getBankAccount(id: string): Promise<ApiResponse<BankAccount>> {
+        return apiFetch(`/wallet/bank-accounts/${id}`, { method: 'GET' })
+      },
+      async updateBankAccount(id: string, payload: { name?: string; bankName?: string; accountNumber?: string; balance?: number; currency?: string }): Promise<ApiResponse<BankAccount>> {
+        return apiFetch(`/wallet/bank-accounts/${id}`, { method: 'PUT', body: payload })
+      },
+      async deleteBankAccount(id: string): Promise<ApiResponse<{ message: string }>> {
+        return apiFetch(`/wallet/bank-accounts/${id}`, { method: 'DELETE' })
+      },
+
+      // Subscriptions
+      async listSubscriptions(bankAccountId: string): Promise<ApiResponse<Subscription[]>> {
+        return apiFetch('/wallet/subscriptions', { method: 'GET', query: { bankAccountId } })
+      },
+      async createSubscription(payload: { name: string; status: 'INCOME' | 'EXPENSE'; amount: number; category: string; paymentMethod: string; isPaid?: boolean; startDate?: string; endDate?: string; bankAccountId: string }): Promise<ApiResponse<Subscription>> {
+        return apiFetch('/wallet/subscriptions', { method: 'POST', body: payload })
+      },
+      async getSubscription(id: string): Promise<ApiResponse<Subscription>> {
+        return apiFetch(`/wallet/subscriptions/${id}`, { method: 'GET' })
+      },
+      async updateSubscription(id: string, payload: { name?: string; status?: 'INCOME' | 'EXPENSE'; amount?: number; category?: string; paymentMethod?: string; isPaid?: boolean; startDate?: string; endDate?: string }): Promise<ApiResponse<Subscription>> {
+        return apiFetch(`/wallet/subscriptions/${id}`, { method: 'PUT', body: payload })
+      },
+      async deleteSubscription(id: string): Promise<ApiResponse<{ message: string }>> {
+        return apiFetch(`/wallet/subscriptions/${id}`, { method: 'DELETE' })
+      },
+
+      // Transactions
+      async listTransactions(bankAccountId: string): Promise<ApiResponse<Transaction[]>> {
+        return apiFetch('/wallet/transactions', { method: 'GET', query: { bankAccountId } })
+      },
+      async createTransaction(payload: { status: 'INCOME' | 'EXPENSE'; amount: number; category: string; description?: string; date?: string; bankAccountId: string }): Promise<ApiResponse<Transaction>> {
+        return apiFetch('/wallet/transactions', { method: 'POST', body: payload })
+      },
+      async getTransaction(id: string): Promise<ApiResponse<Transaction>> {
+        return apiFetch(`/wallet/transactions/${id}`, { method: 'GET' })
+      },
+      async updateTransaction(id: string, payload: { status?: 'INCOME' | 'EXPENSE'; amount?: number; category?: string; description?: string; date?: string }): Promise<ApiResponse<Transaction>> {
+        return apiFetch(`/wallet/transactions/${id}`, { method: 'PUT', body: payload })
+      },
+      async deleteTransaction(id: string): Promise<ApiResponse<{ message: string }>> {
+        return apiFetch(`/wallet/transactions/${id}`, { method: 'DELETE' })
+      },
+
+      // Budget
+      async listBudgets(): Promise<ApiResponse<Budget[]>> {
+        return apiFetch('/wallet/budget', { method: 'GET' })
+      },
+      async getBudget(month: number, year: number): Promise<ApiResponse<Budget>> {
+        return apiFetch('/wallet/budget/month', { method: 'GET', query: { month, year } })
+      },
+      async setBudget(payload: { amount: number; month: number; year: number }): Promise<ApiResponse<Budget>> {
+        return apiFetch('/wallet/budget', { method: 'POST', body: payload })
+      },
+      async deleteBudget(month: number, year: number): Promise<ApiResponse<{ message: string }>> {
+        return apiFetch('/wallet/budget/month', { method: 'DELETE', query: { month, year } })
+      },
+      async getMonthlyChart(months?: number): Promise<ApiResponse<MonthlyChartResponse>> {
+        return apiFetch('/wallet/budget/chart', { method: 'GET', query: { months } })
+      }
     },
   }
 }

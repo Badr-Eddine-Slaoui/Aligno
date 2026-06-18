@@ -146,3 +146,71 @@ export interface PaginatedNotifications {
   unreadCount: number
 }
 
+// ─── Wallet Module ────────────────────────────────────────────────────────────
+
+export interface BankAccount {
+  id: string
+  name: string
+  bankName: string | null
+  accountNumber: string | null
+  balance: number
+  currency: string
+  userId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type TransactionStatus = 'INCOME' | 'EXPENSE'
+
+export interface Transaction {
+  id: string
+  status: TransactionStatus
+  amount: number
+  category: string
+  description: string | null
+  date: string
+  bankAccountId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Subscription {
+  id: string
+  name: string
+  status: TransactionStatus
+  amount: number
+  category: string
+  paymentMethod: string
+  isPaid: boolean
+  startDate: string
+  endDate: string | null
+  bankAccountId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Budget {
+  id: string
+  amount: number
+  month: number
+  year: number
+  userId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MonthlyChartItem {
+  month: number
+  year: number
+  transactions: number
+  subscriptions: number
+  totalSpending: number
+  budget: number | null
+  alert: string | null
+}
+
+export interface MonthlyChartResponse {
+  chart: MonthlyChartItem[]
+}
+
+

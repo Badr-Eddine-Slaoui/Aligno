@@ -14,15 +14,17 @@ const auth = useAuth()
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <AppCard hover-effect>
-        <template #header>
-          <div class="flex items-center gap-3">
-            <Icon name="heroicons:squares-2x2" class="w-6 h-6 text-primary-container" />
-            <h3 class="font-display font-semibold text-lg">Task Management</h3>
-          </div>
-        </template>
-        <p class="text-sm text-on-surface-variant">Check board operations, customize workflow columns, and collaborate.</p>
-      </AppCard>
+      <NuxtLink to="/projects" class="block">
+        <AppCard hover-effect>
+          <template #header>
+            <div class="flex items-center gap-3">
+              <Icon name="heroicons:squares-2x2" class="w-6 h-6 text-primary-container" />
+              <h3 class="font-display font-semibold text-lg">Task Management</h3>
+            </div>
+          </template>
+          <p class="text-sm text-on-surface-variant">Check board operations, customize workflow columns, and collaborate.</p>
+        </AppCard>
+      </NuxtLink>
 
       <AppCard hover-effect>
         <template #header>
@@ -34,15 +36,17 @@ const auth = useAuth()
         <p class="text-sm text-on-surface-variant">Coordinate assignments alongside custom scheduling templates.</p>
       </AppCard>
 
-      <AppCard hover-effect>
-        <template #header>
-          <div class="flex items-center gap-3">
-            <Icon name="heroicons:wallet" class="w-6 h-6 text-primary-container" />
-            <h3 class="font-display font-semibold text-lg">Financial Tracking</h3>
-          </div>
-        </template>
-        <p class="text-sm text-on-surface-variant">Oversee account balances, income channels, and track expenditures.</p>
-      </AppCard>
+      <NuxtLink to="/wallet" class="block">
+        <AppCard hover-effect>
+          <template #header>
+            <div class="flex items-center gap-3">
+              <Icon name="heroicons:wallet" class="w-6 h-6 text-primary-container" />
+              <h3 class="font-display font-semibold text-lg">Financial Tracking</h3>
+            </div>
+          </template>
+          <p class="text-sm text-on-surface-variant">Oversee account balances, income channels, and track expenditures.</p>
+        </AppCard>
+      </NuxtLink>
     </div>
   </div>
 </template>
