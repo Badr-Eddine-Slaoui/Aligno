@@ -21,11 +21,18 @@ export const testUser2 = {
 }
 
 export async function clearWalletData() {
-  await prisma.subscription.deleteMany()
-  await prisma.transaction.deleteMany()
-  await prisma.budget.deleteMany()
-  await prisma.bankAccount.deleteMany()
-  await prisma.user.deleteMany()
+  const walletEmails = [testUser.email, testUser2.email]
+  // Delete wallet-specific data only for our test users to avoid
+  // contaminating other tests running in parallel that share the same DB.
+  const users = await prisma.user.findMany({ where: { email: { in: walletEmails } }, select: { id: true } })
+  const userIds = users.map(u => u.id)
+  if (userIds.length > 0) {
+    await prisma.subscription.deleteMany({ where: { bankAccount: { userId: { in: userIds } } } })
+    await prisma.transaction.deleteMany({ where: { bankAccount: { userId: { in: userIds } } } })
+    await prisma.budget.deleteMany({ where: { userId: { in: userIds } } })
+    await prisma.bankAccount.deleteMany({ where: { userId: { in: userIds } } })
+    await prisma.user.deleteMany({ where: { id: { in: userIds } } })
+  }
 }
 
 export async function createWalletUser(data = testUser) {

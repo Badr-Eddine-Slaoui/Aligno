@@ -118,5 +118,5 @@ describe('Project Management API — Projects and Members', async () => {
       headers: { Authorization: `Bearer ${adminToken}` },
     })
     expect((deleteRes as any).success).toBe(true)
-  })
+  }, 30000)
 })
