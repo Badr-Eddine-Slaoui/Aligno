@@ -28,9 +28,9 @@ const close = () => {
         <div class="absolute inset-0 bg-surface-container-lowest/80 backdrop-blur-md" @click="close" />
 
         <!-- Content -->
-        <div class="relative glass rounded-xl max-w-lg w-full p-8 shadow-2xl overflow-hidden z-10">
-          <div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-6">
-            <h3 v-if="title" class="font-display font-semibold text-lg text-primary">
+        <div class="relative glass rounded-xl max-w-lg w-full p-8 shadow-2xl z-10 max-h-[90vh] flex flex-col">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-6 shrink-0">
+            <h3 v-if="title" class="font-display font-semibold text-lg text-on-surface">
               {{ title }}
             </h3>
             <button @click="close" class="text-on-surface-variant hover:text-on-surface transition-colors">
@@ -38,7 +38,9 @@ const close = () => {
             </button>
           </div>
 
-          <slot />
+          <div class="overflow-y-auto">
+            <slot />
+          </div>
         </div>
       </div>
     </Transition>
