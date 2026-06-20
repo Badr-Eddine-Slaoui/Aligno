@@ -33,12 +33,12 @@ const editingTx = ref<Transaction | null>(null)
 const openCreateTx = () => { if (!wallet.activeAccountId.value) return; editingTx.value = null; showTxModal.value = true }
 const openEditTx = (tx: Transaction) => { editingTx.value = tx; showTxModal.value = true }
 
-const submitTx = async (payload: Parameters<typeof wallet.createTransaction>[0]) => {
+const submitTx = async (payload: { status: 'INCOME' | 'EXPENSE'; amount: number; category: string; description?: string; date: string; bankAccountId?: string }) => {
   try {
     if (editingTx.value) {
       await wallet.updateTransaction(editingTx.value.id, payload)
     } else {
-      await wallet.createTransaction(payload as Parameters<typeof wallet.createTransaction>[0])
+      await wallet.createTransaction({ ...payload, bankAccountId: payload.bankAccountId! })
     }
     showTxModal.value = false
     await wallet.fetchMonthlyChart()
@@ -52,12 +52,12 @@ const editingSub = ref<Subscription | null>(null)
 const openCreateSub = () => { if (!wallet.activeAccountId.value) return; editingSub.value = null; showSubModal.value = true }
 const openEditSub = (sub: Subscription) => { editingSub.value = sub; showSubModal.value = true }
 
-const submitSub = async (payload: Parameters<typeof wallet.createSubscription>[0]) => {
+const submitSub = async (payload: { name: string; status: 'INCOME' | 'EXPENSE'; amount: number; category: string; paymentMethod: string; isPaid: boolean; startDate: string; endDate?: string; bankAccountId?: string }) => {
   try {
     if (editingSub.value) {
       await wallet.updateSubscription(editingSub.value.id, payload)
     } else {
-      await wallet.createSubscription(payload as Parameters<typeof wallet.createSubscription>[0])
+      await wallet.createSubscription({ ...payload, bankAccountId: payload.bankAccountId! })
     }
     showSubModal.value = false
     await wallet.fetchMonthlyChart()
@@ -86,7 +86,7 @@ const submitBudget = async (payload: { amount: number; month: number; year: numb
 const showDeleteConfirm = ref(false)
 const deleteTarget = ref<{ type: 'account' | 'transaction' | 'subscription' | 'budget'; id: string } | null>(null)
 
-const confirmDelete = (type: typeof deleteTarget.value['type'], id: string) => {
+const confirmDelete = (type: 'account' | 'transaction' | 'subscription' | 'budget', id: string) => {
   deleteTarget.value = { type, id }
   showDeleteConfirm.value = true
 }
