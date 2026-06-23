@@ -4,6 +4,7 @@ import pg from 'pg'
 import { seedUsers } from './user.ts'
 import { seedProjects } from './project.ts'
 import { seedWallet } from './wallet.ts'
+import { seedTimeManagement } from './time-managemet.ts'
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
@@ -13,6 +14,7 @@ async function main() {
     await seedUsers(prisma)
     await seedProjects(prisma)
     await seedWallet(prisma)
+    await seedTimeManagement(prisma)
 }
 
 main()

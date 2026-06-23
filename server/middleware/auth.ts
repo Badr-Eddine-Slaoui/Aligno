@@ -8,6 +8,18 @@ const PROTECTED_ROUTES = [
   { path: '/api/auth/me', method: 'GET' },
   { path: '/api/auth/logout', method: 'POST' },
   { path: '/api/auth/profile', method: 'PUT' },
+  { path: '/api/time-management/time-block', method: 'POST' },
+  { path: '/api/time-management/time-block', method: 'GET' },
+  { path: '/api/time-management/time-block', method: 'PUT' },
+  { path: '/api/time-management/time-block', method: 'DELETE' },
+  { path: '/api/time-management/daily-template', method: 'POST' },
+  { path: '/api/time-management/daily-template', method: 'GET' },
+  { path: '/api/time-management/daily-template', method: 'PUT' },
+  { path: '/api/time-management/daily-template', method: 'DELETE' },
+  { path: '/api/time-management/daily-schedule', method: 'POST' },
+  { path: '/api/time-management/daily-schedule', method: 'GET' },
+  { path: '/api/time-management/daily-schedule', method: 'PUT' },
+  { path: '/api/time-management/daily-schedule', method: 'DELETE' }
 ]
 
 const GUEST_ROUTES = [

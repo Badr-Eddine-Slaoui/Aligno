@@ -7,7 +7,7 @@ import {
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-export const createTimeBlockSchema = z.object({
+const baseTimeBlockSchema = z.object({
   title: z.string().min(3).max(100),
   description: z.string().optional(),
 
@@ -30,9 +30,9 @@ export const createTimeBlockSchema = z.object({
 
   templateId: z.string().optional(),
   scheduleId: z.string().optional(),
+});
 
-  userId: z.string()
-}).refine(
+export const createTimeBlockSchema = baseTimeBlockSchema.refine(
   (data) => data.startTime < data.endTime,
   {
     message: "startTime doit être inférieur à endTime",
@@ -40,4 +40,4 @@ export const createTimeBlockSchema = z.object({
   }
 );
 
-export const updateTimeBlockSchema = createTimeBlockSchema.partial();
+export const updateTimeBlockSchema = baseTimeBlockSchema.partial();

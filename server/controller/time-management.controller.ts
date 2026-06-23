@@ -1,7 +1,5 @@
-import type { H3Event } from 'h3'
-import { readBody, getRouterParam, createError } from 'h3'
-
-import { createTimeBlockSchema } from '../validations/time-management/index'
+import { H3Event, readBody, getRouterParam, createError } from 'h3'
+import { createTimeBlockSchema } from '../validations/time-management'
 
 import type {
   CreateTimeBlockDTO,
@@ -9,272 +7,99 @@ import type {
   CreateDailyTemplateDTO,
   UpdateDailyTemplateDTO,
   CreateDailyScheduleDTO,
-  UpdateDailyScheduleDTO
+  UpdateDailyScheduleDTO,
 } from '../dto/time-management.dto'
 
 import type { TimeBlockService } from '../service/time-block.service'
 import type { DailyTemplateService } from '../service/daily-template.service'
 import type { DailyScheduleService } from '../service/daily-schedule.service'
 
+const getUserId = (event: H3Event) => {
+  return event.context.userId
+}
+
+/* ================= TIME BLOCK ================= */
+
 export class TimeBlockController {
-  constructor(
-    private readonly timeBlockService: TimeBlockService
-  ) {}
+  constructor(private readonly service: TimeBlockService) {}
 
   async create(event: H3Event) {
     const body = await readBody(event)
+    const dto = createTimeBlockSchema.safeParse(body)
 
-    const dto = createTimeBlockSchema.parse(body)
-
-    const userId = event.context.auth?.userId
-
-    if (!userId) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
+    if (!dto.success) {
+      throw createError({ statusCode: 422, message: 'Invalid input data' })
     }
 
-    const result = await this.timeBlockService.create(dto, userId)
-    return {
-       data: result
-    }
-  }
+    const userId = getUserId(event)
 
-  async getById(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400, statusMessage: 'Missing id' })
+    console.log('User ID:', userId) // Log the user ID for debugging
 
-    return {
-      data: await this.timeBlockService.getById(id)
-    }
+    if (!userId) throw createError({ statusCode: 401 })
+
+    const result = await this.service.create(dto.data, userId)
+
+    return { success: true, data: result }
   }
 
   async getByUser(event: H3Event) {
-    const userId = event.context.auth?.userId
+    const userId = getUserId(event)
+    if (!userId) throw createError({ statusCode: 401 })
 
-    if (!userId) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
-    }
+    const result = await this.service.getByUser(userId)
 
-    return {
-      data: await this.timeBlockService.getByUser(userId)
-    }
-  }
-
-  async getBySchedule(event: H3Event) {
-    const scheduleId = getRouterParam(event, 'scheduleId')
-    if (!scheduleId) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.timeBlockService.getBySchedule(scheduleId)
-    }
-  }
-
-  async getByTemplate(event: H3Event) {
-    const templateId = getRouterParam(event, 'templateId')
-    if (!templateId) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.timeBlockService.getByTemplate(templateId)
-    }
-  }
-
-  async update(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    const body = await readBody(event)
-
-    return {
-      data: await this.timeBlockService.update(
-        id,
-        body as UpdateTimeBlockDTO
-      )
-    }
-  }
-
-  async delete(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.timeBlockService.delete(id)
-    }
+    return { success: true, data: result }
   }
 }
+
+/* ================= TEMPLATE ================= */
 
 export class DailyTemplateController {
-  constructor(
-    private readonly dailyTemplateService: DailyTemplateService
-  ) {}
+  constructor(private readonly service: DailyTemplateService) {}
 
   async create(event: H3Event) {
     const body = await readBody(event)
+    const userId = getUserId(event)
 
-    const userId = event.context.auth?.userId
+    if (!userId) throw createError({ statusCode: 401 })
 
-    if (!userId) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
-    }
+    const result = await this.service.create(body as CreateDailyTemplateDTO, userId)
 
-    const result = await this.dailyTemplateService.create(
-      body as CreateDailyTemplateDTO,
-      userId
-    )
-
-    return {
-      data: result
-    }
-  }
-
-  async getById(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.dailyTemplateService.getById(id)
-    }
+    return { success: true, data: result }
   }
 
   async getByUser(event: H3Event) {
-    const userId = event.context.auth?.userId
+    const userId = getUserId(event)
+    if (!userId) throw createError({ statusCode: 401 })
 
-    if (!userId) {
-      throw createError({ statusCode: 401 })
-    }
+    const result = await this.service.getByUser(userId)
 
-    return {
-      data: await this.dailyTemplateService.getByUser(userId)
-    }
-  }
-
-  async getActive(event: H3Event) {
-    const userId = event.context.auth?.userId
-
-    if (!userId) {
-      throw createError({ statusCode: 401 })
-    }
-
-    return {
-      data: await this.dailyTemplateService.getActive(userId)
-    }
-  }
-
-  async update(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    const body = await readBody(event)
-
-    return {
-      data: await this.dailyTemplateService.update(
-        id,
-        body as UpdateDailyTemplateDTO
-      )
-    }
-  }
-
-  async delete(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.dailyTemplateService.delete(id)
-    }
+    return { success: true, data: result }
   }
 }
 
+/* ================= SCHEDULE ================= */
+
 export class DailyScheduleController {
-  constructor(
-    private readonly dailyScheduleService: DailyScheduleService
-  ) {}
+  constructor(private readonly service: DailyScheduleService) {}
 
   async create(event: H3Event) {
     const body = await readBody(event)
+    const userId = getUserId(event)
 
-    const userId = event.context.auth?.userId
+    if (!userId) throw createError({ statusCode: 401 })
 
-    if (!userId) {
-      throw createError({
-        statusCode: 401
-      })
-    }
+    const result = await this.service.create(body as CreateDailyScheduleDTO, userId)
 
-    const result = await this.dailyScheduleService.create(
-      body as CreateDailyScheduleDTO,
-      userId
-    )
-
-    return {
-      data: result
-    }
-  }
-
-  async getById(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.dailyScheduleService.getById(id)
-    }
+    return { success: true, data: result }
   }
 
   async getByUser(event: H3Event) {
-    const userId = event.context.auth?.userId
+    const userId = getUserId(event)
+    if (!userId) throw createError({ statusCode: 401 })
 
-    if (!userId) {
-      throw createError({ statusCode: 401 })
-    }
+    const result = await this.service.getByUser(userId)
 
-    return {
-      data: await this.dailyScheduleService.getByUser(userId)
-    }
-  }
-
-  async getByDate(event: H3Event) {
-    const userId = event.context.auth?.userId
-    const date = getRouterParam(event, 'date')
-
-    if (!userId || !date) {
-      throw createError({ statusCode: 400 })
-    }
-
-    return {
-      data: await this.dailyScheduleService.getByDate(
-        userId,
-        new Date(date)
-      )
-    }
-  }
-
-  async update(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-    const body = await readBody(event)
-
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.dailyScheduleService.update(
-        id,
-        body as UpdateDailyScheduleDTO
-      )
-    }
-  }
-
-  async delete(event: H3Event) {
-    const id = getRouterParam(event, 'id')
-
-    if (!id) throw createError({ statusCode: 400 })
-
-    return {
-      data: await this.dailyScheduleService.delete(id)
-    }
+    return { success: true, data: result }
   }
 }

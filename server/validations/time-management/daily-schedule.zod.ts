@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createDailyScheduleSchema = z.object({
-  date: z.coerce.date(),
+  date: z.date(),
   userId: z.string(),
   templateId: z.string().optional()
 });

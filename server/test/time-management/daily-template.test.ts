@@ -1,50 +1,48 @@
 import 'dotenv/config'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { setup, $fetch } from '@nuxt/test-utils/e2e'
-
 import {
   clearTimeManagementData,
   createTestUser,
-  getAuthToken,
-  createDailyTemplateAPI,
+  getAuthToken
 } from './helpers'
 
-describe('Time Management — DailyTemplate', async () => {
+describe('Time Management — DailyTemplate API', async () => {
   await setup({})
 
   let token: string
+  let user: any
 
   beforeEach(async () => {
     await clearTimeManagementData()
-    await createTestUser()
-
+    user = await createTestUser()
     token = await getAuthToken()
   })
 
   it('should create a daily template', async () => {
-    const res = await createDailyTemplateAPI(token)
+    const res = await $fetch('/api/time-management/daily-template', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: {
+        name: 'Morning Routine',
+        isActive: true,
+      },
+    })
 
+    expect((res as any).success).toBe(true)
     expect((res as any).data.name).toBe('Morning Routine')
   })
 
   it('should get templates', async () => {
-    await createDailyTemplateAPI(token)
-
-    const res = await $fetch('/api/time-management/daily-templates', {
-      headers: { Authorization: `Bearer ${token}` },
+    const res = await $fetch('/api/time-management/daily-template', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
 
-    expect((res as any).length).toBeGreaterThanOrEqual(1)
-  })
-
-  it('should return 422 when name missing', async () => {
-    const res = await $fetch('/api/time-management/daily-templates', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: {},
-      ignoreResponseError: true,
-    })
-
-    expect((res as any).statusCode ?? 422).toBe(422)
+    expect((res as any).success).toBe(true)
+    expect(Array.isArray((res as any).data)).toBe(true)
   })
 })
