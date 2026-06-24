@@ -32,9 +32,6 @@ export class TimeBlockController {
     }
 
     const userId = getUserId(event)
-
-    console.log('User ID:', userId) // Log the user ID for debugging
-
     if (!userId) throw createError({ statusCode: 401 })
 
     const result = await this.service.create(dto.data, userId)
@@ -49,6 +46,35 @@ export class TimeBlockController {
     const result = await this.service.getByUser(userId)
 
     return { success: true, data: result }
+  }
+
+  async getById(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const result = await this.service.getById(id)
+
+    return { success: true, data: result }
+  }
+
+  async update(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const body = await readBody(event)
+
+    const result = await this.service.update(id, body as UpdateTimeBlockDTO)
+
+    return { success: true, data: result }
+  }
+
+  async delete(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    await this.service.delete(id)
+
+    return { success: true, message: 'Deleted successfully' }
   }
 }
 
@@ -76,6 +102,35 @@ export class DailyTemplateController {
 
     return { success: true, data: result }
   }
+
+  async getById(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const result = await this.service.getById(id)
+
+    return { success: true, data: result }
+  }
+
+  async update(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const body = await readBody(event)
+
+    const result = await this.service.update(id, body as UpdateDailyTemplateDTO)
+
+    return { success: true, data: result }
+  }
+
+  async delete(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    await this.service.delete(id)
+
+    return { success: true, message: 'Deleted successfully' }
+  }
 }
 
 /* ================= SCHEDULE ================= */
@@ -102,4 +157,40 @@ export class DailyScheduleController {
 
     return { success: true, data: result }
   }
+
+  async getById(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const result = await this.service.getById(id)
+
+    return { success: true, data: result }
+  }
+
+  async update(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const body = await readBody(event)
+
+    const result = await this.service.update(id, body as UpdateDailyScheduleDTO)
+
+    return { success: true, data: result }
+  }
+
+  async delete(event: H3Event) {
+    const id = getRouterParam(event, 'id')
+    if (!id) throw createError({ statusCode: 400, message: 'ID required' })
+
+    const deleted = await this.service.delete(id)
+
+    if (!deleted) {
+      throw createError({ statusCode: 404, message: 'Not found' })
+    }
+
+    return {
+      success: true,
+      message: 'Deleted successfully'
+    }
+}
 }

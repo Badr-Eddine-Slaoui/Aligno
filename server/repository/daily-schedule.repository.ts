@@ -56,9 +56,11 @@ export class DailyScheduleRepository implements IDailyScheduleDAO {
     })
   }
 
-  async delete(id: string) {
-    await prisma.dailySchedule.delete({
-      where: { id },
+  async delete(id: string): Promise<boolean> {
+    const deleted = await prisma.dailySchedule.deleteMany({
+      where: { id }
     })
+
+    return deleted.count > 0
   }
 }
