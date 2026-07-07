@@ -49,8 +49,8 @@ async function loadDashboardData() {
     unreadCount.value = notifRes.data.unreadCount
 
     // Today's schedule
-    const todayStr = new Date().toISOString().split('T')[0]
-    const todaySched = schedRes.data.find((s: DailySchedule) => s.date.startsWith(todayStr)) ?? null
+    const todayStr = new Date().toISOString().split('T')[0] ?? ''
+    const todaySched = schedRes.data.find((s: DailySchedule) => s.date?.startsWith(todayStr)) ?? null
     todaySchedule.value = todaySched
     if (todaySched?.timeBlocks) {
       todayBlocks.value = todaySched.timeBlocks.sort((a: any, b: any) => {
