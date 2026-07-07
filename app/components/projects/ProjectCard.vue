@@ -30,7 +30,6 @@ const fetchCardData = async () => {
     progress.value = progData
     members.value = memData.data || []
   } catch (err) {
-    console.error('Failed to fetch card details:', err)
   } finally {
     loadingProgress.value = false
   }

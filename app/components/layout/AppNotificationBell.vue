@@ -17,7 +17,6 @@ const fetchBellNotifications = async () => {
       notifications.value = data.notifications
     }
   } catch (err) {
-    console.error('Failed to fetch notifications:', err)
   }
 }
 
@@ -54,7 +53,6 @@ const handleMarkAsRead = async (notification: AppNotification) => {
     notification.isRead = true
     await fetchBellNotifications()
   } catch (err) {
-    console.error('Failed to mark notification as read:', err)
   }
 }
 
@@ -64,7 +62,6 @@ const handleMarkAllAsRead = async () => {
     notifications.value.forEach(n => n.isRead = true)
     notificationsHelper.success('All notifications marked as read')
   } catch (err) {
-    console.error('Failed to mark all as read:', err)
   }
 }
 </script>

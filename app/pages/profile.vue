@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Profile – Aligno', description: 'Manage your Aligno account details and settings.' })
 import { ref, computed, watch } from 'vue'
 import { parseApiError } from '~/utils/errors'
 

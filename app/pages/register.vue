@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Create Account – Aligno', description: 'Join Aligno to start organizing your productivity and finances.' })
 import { ref } from 'vue'
 import PasswordStrength from '~/components/ui/PasswordStrength.vue'
 import { parseApiError } from '~/utils/errors'

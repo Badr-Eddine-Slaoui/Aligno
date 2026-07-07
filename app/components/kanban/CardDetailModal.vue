@@ -44,7 +44,6 @@ const syncCardDetails = async () => {
     cardDetail.value = freshCard
     titleInput.value = freshCard.title
   } catch (err) {
-    console.error('Failed to fetch card detail:', err)
   }
 }
 

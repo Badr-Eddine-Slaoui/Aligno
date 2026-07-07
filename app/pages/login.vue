@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Sign In – Aligno', description: 'Sign in to Aligno to manage your projects, time, and finances.' })
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { parseApiError } from '~/utils/errors'
@@ -39,9 +40,7 @@ const onSubmit = async () => {
       notifications.success('Logged in successfully!')
     }
   } catch (err: any) {
-    console.error('[Login Error Debug]: Received error object:', err)
     const { statusCode, message, errors: apiErrors } = parseApiError(err)
-    console.error('[Login Error Debug]: Parsed properties:', { statusCode, message, apiErrors })
 
     if (statusCode === 403) {
       // Email not verified

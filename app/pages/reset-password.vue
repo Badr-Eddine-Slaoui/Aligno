@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Reset Password – Aligno', description: 'Set a new secure password for your Aligno account.' })
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApiService } from '~/services/api'

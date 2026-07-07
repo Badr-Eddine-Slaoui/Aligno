@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Kanban Board – Aligno', description: 'Drag-and-drop Kanban board for managing project tasks.' })
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { KanbanCard } from '~/types'
@@ -20,7 +21,6 @@ const fetchBoardData = async () => {
   try {
     await projectsHelper.fetchProject(projectId)
   } catch (err) {
-    console.error('Failed to load project details:', err)
   }
 }
 
@@ -37,7 +37,6 @@ const handleAddColumn = async () => {
     newColumnName.value = ''
     showAddColumnInput.value = false
   } catch (err) {
-    console.error('Failed to add column:', err)
   }
 }
 
@@ -46,7 +45,6 @@ const handleRenameColumn = async (columnId: string, name: string) => {
   try {
     await projectsHelper.renameColumn(columnId, name)
   } catch (err) {
-    console.error('Failed to rename column:', err)
   }
 }
 
@@ -55,7 +53,6 @@ const handleDeleteColumn = async (columnId: string) => {
   try {
     await projectsHelper.deleteColumn(columnId)
   } catch (err) {
-    console.error('Failed to delete column:', err)
   }
 }
 
@@ -64,7 +61,6 @@ const handleAddCard = async (columnId: string, title: string) => {
   try {
     await projectsHelper.createCard(columnId, { title })
   } catch (err) {
-    console.error('Failed to add card:', err)
   }
 }
 
@@ -78,7 +74,6 @@ const handleTransfer = async (data: any) => {
       await projectsHelper.moveCard(cardId, targetColumnId, position)
     }
   } catch (err) {
-    console.error('Failed to move card:', err)
   }
 }
 
@@ -90,7 +85,6 @@ const handleSort = async (data: any) => {
       await projectsHelper.reorderCards(columnId, cardIds)
     }
   } catch (err) {
-    console.error('Failed to reorder cards:', err)
   }
 }
 

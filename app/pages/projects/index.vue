@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Projects – Aligno', description: 'View and manage all your projects and Kanban boards in Aligno.' })
 import { ref, computed, onMounted } from 'vue'
 import type { Project } from '~/types'
 
@@ -30,7 +31,6 @@ const fetchProjectsList = async () => {
       totalPages.value = res.totalPages
     }
   } catch (err) {
-    console.error('Failed to fetch projects:', err)
   }
 }
 
@@ -63,7 +63,6 @@ const onDeleteProject = async (projectId: string) => {
     await projectsHelper.deleteProject(projectId)
     fetchProjectsList()
   } catch (err) {
-    console.error('Failed to delete project:', err)
   }
 }
 
@@ -73,7 +72,6 @@ const onArchiveProject = async (projectId: string) => {
     await projectsHelper.archiveProject(projectId)
     fetchProjectsList()
   } catch (err) {
-    console.error('Failed to archive project:', err)
   }
 }
 

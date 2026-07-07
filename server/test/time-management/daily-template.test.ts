@@ -45,4 +45,57 @@ describe('Time Management — DailyTemplate API', async () => {
     expect((res as any).success).toBe(true)
     expect(Array.isArray((res as any).data)).toBe(true)
   })
+
+  it('should get template by id, update it, and delete it', async () => {
+    const created = await $fetch('/api/time-management/daily-template', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: {
+        name: 'Gym Routine',
+        isActive: false,
+      },
+    })
+    const id = (created as any).data.id
+
+    const got = await $fetch(`/api/time-management/daily-template/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    expect((got as any).success).toBe(true)
+    expect((got as any).data.name).toBe('Gym Routine')
+
+    const updated = await $fetch(`/api/time-management/daily-template/${id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: {
+        name: 'Heavy Lift Routine',
+        isActive: true,
+      },
+    })
+    expect((updated as any).success).toBe(true)
+    expect((updated as any).data.name).toBe('Heavy Lift Routine')
+    expect((updated as any).data.isActive).toBe(true)
+
+    const deleted = await $fetch(`/api/time-management/daily-template/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    expect((deleted as any).success).toBe(true)
+  })
+
+  it('should prevent unauthorized requests', async () => {
+    const res = await $fetch('/api/time-management/daily-template', {
+      method: 'POST',
+      body: { name: 'Unauthorized' },
+      ignoreResponseError: true,
+    })
+    expect((res as any).statusCode).toBe(401)
+  })
 })

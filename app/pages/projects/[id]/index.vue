@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Project Overview – Aligno', description: 'Track progress and details for your Aligno project.' })
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { parseApiError } from '~/utils/errors'
@@ -27,7 +28,6 @@ const fetchDashboardData = async () => {
     ])
     progress.value = progData
   } catch (err) {
-    console.error('Failed to load project details:', err)
   }
 }
 

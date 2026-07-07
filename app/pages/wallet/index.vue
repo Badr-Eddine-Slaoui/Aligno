@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Wallet – Aligno', description: 'Track your income, expenses, subscriptions and budget in Aligno.' })
 import type { BankAccount, Transaction, Subscription } from '~/types'
 
 definePageMeta({ layout: 'default' })

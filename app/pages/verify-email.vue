@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Verify Email – Aligno', description: 'Verify your email address to activate your Aligno account.' })
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApiService } from '~/services/api'

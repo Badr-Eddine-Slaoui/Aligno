@@ -4,7 +4,8 @@ import { setup, $fetch } from '@nuxt/test-utils/e2e'
 import {
   clearTimeManagementData,
   createTestUser,
-  getAuthToken
+  getAuthToken,
+  createTimeBlockAPI,
 } from './helpers'
 import { prisma } from '../../utils/prisma'
 
@@ -13,42 +14,33 @@ describe('Time Management — TimeBlock API', async () => {
 
   let token: string
   let user: any
-  let timeBlockId: string
 
   beforeEach(async () => {
     await clearTimeManagementData()
     user = await createTestUser()
     token = await getAuthToken()
-
-    // sanity check
     expect(user.email).toBeDefined()
   })
 
   it('should create a time block', async () => {
     const res = await $fetch('/api/time-management/time-block', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
       body: {
-        title: "Study Session",
-        description: "string",
-        startTime: "09:00",
-        endTime: "10:30",
-        duration: 1,
-        category: "WORK",
-        priority: "LOW",
+        title: 'Study Session',
+        description: 'Deep focus block',
+        startTime: '09:00',
+        endTime: '10:30',
+        duration: 90,
+        category: 'WORK',
+        priority: 'LOW',
         position: 0,
-        repeatType: "NONE",
-        repeatDays: "string",
-        repeatEnd: "2026-06-23T22:11:49.490Z"
+        repeatType: 'NONE',
       },
     })
 
     expect((res as any).success).toBe(true)
     expect((res as any).data.title).toBe('Study Session')
-
-    timeBlockId = (res as any).data.id
   })
 
   it('should get user time blocks', async () => {
@@ -64,31 +56,55 @@ describe('Time Management — TimeBlock API', async () => {
     })
 
     const res = await $fetch('/api/time-management/time-block', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
 
     expect((res as any).success).toBe(true)
     expect((res as any).data.length).toBeGreaterThan(0)
   })
 
+  it('should get by id, update, and delete a time block', async () => {
+    const created = await createTimeBlockAPI(token)
+    const id = (created as any).data.id
+
+    const got = await $fetch(`/api/time-management/time-block/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    expect((got as any).success).toBe(true)
+    expect((got as any).data.id).toBe(id)
+
+    const updated = await $fetch(`/api/time-management/time-block/${id}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: { title: 'Updated Block', priority: 'HIGH' },
+    })
+    expect((updated as any).success).toBe(true)
+    expect((updated as any).data.title).toBe('Updated Block')
+    expect((updated as any).data.priority).toBe('HIGH')
+
+    const deleted = await $fetch(`/api/time-management/time-block/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    expect((deleted as any).success).toBe(true)
+  })
+
   it('should return 422 for invalid data', async () => {
     const res = await $fetch('/api/time-management/time-block', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: {
-        title: '', // invalid
-      },
+      headers: { Authorization: `Bearer ${token}` },
+      body: { title: '' },
       ignoreResponseError: true,
     })
-
-    console.log('Response:', res) // Log the response for debugging
-    console.log('Response Body:', (res as any).body)
-    console.log('Response Status:', (res as any).statusCode)
-
     expect((res as any).statusCode).toBe(422)
+  })
+
+  it('should prevent unauthorized requests', async () => {
+    const res = await $fetch('/api/time-management/time-block', {
+      method: 'POST',
+      body: { title: 'Unauthorized' },
+      ignoreResponseError: true,
+    })
+    expect((res as any).statusCode).toBe(401)
   })
 })

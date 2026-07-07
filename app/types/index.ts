@@ -213,4 +213,52 @@ export interface MonthlyChartResponse {
   chart: MonthlyChartItem[]
 }
 
+// ─── Time Management Module ───────────────────────────────────────────────────
 
+export type TimeCategory = 'WORK' | 'STUDY' | 'HEALTH' | 'BREAK' | 'PERSONAL' | 'MEETING' | 'OTHER'
+export type TimePriority = 'LOW' | 'MEDIUM' | 'HIGH'
+export type RepeatType = 'NONE' | 'ONCE' | 'DAILY' | 'WEEKLY' | 'MONTHLY'
+
+export interface DailyTemplate {
+  id: string
+  name: string
+  description: string | null
+  isActive: boolean
+  userId: string
+  createdAt: string
+  updatedAt: string
+  timeBlocks?: TimeBlock[]
+}
+
+export interface TimeBlock {
+  id: string
+  title: string
+  description: string | null
+  startTime: string
+  endTime: string
+  duration: number
+  category: TimeCategory
+  priority: TimePriority
+  position: number
+  isCompleted: boolean
+  isLocked: boolean
+  repeatType: RepeatType
+  repeatDays: string | null
+  repeatEnd: string | null
+  templateId: string | null
+  scheduleId: string | null
+  userId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DailySchedule {
+  id: string
+  date: string
+  templateId: string | null
+  userId: string
+  createdAt: string
+  updatedAt: string
+  template?: DailyTemplate | null
+  timeBlocks?: TimeBlock[]
+}

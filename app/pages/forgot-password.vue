@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useSeoMeta({ title: 'Forgot Password – Aligno', description: 'Reset your Aligno password to regain account access.' })
 import { ref, onBeforeUnmount } from 'vue'
 import { useApiService } from '~/services/api'
 import { parseApiError } from '~/utils/errors'

@@ -253,6 +253,90 @@ export const useApiService = () => {
         return apiFetch('/wallet/budget/chart', { method: 'GET', query: { months } })
       }
     },
+
+    // ─── Time Management ──────────────────────────────────────────────────────
+    timeManagement: {
+      templates: {
+        async list(): Promise<ApiResponse<import('~/types').DailyTemplate[]>> {
+          return apiFetch('/time-management/daily-template', { method: 'GET' })
+        },
+        async create(payload: { name: string; description?: string; isActive?: boolean }): Promise<ApiResponse<import('~/types').DailyTemplate>> {
+          return apiFetch('/time-management/daily-template', { method: 'POST', body: payload })
+        },
+        async get(id: string): Promise<ApiResponse<import('~/types').DailyTemplate>> {
+          return apiFetch(`/time-management/daily-template/${id}`, { method: 'GET' })
+        },
+        async update(id: string, payload: { name?: string; description?: string; isActive?: boolean }): Promise<ApiResponse<import('~/types').DailyTemplate>> {
+          return apiFetch(`/time-management/daily-template/${id}`, { method: 'PUT', body: payload })
+        },
+        async delete(id: string): Promise<ApiResponse<{ message: string }>> {
+          return apiFetch(`/time-management/daily-template/${id}`, { method: 'DELETE' })
+        },
+      },
+
+      schedules: {
+        async list(): Promise<ApiResponse<import('~/types').DailySchedule[]>> {
+          return apiFetch('/time-management/daily-schedule', { method: 'GET' })
+        },
+        async create(payload: { date: string; templateId?: string }): Promise<ApiResponse<import('~/types').DailySchedule>> {
+          return apiFetch('/time-management/daily-schedule', { method: 'POST', body: payload })
+        },
+        async get(id: string): Promise<ApiResponse<import('~/types').DailySchedule>> {
+          return apiFetch(`/time-management/daily-schedule/${id}`, { method: 'GET' })
+        },
+        async update(id: string, payload: { date?: string; templateId?: string | null }): Promise<ApiResponse<import('~/types').DailySchedule>> {
+          return apiFetch(`/time-management/daily-schedule/${id}`, { method: 'PUT', body: payload })
+        },
+        async delete(id: string): Promise<ApiResponse<{ message: string }>> {
+          return apiFetch(`/time-management/daily-schedule/${id}`, { method: 'DELETE' })
+        },
+      },
+
+      blocks: {
+        async list(): Promise<ApiResponse<import('~/types').TimeBlock[]>> {
+          return apiFetch('/time-management/time-block', { method: 'GET' })
+        },
+        async create(payload: {
+          title: string
+          description?: string
+          startTime: string
+          endTime: string
+          duration: number
+          category: import('~/types').TimeCategory
+          priority?: import('~/types').TimePriority
+          position?: number
+          repeatType?: import('~/types').RepeatType
+          repeatDays?: string
+          repeatEnd?: string
+          templateId?: string
+          scheduleId?: string
+        }): Promise<ApiResponse<import('~/types').TimeBlock>> {
+          return apiFetch('/time-management/time-block', { method: 'POST', body: payload })
+        },
+        async get(id: string): Promise<ApiResponse<import('~/types').TimeBlock>> {
+          return apiFetch(`/time-management/time-block/${id}`, { method: 'GET' })
+        },
+        async update(id: string, payload: Partial<{
+          title: string
+          description: string
+          startTime: string
+          endTime: string
+          duration: number
+          category: import('~/types').TimeCategory
+          priority: import('~/types').TimePriority
+          position: number
+          isCompleted: boolean
+          isLocked: boolean
+          repeatType: import('~/types').RepeatType
+          repeatDays: string
+          repeatEnd: string | null
+        }>): Promise<ApiResponse<import('~/types').TimeBlock>> {
+          return apiFetch(`/time-management/time-block/${id}`, { method: 'PUT', body: payload })
+        },
+        async delete(id: string): Promise<ApiResponse<{ message: string }>> {
+          return apiFetch(`/time-management/time-block/${id}`, { method: 'DELETE' })
+        },
+      },
+    },
   }
 }
-

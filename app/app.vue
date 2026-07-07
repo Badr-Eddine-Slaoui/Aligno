@@ -6,6 +6,12 @@ import { useAuthStore } from '~/stores/auth'
 const authStore = useAuthStore()
 const isMounted = ref(false)
 
+useHead({
+  htmlAttrs: {
+    lang: 'en'
+  }
+})
+
 onMounted(() => {
   isMounted.value = true
 })

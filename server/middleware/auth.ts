@@ -4,24 +4,6 @@ import { hashToken } from '../utils/crypto'
 import { logger } from '../utils/logger'
 import { sentry } from '../utils/sentry'
 
-const PROTECTED_ROUTES = [
-  { path: '/api/auth/me', method: 'GET' },
-  { path: '/api/auth/logout', method: 'POST' },
-  { path: '/api/auth/profile', method: 'PUT' },
-  { path: '/api/time-management/time-block', method: 'POST' },
-  { path: '/api/time-management/time-block', method: 'GET' },
-  { path: '/api/time-management/time-block', method: 'PUT' },
-  { path: '/api/time-management/time-block', method: 'DELETE' },
-  { path: '/api/time-management/daily-template', method: 'POST' },
-  { path: '/api/time-management/daily-template', method: 'GET' },
-  { path: '/api/time-management/daily-template', method: 'PUT' },
-  { path: '/api/time-management/daily-template', method: 'DELETE' },
-  { path: '/api/time-management/daily-schedule', method: 'POST' },
-  { path: '/api/time-management/daily-schedule', method: 'GET' },
-  { path: '/api/time-management/daily-schedule', method: 'PUT' },
-  { path: '/api/time-management/daily-schedule', method: 'DELETE' }
-]
-
 const GUEST_ROUTES = [
   { path: '/api/auth/register', method: 'POST' },
   { path: '/api/auth/login', method: 'POST' },
@@ -73,9 +55,13 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  const isProtected = PROTECTED_ROUTES.some(
-    (r) => path === r.path && method === r.method,
-  ) || path.startsWith('/api/project-management/') || path.startsWith('/api/wallet/')
+  const isProtected =
+    path.startsWith('/api/project-management/') ||
+    path.startsWith('/api/wallet/') ||
+    path.startsWith('/api/time-management/') ||
+    path === '/api/auth/me' ||
+    path === '/api/auth/logout' ||
+    path === '/api/auth/profile'
 
   if (!isProtected) return
 

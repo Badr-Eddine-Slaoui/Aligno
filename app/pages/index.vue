@@ -1,5 +1,9 @@
 <script setup lang="ts">
-// Automatically forward from root to main dashboard page
+useSeoMeta({
+  title: 'Aligno – Work, Time & Finance Planner',
+  description: 'Aligno is an all-in-one productivity app for managing projects, daily schedules, and finances.',
+})
+
 onMounted(() => {
   navigateTo('/dashboard')
 })
