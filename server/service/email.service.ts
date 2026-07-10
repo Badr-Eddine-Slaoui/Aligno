@@ -114,19 +114,23 @@ export class EmailService {
     role: string,
     acceptToken: string,
   ): Promise<void> {
+    const appUrl = process.env.APP_URL || 'http://localhost:4000'
+    const acceptUrl = `${appUrl}/api/project-management/members/invite/accept?token=${acceptToken}`
+    const declineUrl = `${appUrl}/api/project-management/members/invite/decline?token=${acceptToken}`
+
+    logger.info(`[Project Invite Accept Link for ${email}]: ${acceptUrl}`)
+    logger.info(`[Project Invite Decline Link for ${email}]: ${declineUrl}`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Project invite email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
     try {
-      const appUrl = process.env.APP_URL || 'http://localhost:4000'
-      const acceptUrl = `${appUrl}/api/project-management/members/invite/accept?token=${acceptToken}`
-      const declineUrl = `${appUrl}/api/project-management/members/invite/decline?token=${acceptToken}`
-
-      logger.info(`[Project Invite Accept Link]: ${acceptUrl}`)
-      logger.info(`[Project Invite Decline Link]: ${declineUrl}`)
-
       const vnode = h(ProjectInviteEmail, {
         inviteeName,
         inviterName,
@@ -146,10 +150,12 @@ export class EmailService {
       logger.info(`Project invite email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send project invite email. Please try again later.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send project invite email. Please try again later.',
+        })
+      }
     }
   }
 
@@ -159,8 +165,14 @@ export class EmailService {
     projectName: string,
     dueDate: string,
   ): Promise<void> {
+    logger.info(`[Project Due Date Reminder for ${email}]: Project "${projectName}" is due tomorrow!`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Project due reminder email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
@@ -185,10 +197,12 @@ export class EmailService {
       logger.info(`Project due reminder email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send project due date reminder email.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send project due date reminder email.',
+        })
+      }
     }
   }
 
@@ -199,8 +213,14 @@ export class EmailService {
     projectName: string,
     dueDate: string,
   ): Promise<void> {
+    logger.info(`[Card Due Date Reminder for ${email}]: Card "${cardTitle}" in "${projectName}" is due tomorrow!`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Card due reminder email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
@@ -226,10 +246,12 @@ export class EmailService {
       logger.info(`Card due reminder email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send card due date reminder email.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send card due date reminder email.',
+        })
+      }
     }
   }
 
@@ -240,8 +262,14 @@ export class EmailService {
     projectName: string,
     assignerName: string,
   ): Promise<void> {
+    logger.info(`[Card Assigned Notification for ${email}]: Assigned "${cardTitle}" in "${projectName}" by ${assignerName}`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Card assigned email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
@@ -267,10 +295,12 @@ export class EmailService {
       logger.info(`Card assigned email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send card assignment notification email.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send card assignment notification email.',
+        })
+      }
     }
   }
 
@@ -280,8 +310,14 @@ export class EmailService {
     projectName: string,
     removerName: string,
   ): Promise<void> {
+    logger.info(`[Member Removed Notification for ${email}]: Removed from "${projectName}" by ${removerName}`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Member removed email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
@@ -302,10 +338,12 @@ export class EmailService {
       logger.info(`Member removed email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send member removal notification email.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send member removal notification email.',
+        })
+      }
     }
   }
 }
