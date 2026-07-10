@@ -102,19 +102,29 @@ const handleCardUpdated = () => {
 <template>
   <div class="h-[calc(100vh-100px)] flex flex-col">
     <!-- Board Subheader -->
-    <div v-if="project" class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-container/10">
-      <div class="flex items-center gap-3">
-        <div 
-          class="w-3 h-8 rounded-md" 
-          :style="{ backgroundColor: project.colorCode || '#00e5ff' }"
-        />
-        <div>
-          <h1 class="font-display font-bold text-2xl text-on-surface">
-            {{ project.name }}
-          </h1>
-          <p class="text-xs text-on-surface-variant font-mono">
-            Kanban Board
-          </p>
+    <div v-if="project" class="p-4 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-container/10">
+      <div class="flex items-center gap-4">
+        <NuxtLink 
+          to="/projects" 
+          class="p-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-white/5 transition-all duration-300"
+          aria-label="Back to projects"
+        >
+          <Icon name="heroicons:chevron-left" class="w-5 h-5" />
+        </NuxtLink>
+
+        <div class="flex items-center gap-3">
+          <div 
+            class="w-3 h-8 rounded-md" 
+            :style="{ backgroundColor: project.colorCode || '#00e5ff' }"
+          />
+          <div>
+            <h1 class="font-display font-bold text-xl text-on-surface">
+              {{ project.name }}
+            </h1>
+            <p class="text-xs text-on-surface-variant font-mono">
+              Kanban Board
+            </p>
+          </div>
         </div>
       </div>
 

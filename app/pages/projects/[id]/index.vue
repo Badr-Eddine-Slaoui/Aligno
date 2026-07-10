@@ -110,7 +110,18 @@ const formattedDueDate = computed(() => {
 </script>
 
 <template>
-  <div class="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Back Navigation -->
+    <div>
+      <NuxtLink 
+        to="/projects" 
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-xs font-semibold text-on-surface-variant hover:text-on-surface border border-white/5 transition-all duration-300"
+      >
+        <Icon name="heroicons:chevron-left" class="w-4 h-4" />
+        Back to Projects
+      </NuxtLink>
+    </div>
+
     <!-- Board Subheader -->
     <div v-if="project" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-6">
       <div class="flex items-center gap-3">

@@ -56,18 +56,19 @@ onUnmounted(() => clearInterval(timer))
 
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <h1 class="text-3xl font-bold font-display text-primary">Today's Schedule</h1>
-        <p class="text-on-surface-variant">{{ todayLabel }}</p>
-      </div>
-      <NuxtLink
-        to="/time-management"
-        class="flex items-center gap-2 px-4 py-2.5 bg-surface-container text-on-surface rounded-xl text-sm font-medium hover:bg-surface-container-high transition-colors"
+    <div class="flex items-center gap-4">
+      <NuxtLink 
+        to="/time-management" 
+        class="p-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-white/5 transition-all duration-300"
+        aria-label="Back to templates"
       >
-        <Icon name="heroicons:squares-plus" class="w-4 h-4" />
-        Manage Templates
+        <Icon name="heroicons:chevron-left" class="w-5 h-5" />
       </NuxtLink>
+
+      <div class="flex-1 min-w-0">
+        <h1 class="text-2xl font-bold font-display text-primary">Today's Schedule</h1>
+        <p class="text-sm text-on-surface-variant leading-relaxed">{{ todayLabel }}</p>
+      </div>
     </div>
 
     <div v-if="isLoading" class="flex flex-col gap-3">
