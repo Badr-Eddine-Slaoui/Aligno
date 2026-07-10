@@ -16,8 +16,12 @@ export class EmailService {
   private from = process.env.EMAIL_FROM || 'onboarding@resend.dev'
 
   constructor() {
-    if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is not set')
-    this.resend = new Resend(process.env.RESEND_API_KEY)
+    const apiKey = process.env.RESEND_API_KEY
+    if (apiKey && apiKey !== 're_your_api_key' && !apiKey.startsWith('re_49tSv2br_')) {
+      this.resend = new Resend(apiKey)
+    } else {
+      logger.warn('RESEND_API_KEY is not set or is using placeholder. Emails will be logged to console.')
+    }
   }
 
   async sendVerificationEmail(
@@ -25,17 +29,21 @@ export class EmailService {
     firstName: string,
     token: string,
   ): Promise<void> {
+    const appUrl = process.env.APP_URL || 'http://localhost:4000'
+    const url = `${appUrl}/verify-email?token=${token}`
+
+    logger.info(`[Verification Link for ${email}]: ${url}`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Verification email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
     try {
-      const appUrl = process.env.APP_URL || 'http://localhost:4000'
-      const url = `${appUrl}/verify-email?token=${token}`
-
-      logger.info(`[Verification Link]: ${url}`)
-
       const vnode = h(VerificationEmail, { firstName, url })
       const { html } = await useRender(vnode)
 
@@ -48,10 +56,12 @@ export class EmailService {
       logger.info(`Verification email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send verification email. Please try again later.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send verification email. Please try again later.',
+        })
+      }
     }
   }
 
@@ -60,17 +70,21 @@ export class EmailService {
     firstName: string,
     token: string,
   ): Promise<void> {
+    const appUrl = process.env.APP_URL || 'http://localhost:4000'
+    const url = `${appUrl}/reset-password?token=${token}`
+
+    logger.info(`[Password Reset Link for ${email}]: ${url}`)
+
     if (process.env.NODE_ENV === 'test') {
-      logger.info(`Password reset email skipped in test environment for ${email}`)
+      return
+    }
+
+    if (!this.resend) {
+      logger.info('Skipping email delivery (no Resend API key configured).')
       return
     }
 
     try {
-      const appUrl = process.env.APP_URL || 'http://localhost:4000'
-      const url = `${appUrl}/reset-password?token=${token}`
-
-      logger.info(`[Password Reset Link]: ${url}`)
-
       const vnode = h(PasswordResetEmail, { firstName, url })
       const { html } = await useRender(vnode)
 
@@ -83,10 +97,12 @@ export class EmailService {
       logger.info(`Password reset email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Could not send password reset email. Please try again later.',
-      })
+      if (process.env.NODE_ENV === 'production') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Could not send password reset email. Please try again later.',
+        })
+      }
     }
   }
 
