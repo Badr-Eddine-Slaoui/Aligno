@@ -100,3 +100,37 @@ h1, h2, h3, h4, h5, h6 {
 code, pre, .font-mono {
   font-family: var(--font-mono);
 }
+
+/* ─── Custom Scrollbars ─────────────────────────────────────────────────── */
+/* Webkit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-container-low);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-container-highest);
+  border-radius: 9999px;
+  border: 1px solid var(--color-surface-container-low);
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.35);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-surface-container-low);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-container-highest) var(--color-surface-container-low);
+}
+

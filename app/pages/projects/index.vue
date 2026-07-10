@@ -58,11 +58,29 @@ const onEditProject = (project: Project) => {
 }
 
 // Delete handler
-const onDeleteProject = async (projectId: string) => {
+const pendingDeleteId = ref<string | null>(null)
+const pendingDeleteName = ref('')
+const showDeleteConfirm = ref(false)
+const isDeleting = ref(false)
+
+const onRequestDelete = (projectId: string, projectName: string) => {
+  pendingDeleteId.value = projectId
+  pendingDeleteName.value = projectName
+  showDeleteConfirm.value = true
+}
+
+const onConfirmDelete = async () => {
+  if (!pendingDeleteId.value) return
+  isDeleting.value = true
   try {
-    await projectsHelper.deleteProject(projectId)
+    await projectsHelper.deleteProject(pendingDeleteId.value)
     fetchProjectsList()
   } catch (err) {
+  } finally {
+    isDeleting.value = false
+    showDeleteConfirm.value = false
+    pendingDeleteId.value = null
+    pendingDeleteName.value = ''
   }
 }
 
@@ -157,7 +175,7 @@ const filteredProjects = computed(() => {
           :key="project.id" 
           :project="project"
           @edit="onEditProject"
-          @delete="onDeleteProject"
+          @request-delete="onRequestDelete"
           @archive="onArchiveProject"
         />
       </div>
@@ -225,6 +243,16 @@ const filteredProjects = computed(() => {
       v-model="showEditModal" 
       :project="projectToEdit"
       @updated="fetchProjectsList"
+    />
+
+    <AppConfirmModal
+      v-model="showDeleteConfirm"
+      title="Delete Project"
+      :message="`Deleting this project will permanently remove all boards, tasks, and associated data. This cannot be undone.`"
+      :item-name="pendingDeleteName"
+      confirm-label="Delete Project"
+      :loading="isDeleting"
+      @confirm="onConfirmDelete"
     />
   </div>
 </template>

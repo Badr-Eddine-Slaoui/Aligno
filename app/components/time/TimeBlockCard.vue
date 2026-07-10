@@ -2,7 +2,7 @@
 import type { TimeBlock } from '~/types'
 
 const props = defineProps<{ block: TimeBlock }>()
-const emit = defineEmits<{ edit: [TimeBlock]; delete: [string]; toggle: [TimeBlock] }>()
+const emit = defineEmits<{ edit: [TimeBlock]; delete: [TimeBlock]; toggle: [TimeBlock] }>()
 
 const categoryColors: Record<string, string> = {
   WORK: 'bg-blue-500/15 text-blue-400',
@@ -46,7 +46,7 @@ const priorityDot: Record<string, string> = {
           <button :id="`edit-block-${block.id}`" aria-label="Edit block" @click="emit('edit', block)" class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface">
             <Icon name="heroicons:pencil-square" class="w-4 h-4" />
           </button>
-          <button :id="`delete-block-${block.id}`" aria-label="Delete block" @click="emit('delete', block.id)" class="p-1.5 rounded-lg hover:bg-error/10 text-on-surface-variant hover:text-error">
+          <button :id="`delete-block-${block.id}`" aria-label="Delete block" @click="emit('delete', block)" class="p-1.5 rounded-lg hover:bg-error/10 text-on-surface-variant hover:text-error">
             <Icon name="heroicons:trash" class="w-4 h-4" />
           </button>
         </div>

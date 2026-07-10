@@ -13,6 +13,10 @@ const filter = ref<'ALL' | 'ACTIVE'>('ALL')
 const showCreateModal = ref(false)
 const editingTemplate = ref<import('~/types').DailyTemplate | null>(null)
 const deletingId = ref<string | null>(null)
+const showDeleteConfirm = ref(false)
+const templateToDelete = computed(() =>
+  templates.value.find((t) => t.id === deletingId.value)
+)
 
 const filteredTemplates = computed(() => {
   let list = templates.value
@@ -26,14 +30,21 @@ const filteredTemplates = computed(() => {
 
 onMounted(fetchTemplates)
 
-async function handleDelete(id: string) {
+const onRequestDelete = (id: string) => {
   deletingId.value = id
+  showDeleteConfirm.value = true
+}
+
+async function handleDelete() {
+  if (!deletingId.value) return
   try {
-    await deleteTemplate(id)
+    await deleteTemplate(deletingId.value)
   } finally {
     deletingId.value = null
+    showDeleteConfirm.value = false
   }
 }
+
 </script>
 
 <template>
@@ -126,7 +137,7 @@ async function handleDelete(id: string) {
               <button
                 :id="`delete-template-${template.id}`"
                 aria-label="Delete template"
-                @click.prevent="handleDelete(template.id)"
+                @click.prevent="onRequestDelete(template.id)"
                 class="p-1.5 rounded-lg hover:bg-error/10 text-on-surface-variant hover:text-error transition-colors"
                 :disabled="deletingId === template.id"
               >
@@ -161,6 +172,16 @@ async function handleDelete(id: string) {
       :template="editingTemplate"
       @close="editingTemplate = null"
       @updated="editingTemplate = null"
+    />
+
+    <AppConfirmModal
+      v-model="showDeleteConfirm"
+      title="Delete Template"
+      message="This will permanently remove the template and all its time blocks."
+      :item-name="templateToDelete?.name"
+      confirm-label="Delete Template"
+      @confirm="handleDelete"
+      @update:model-value="(v) => { if (!v) { showDeleteConfirm.value = false; deletingId.value = null } }"
     />
   </div>
 </template>

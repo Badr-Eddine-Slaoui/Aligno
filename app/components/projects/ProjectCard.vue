@@ -10,6 +10,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'edit', project: Project): void
   (e: 'delete', projectId: string): void
+  (e: 'request-delete', projectId: string, projectName: string): void
   (e: 'archive', projectId: string): void
 }>()
 
@@ -66,9 +67,7 @@ const handleArchive = (e: Event) => {
 const handleDelete = (e: Event) => {
   e.stopPropagation()
   showMenu.value = false
-  if (confirm(`Are you sure you want to delete the project "${props.project.name}"? This cannot be undone.`)) {
-    emit('delete', props.project.id)
-  }
+  emit('request-delete', props.project.id, props.project.name)
 }
 
 const formattedDate = computed(() => {

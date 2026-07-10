@@ -52,6 +52,25 @@ function closeModal() {
   showBlockModal.value = false
   editingBlock.value = null
 }
+
+const pendingDeleteBlock = ref<TimeBlock | null>(null)
+const isDeletingBlock = ref(false)
+
+const handleRequestDeleteBlock = (block: TimeBlock) => {
+  pendingDeleteBlock.value = block
+}
+
+const handleConfirmDeleteBlock = async () => {
+  if (!pendingDeleteBlock.value) return
+  isDeletingBlock.value = true
+  try {
+    await deleteTimeBlock(pendingDeleteBlock.value.id)
+    await fetchTemplate(id)
+  } finally {
+    isDeletingBlock.value = false
+    pendingDeleteBlock.value = null
+  }
+}
 </script>
 
 <template>
@@ -122,7 +141,7 @@ function closeModal() {
           :key="block.id"
           :block="block"
           @edit="openEdit"
-          @delete="deleteTimeBlock"
+          @delete="handleRequestDeleteBlock"
           @toggle="toggleBlockComplete"
         />
       </div>
@@ -134,6 +153,17 @@ function closeModal() {
       :template-id="id"
       @close="closeModal"
       @saved="closeModal(); fetchTemplate(id)"
+    />
+
+    <AppConfirmModal
+      :model-value="!!pendingDeleteBlock"
+      title="Delete Time Block"
+      message="This time block will be permanently removed from the template."
+      :item-name="pendingDeleteBlock ? `${pendingDeleteBlock.startTime} – ${pendingDeleteBlock.endTime}: ${pendingDeleteBlock.activity}` : undefined"
+      confirm-label="Delete Block"
+      :loading="isDeletingBlock"
+      @update:model-value="(v) => { if (!v) pendingDeleteBlock.value = null }"
+      @confirm="handleConfirmDeleteBlock"
     />
   </div>
 </template>

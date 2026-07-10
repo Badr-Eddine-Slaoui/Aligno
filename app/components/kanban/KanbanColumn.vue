@@ -21,6 +21,7 @@ const emit = defineEmits<{
 const isEditingName = ref(false)
 const editedName = ref(props.column.name)
 const nameInputRef = ref<HTMLInputElement | null>(null)
+const showDeleteColumnConfirm = ref(false)
 
 const startEditing = () => {
   editedName.value = props.column.name
@@ -121,7 +122,7 @@ const cards = computed(() => dndCards.value as KanbanCard[])
         </button>
         <button 
           v-if="!column.cards || column.cards.length === 0"
-          @click="emit('delete-column', column.id)"
+          @click="showDeleteColumnConfirm = true"
           class="p-1 rounded text-error/80 hover:text-error hover:bg-error-container/10 transition-colors"
           title="Delete column"
         >
@@ -165,4 +166,13 @@ const cards = computed(() => dndCards.value as KanbanCard[])
       </button>
     </div>
   </div>
+
+  <AppConfirmModal
+    v-model="showDeleteColumnConfirm"
+    title="Delete Column"
+    message="This column must be empty to delete. This action cannot be undone."
+    :item-name="column.name"
+    confirm-label="Delete Column"
+    @confirm="() => { emit('delete-column', column.id); showDeleteColumnConfirm = false }"
+  />
 </template>

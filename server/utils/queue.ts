@@ -17,7 +17,7 @@ export const dueDateQueue = new Queue(queueName, {
 })
 
 export async function scheduleProjectReminder(projectId: string, dueDate: Date) {
-  const jobId = `project:${projectId}`
+  const jobId = `project_${projectId}`
   
   // Remove existing job if any
   await removeScheduledReminder(jobId)
@@ -37,7 +37,7 @@ export async function scheduleProjectReminder(projectId: string, dueDate: Date) 
 }
 
 export async function scheduleCardReminder(cardId: string, dueDate: Date) {
-  const jobId = `card:${cardId}`
+  const jobId = `card_${cardId}`
   
   // Remove existing job if any
   await removeScheduledReminder(jobId)
@@ -57,11 +57,11 @@ export async function scheduleCardReminder(cardId: string, dueDate: Date) {
 }
 
 export async function cancelProjectReminder(projectId: string) {
-  await removeScheduledReminder(`project:${projectId}`)
+  await removeScheduledReminder(`project_${projectId}`)
 }
 
 export async function cancelCardReminder(cardId: string) {
-  await removeScheduledReminder(`card:${cardId}`)
+  await removeScheduledReminder(`card_${cardId}`)
 }
 
 async function removeScheduledReminder(jobId: string) {

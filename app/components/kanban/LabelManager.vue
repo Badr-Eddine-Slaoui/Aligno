@@ -22,6 +22,12 @@ const editingLabelId = ref<string | null>(null)
 const editingName = ref('')
 const editingColor = ref('')
 const isCreating = ref(false)
+const pendingDeleteLabelId = ref<string | null>(null)
+const isDeletingLabel = ref(false)
+
+const labelToDelete = computed(() =>
+  projectsHelper.labels?.value?.find((l) => l.id === pendingDeleteLabelId.value)
+)
 
 const colors = [
   '#00e5ff', // Cyan
@@ -83,15 +89,22 @@ const handleUpdateLabel = async () => {
   }
 }
 
-const handleDeleteLabel = async (labelId: string) => {
-  if (confirm('Are you sure you want to delete this label? It will be removed from all tasks.')) {
-    try {
-      await projectsHelper.deleteLabel(labelId)
-      emit('labels-updated')
-      notifications.success('Label deleted')
-    } catch (err) {
-      notifications.error('Failed to delete label')
-    }
+const handleDeleteLabel = (labelId: string) => {
+  pendingDeleteLabelId.value = labelId
+}
+
+const confirmDeleteLabel = async () => {
+  if (!pendingDeleteLabelId.value) return
+  isDeletingLabel.value = true
+  try {
+    await projectsHelper.deleteLabel(pendingDeleteLabelId.value)
+    emit('labels-updated')
+    notifications.success('Label deleted')
+  } catch (err) {
+    notifications.error('Failed to delete label')
+  } finally {
+    isDeletingLabel.value = false
+    pendingDeleteLabelId.value = null
   }
 }
 
@@ -221,4 +234,15 @@ const toggleAssign = (labelId: string) => {
       </div>
     </div>
   </div>
+
+  <AppConfirmModal
+    :model-value="!!pendingDeleteLabelId"
+    title="Delete Label"
+    message="This label will be permanently removed from this project and all tasks it's assigned to."
+    :item-name="labelToDelete?.name"
+    confirm-label="Delete Label"
+    :loading="isDeletingLabel"
+    @update:model-value="(v) => { if (!v) pendingDeleteLabelId.value = null }"
+    @confirm="confirmDeleteLabel"
+  />
 </template>

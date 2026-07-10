@@ -143,16 +143,21 @@ const handleUnassignLabel = async (labelId: string) => {
 }
 
 // Delete Card
+const showDeleteCardConfirm = ref(false)
+const isDeletingCard = ref(false)
+
 const handleDeleteCard = async () => {
   if (!cardDetail.value) return
-  if (confirm('Are you sure you want to delete this task? This cannot be undone.')) {
-    try {
-      await projectsHelper.deleteCard(cardDetail.value.id)
-      emit('update:modelValue', false)
-      emit('updated')
-    } catch (err) {
-      notifications.error('Failed to delete task')
-    }
+  isDeletingCard.value = true
+  try {
+    await projectsHelper.deleteCard(cardDetail.value.id)
+    emit('update:modelValue', false)
+    emit('updated')
+  } catch (err) {
+    notifications.error('Failed to delete task')
+  } finally {
+    isDeletingCard.value = false
+    showDeleteCardConfirm.value = false
   }
 }
 
@@ -326,7 +331,7 @@ const assignedLabelIds = computed(() => {
         <AppButton 
           variant="solid" 
           color="error" 
-          @click="handleDeleteCard"
+          @click="showDeleteCardConfirm = true"
         >
           <Icon name="heroicons:trash" class="w-4 h-4 mr-1.5" />
           Delete Task
@@ -341,4 +346,14 @@ const assignedLabelIds = computed(() => {
       </div>
     </div>
   </AppModal>
+
+  <AppConfirmModal
+    v-model="showDeleteCardConfirm"
+    title="Delete Task"
+    :message="`This will permanently delete the task and all its subtasks. This action cannot be undone.`"
+    :item-name="cardDetail?.title"
+    confirm-label="Delete Task"
+    :loading="isDeletingCard"
+    @confirm="handleDeleteCard"
+  />
 </template>
