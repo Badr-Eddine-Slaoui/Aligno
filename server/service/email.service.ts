@@ -12,7 +12,7 @@ import { logger } from '../utils/logger'
 import { sentry } from '../utils/sentry'
 
 export class EmailService {
-  private resend: Resend
+  private resend: Resend | undefined
   private from = process.env.EMAIL_FROM || 'onboarding@resend.dev'
 
   constructor() {

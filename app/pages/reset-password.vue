@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Reset Password – Aligno', description: 'Set a new secure password for your Aligno account.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Reset Password – Aligno',
+  description: 'Set a new secure password for your Aligno account to ensure workspace security.',
+  ogTitle: 'Reset Password – Aligno',
+  ogDescription: 'Set a new secure password for your Aligno account.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/reset-password`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Reset Password – Aligno',
+  twitterDescription: 'Set a new secure password for your Aligno account.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/reset-password` }],
+})
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApiService } from '~/services/api'

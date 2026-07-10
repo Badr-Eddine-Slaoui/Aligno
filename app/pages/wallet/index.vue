@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Wallet – Aligno', description: 'Track your income, expenses, subscriptions and budget in Aligno.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Wallet & Finance – Aligno',
+  description: 'Track multiple bank accounts, monitor recurring subscriptions, create monthly budgets, and analyze spending habits in Aligno.',
+  ogTitle: 'Wallet & Finance Tracker – Aligno',
+  ogDescription: 'Track multiple bank accounts, monitor recurring subscriptions, create monthly budgets, and analyze spending habits.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/wallet`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Wallet & Finance Tracker – Aligno',
+  twitterDescription: 'Track accounts, budgets, expenses and subscriptions in Aligno.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/wallet` }],
+})
 import type { BankAccount, Transaction, Subscription } from '~/types'
 
 definePageMeta({ layout: 'default' })

@@ -42,6 +42,33 @@ export default defineNuxtConfig({
     storesDirs: ['./app/stores/**'],
   },
 
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: { lang: 'en' },
+      titleTemplate: '%s',
+      meta: [
+        { name: 'author', content: 'Aligno' },
+        { name: 'robots', content: 'index, follow' },
+        { name: 'theme-color', content: '#6366f1' },
+        { name: 'application-name', content: 'Aligno' },
+        // Default OG fallbacks (pages override with useSeoMeta)
+        { property: 'og:site_name', content: 'Aligno' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:locale', content: 'en_US' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:site', content: '@alignoapp' },
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    },
+  },
+
   components: [
     {
       path: '~/components',

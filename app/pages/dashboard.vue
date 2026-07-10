@@ -6,9 +6,26 @@ definePageMeta({
   layout: 'default'
 })
 
+const appUrl = useRuntimeConfig().public.appUrl
+
 useSeoMeta({
   title: 'Dashboard – Aligno',
-  description: 'Your Aligno productivity overview — projects, schedule, and finances.',
+  description: 'Overview of your active projects, daily task schedules, and wallet balances in Aligno.',
+  ogTitle: 'Workspace Dashboard – Aligno',
+  ogDescription: 'Get an overview of your projects, schedule, and finances on your Aligno Dashboard.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/dashboard`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Workspace Dashboard – Aligno',
+  twitterDescription: 'Overview of your workspace, projects, schedule, and finances.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/dashboard` }],
 })
 
 const auth = useAuth()

@@ -1,9 +1,26 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
+const appUrl = useRuntimeConfig().public.appUrl
+
 useSeoMeta({
   title: 'Time Templates – Aligno',
-  description: 'Create and manage daily schedule templates in Aligno.',
+  description: 'Design and manage daily routine templates in Aligno. Block time for focused work, habits, and relaxation.',
+  ogTitle: 'Daily Time Templates – Aligno',
+  ogDescription: 'Design structured routines, save them as templates, and activate them on your daily calendar.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/time-management`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Daily Time Templates – Aligno',
+  twitterDescription: 'Structure your calendar routines with reusable templates.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/time-management` }],
 })
 
 const { templates, isLoading, error, fetchTemplates, createTemplate, updateTemplate, deleteTemplate } = useTimeManagement()

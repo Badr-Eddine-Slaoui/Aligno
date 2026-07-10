@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Sign In – Aligno', description: 'Sign in to Aligno to manage your projects, time, and finances.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Sign In – Aligno',
+  description: 'Sign in to your Aligno account to manage your projects, daily schedule, and personal finances.',
+  ogTitle: 'Sign In – Aligno',
+  ogDescription: 'Access your Aligno workspace. Manage projects, schedule, and finances.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/login`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Sign In – Aligno',
+  twitterDescription: 'Sign in to your Aligno account.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/login` }],
+})
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { parseApiError } from '~/utils/errors'

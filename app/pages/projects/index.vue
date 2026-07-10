@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Projects – Aligno', description: 'View and manage all your projects and Kanban boards in Aligno.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Projects – Aligno',
+  description: 'Manage your workspace projects, organize collaborative Kanban boards, and track team progress.',
+  ogTitle: 'Workspace Projects – Aligno',
+  ogDescription: 'Manage and organize all your workspace projects in Aligno.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/projects`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Workspace Projects – Aligno',
+  twitterDescription: 'Manage and organize all your workspace projects in Aligno.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/projects` }],
+})
 import { ref, computed, onMounted } from 'vue'
 import type { Project } from '~/types'
 

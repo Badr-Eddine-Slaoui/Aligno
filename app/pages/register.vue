@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Create Account – Aligno', description: 'Join Aligno to start organizing your productivity and finances.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Create Account – Aligno',
+  description: 'Join Aligno for free. Start managing your projects, daily schedule, and personal finances in one powerful platform.',
+  ogTitle: 'Create Your Aligno Account – Free',
+  ogDescription: 'Sign up for Aligno and take control of your projects, time, and finances. Free to get started.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/register`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Create Your Aligno Account',
+  twitterDescription: 'Join Aligno and manage your projects, time, and finances in one place.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/register` }],
+})
 import { ref } from 'vue'
 import PasswordStrength from '~/components/ui/PasswordStrength.vue'
 import { parseApiError } from '~/utils/errors'

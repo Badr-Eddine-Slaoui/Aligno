@@ -1,5 +1,27 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Kanban Board – Aligno', description: 'Drag-and-drop Kanban board for managing project tasks.' })
+const appUrl = useRuntimeConfig().public.appUrl
+const route = useRoute()
+const projectId = route.params.id as string
+
+useSeoMeta({
+  title: 'Kanban Board – Aligno',
+  description: 'Interactive Kanban board with drag-and-drop support, task assignments, and customizable columns in Aligno.',
+  ogTitle: 'Kanban Board – Aligno',
+  ogDescription: 'Organize your tasks visually with the Aligno Kanban board. Assign members, set due dates, and update statuses.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/projects/${projectId}/board`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Kanban Board – Aligno',
+  twitterDescription: 'Visually plan, organize, and execute your team workflows.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/projects/${projectId}/board` }],
+})
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { KanbanCard } from '~/types'

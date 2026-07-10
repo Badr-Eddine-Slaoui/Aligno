@@ -1,5 +1,25 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Verify Email – Aligno', description: 'Verify your email address to activate your Aligno account.' })
+const appUrl = useRuntimeConfig().public.appUrl
+
+useSeoMeta({
+  title: 'Verify Email – Aligno',
+  description: 'Verify your email address to activate your Aligno workspace and start organizing your tasks and finances.',
+  ogTitle: 'Verify Email – Aligno',
+  ogDescription: 'Verify your email address to activate your Aligno workspace.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/verify-email`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Verify Email – Aligno',
+  twitterDescription: 'Verify your email address to activate your Aligno workspace.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/verify-email` }],
+})
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApiService } from '~/services/api'

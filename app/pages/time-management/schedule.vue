@@ -1,9 +1,26 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
+const appUrl = useRuntimeConfig().public.appUrl
+
 useSeoMeta({
   title: "Today's Schedule – Aligno",
-  description: "Your daily time block schedule in Aligno.",
+  description: "Track your active routine, mark time blocks complete, and stay on top of your daily goals in Aligno.",
+  ogTitle: "Today's Schedule – Aligno",
+  ogDescription: "Live view of your active daily routines, hourly task blocks, and personal calendar tracking in Aligno.",
+  ogType: 'website',
+  ogUrl: `${appUrl}/time-management/schedule`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: "Today's Schedule – Aligno",
+  twitterDescription: "Live view of your active daily routines, hourly task blocks, and calendar tracking.",
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/time-management/schedule` }],
 })
 
 const { todaySchedule, timeBlocks, isLoading, error, fetchTodaySchedule, toggleBlockComplete } = useTimeManagement()

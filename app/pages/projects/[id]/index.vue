@@ -1,5 +1,27 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Project Overview – Aligno', description: 'Track progress and details for your Aligno project.' })
+const appUrl = useRuntimeConfig().public.appUrl
+const route = useRoute()
+const projectId = route.params.id as string
+
+useSeoMeta({
+  title: 'Project Overview – Aligno',
+  description: 'Detailed overview, milestone tracking, and task completion metrics for your Aligno project.',
+  ogTitle: 'Project Overview – Aligno',
+  ogDescription: 'Track project milestones, view analytics, and collaborate with your team.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/projects/${projectId}`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Project Overview – Aligno',
+  twitterDescription: 'Detailed project metrics and collaboration hubs.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/projects/${projectId}` }],
+})
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { parseApiError } from '~/utils/errors'

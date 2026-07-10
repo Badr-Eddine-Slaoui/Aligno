@@ -6,9 +6,28 @@ definePageMeta({ layout: 'default' })
 const route = useRoute()
 const id = route.params.id as string
 
+const appUrl = useRuntimeConfig().public.appUrl
+const route = useRoute()
+const id = route.params.id as string
+
 useSeoMeta({
   title: 'Template Editor – Aligno',
-  description: 'Edit time blocks for your daily schedule template.',
+  description: 'Customize and edit hourly schedule blocks, tasks, and habits inside your daily templates in Aligno.',
+  ogTitle: 'Template Editor – Aligno',
+  ogDescription: 'Customize and edit hourly schedule blocks, tasks, and habits inside your daily templates.',
+  ogType: 'website',
+  ogUrl: `${appUrl}/time-management/templates/${id}`,
+  ogImage: `${appUrl}/og-image.png`,
+  ogImageWidth: '1200',
+  ogImageHeight: '630',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Template Editor – Aligno',
+  twitterDescription: 'Customize and edit hourly schedule blocks, tasks, and habits inside your daily templates.',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: `${appUrl}/time-management/templates/${id}` }],
 })
 
 const { currentTemplate, timeBlocks, isLoading, error, fetchTemplate, deleteTimeBlock, toggleBlockComplete, activateTemplateForToday } = useTimeManagement()
