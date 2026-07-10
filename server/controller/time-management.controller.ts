@@ -108,8 +108,16 @@ export class DailyTemplateController {
     if (!id) throw createError({ statusCode: 400, message: 'ID required' })
 
     const result = await this.service.getById(id)
+    if (!result) return { success: true, data: null }
 
-    return { success: true, data: result }
+    const { blocks, ...rest } = result as any
+    return {
+      success: true,
+      data: {
+        ...rest,
+        timeBlocks: blocks || []
+      }
+    }
   }
 
   async update(event: H3Event) {

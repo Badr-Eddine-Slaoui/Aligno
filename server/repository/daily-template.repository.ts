@@ -16,7 +16,7 @@ export class DailyTemplateRepository implements IDailyTemplateDAO {
     return prisma.dailyTemplate.findUnique({
       where: { id },
       include: {
-        timeBlocks: {
+        blocks: {
           orderBy: { position: 'asc' },
         },
       },
