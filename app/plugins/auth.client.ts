@@ -34,20 +34,24 @@ export default defineNuxtPlugin(async () => {
   } catch {
     // Silent catch — user remains unauthenticated (401 = no valid cookie)
   } finally {
-    authStore.isSessionRestoring = false
-
     const route = useRoute()
     const isGuestRoute = GUEST_ROUTES.some(r => route.path === r || route.path.startsWith(r + '?'))
 
     if (!authStore.isAuthenticated && !isGuestRoute) {
+      // Redirect to login while overlay is still visible (isSessionRestoring still true)
       await navigateTo({
         path: '/login',
         query: { redirect: route.fullPath },
         replace: true,
       })
     } else if (authStore.isAuthenticated && isGuestRoute) {
+      // Redirect to dashboard (or intended page) while overlay is still visible
       const redirect = (route.query.redirect as string) || '/dashboard'
       await navigateTo(redirect, { replace: true })
     }
+
+    // Only hide the overlay AFTER navigation has completed.
+    // This prevents any flash of the wrong page between restore and redirect.
+    authStore.isSessionRestoring = false
   }
 })

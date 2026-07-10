@@ -13,11 +13,11 @@ export default defineNuxtRouteMiddleware((to) => {
 
   const authStore = useAuthStore()
 
-  // While the session is being restored, block navigation entirely.
-  // The plugin that restores the session will call router.push() once done.
-  if (authStore.isSessionRestoring) {
-    return abortNavigation()
-  }
+  // While the session is being restored, allow navigation through.
+  // The full-screen loading overlay in app.vue covers all content,
+  // and the plugin will redirect to the correct page once restore completes.
+  if (authStore.isSessionRestoring) return
+
 
   const isGuestRoute = GUEST_ROUTES.some(r => to.path === r || to.path.startsWith(r + '?'))
 
