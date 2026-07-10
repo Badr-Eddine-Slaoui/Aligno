@@ -16,6 +16,7 @@ const notifications = useNotifications()
 const inviteEmail = ref('')
 const inviteRole = ref<'MEMBER' | 'VISITOR'>('MEMBER')
 const isInviting = ref(false)
+const inviteError = ref('')
 const progress = ref<ProjectProgress | null>(null)
 
 const project = computed(() => projectsHelper.currentProject.value)
@@ -73,21 +74,30 @@ const stats = computed(() => {
 
 // Invite Member
 const handleInviteMember = async () => {
+  inviteError.value = ''
   const email = inviteEmail.value.trim()
-  if (!email) return
+  if (!email) {
+    inviteError.value = 'Email address is required'
+    return
+  }
   isInviting.value = true
   try {
     await projectsHelper.inviteMember(projectId, email, inviteRole.value)
     inviteEmail.value = ''
     // Reload members list
     await projectsHelper.fetchProject(projectId)
-  } catch (err) {
-    const { message } = parseApiError(err)
-    notifications.error(message || 'Failed to send invitation')
+  } catch (err: any) {
+    const { message, errors: apiErrors } = parseApiError(err)
+    if (apiErrors?.email) {
+      inviteError.value = apiErrors.email[0]
+    } else {
+      inviteError.value = message || 'Failed to send invitation'
+    }
   } finally {
     isInviting.value = false
   }
 }
+
 
 const formattedDueDate = computed(() => {
   if (!project.value?.dueDate) return ''
@@ -292,7 +302,8 @@ const formattedDueDate = computed(() => {
                   v-model="inviteEmail"
                   type="email"
                   placeholder="collaborator@example.com"
-                  class="w-full bg-surface-container-low text-on-surface rounded-xl px-3 py-2 text-xs border border-outline-variant focus:outline-none"
+                  class="w-full bg-surface-container-low text-on-surface rounded-xl px-3 py-2 text-xs border focus:outline-none"
+                  :class="[inviteError ? 'border-error focus:border-error focus:ring-1 focus:ring-error/20' : 'border-outline-variant']"
                 />
                 <select 
                   v-model="inviteRole"
@@ -309,7 +320,11 @@ const formattedDueDate = computed(() => {
                   <Icon name="heroicons:paper-airplane" class="w-4 h-4" />
                 </button>
               </div>
+              <p v-if="inviteError" class="text-error text-[10px] font-mono mt-1">
+                {{ inviteError }}
+              </p>
             </div>
+
 
             <!-- Members list -->
             <div class="space-y-3">

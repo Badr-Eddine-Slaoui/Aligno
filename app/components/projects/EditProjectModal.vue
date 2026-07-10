@@ -58,6 +58,9 @@ const onSubmit = async () => {
   if (!props.project) return
   
   errors.name = ''
+  errors.description = ''
+  errors.dueDate = ''
+
   if (!form.value.name.trim()) {
     errors.name = 'Project name is required'
     return
@@ -65,18 +68,25 @@ const onSubmit = async () => {
 
   isLoading.value = true
   try {
+    let isoDueDate: string | null = null
+    if (form.value.dueDate) {
+      isoDueDate = new Date(form.value.dueDate).toISOString()
+    }
+
     await projectsHelper.updateProject(props.project.id, {
       name: form.value.name,
       description: form.value.description || undefined,
-      dueDate: form.value.dueDate || null,
+      dueDate: isoDueDate,
       colorCode: form.value.colorCode
     })
     emit('update:modelValue', false)
     emit('updated')
   } catch (err: any) {
     const { message, errors: apiErrors } = parseApiError(err)
-    if (apiErrors?.name) {
-      errors.name = apiErrors.name[0]
+    if (apiErrors) {
+      if (apiErrors.name) errors.name = apiErrors.name[0]
+      if (apiErrors.description) errors.description = apiErrors.description[0]
+      if (apiErrors.dueDate) errors.dueDate = apiErrors.dueDate[0]
     } else {
       notifications.error(message || 'Failed to update project')
     }
@@ -85,6 +95,7 @@ const onSubmit = async () => {
   }
 }
 </script>
+
 
 <template>
   <AppModal 
