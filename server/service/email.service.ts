@@ -17,10 +17,11 @@ export class EmailService {
 
   constructor() {
     const apiKey = process.env.RESEND_API_KEY
-    if (apiKey && apiKey !== 're_your_api_key' && !apiKey.startsWith('re_49tSv2br_')) {
+    if (apiKey && apiKey !== 're_your_api_key') {
       this.resend = new Resend(apiKey)
+      logger.info(`EmailService initialised. From: ${this.from}`)
     } else {
-      logger.warn('RESEND_API_KEY is not set or is using placeholder. Emails will be logged to console.')
+      logger.warn('RESEND_API_KEY is not set or is using placeholder. Emails will be skipped.')
     }
   }
 
@@ -55,18 +56,18 @@ export class EmailService {
       })
 
       if (response.error) {
+        logger.error(`Resend API error sending to ${email}: ${JSON.stringify(response.error)}`)
         throw new Error(response.error.message || 'Resend API error')
       }
 
-      logger.info(`Verification email sent successfully to ${email}`)
-    } catch (error) {
+      logger.info(`Verification email queued (Resend ID: ${response.data?.id}) from: ${this.from} to: ${email}`)
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send verification email. Please try again later.',
-        })
-      }
+      logger.error(`Failed to send verification email to ${email}: ${error?.message}`)
+      throw createError({
+        statusCode: 500,
+        statusMessage: error?.message || 'Could not send verification email. Please try again later.',
+      })
     }
   }
 
@@ -105,14 +106,13 @@ export class EmailService {
       }
 
       logger.info(`Password reset email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send password reset email. Please try again later.',
-        })
-      }
+      logger.error(`Failed to send password reset email to ${email}: ${error?.message}`)
+      throw createError({
+        statusCode: 500,
+        statusMessage: error?.message || 'Could not send password reset email. Please try again later.',
+      })
     }
   }
 
@@ -163,14 +163,13 @@ export class EmailService {
       }
 
       logger.info(`Project invite email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send project invite email. Please try again later.',
-        })
-      }
+      logger.error(`Failed to send project invite email to ${email}: ${error?.message}`)
+      throw createError({
+        statusCode: 500,
+        statusMessage: error?.message || 'Could not send project invite email. Please try again later.',
+      })
     }
   }
 
@@ -215,14 +214,10 @@ export class EmailService {
       }
 
       logger.info(`Project due reminder email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send project due date reminder email.',
-        })
-      }
+      logger.error(`Failed to send project due date reminder email to ${email}: ${error?.message}`)
+      // Non-critical: log but don't block the user
     }
   }
 
@@ -269,14 +264,10 @@ export class EmailService {
       }
 
       logger.info(`Card due reminder email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send card due date reminder email.',
-        })
-      }
+      logger.error(`Failed to send card due date reminder email to ${email}: ${error?.message}`)
+      // Non-critical: log but don't block the user
     }
   }
 
@@ -323,14 +314,10 @@ export class EmailService {
       }
 
       logger.info(`Card assigned email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send card assignment notification email.',
-        })
-      }
+      logger.error(`Failed to send card assigned email to ${email}: ${error?.message}`)
+      // Non-critical: log but don't block the user
     }
   }
 
@@ -371,14 +358,10 @@ export class EmailService {
       }
 
       logger.info(`Member removed email sent successfully to ${email}`)
-    } catch (error) {
+    } catch (error: any) {
       sentry.captureException(error)
-      if (process.env.NODE_ENV === 'production') {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Could not send member removal notification email.',
-        })
-      }
+      logger.error(`Failed to send member removed email to ${email}: ${error?.message}`)
+      // Non-critical: log but don't block the user
     }
   }
 }
