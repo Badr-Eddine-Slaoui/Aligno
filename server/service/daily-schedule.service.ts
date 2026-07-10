@@ -19,10 +19,34 @@ export class DailyScheduleService {
         userId
       )
 
-    // Run in a prisma transaction to ensure atomic schedule creation & block copying
     const { prisma } = await import('../utils/prisma')
     
+    // Find if a schedule already exists for today (matching YYYY-MM-DD)
+    const dateStr = new Date(dto.date).toISOString().split('T')[0] ?? ''
+    
     return prisma.$transaction(async (tx) => {
+      // Find existing schedule on that date
+      const existing = await tx.dailySchedule.findFirst({
+        where: {
+          userId,
+          date: {
+            gte: new Date(`${dateStr}T00:00:00.000Z`),
+            lte: new Date(`${dateStr}T23:59:59.999Z`),
+          },
+        },
+      })
+
+      if (existing) {
+        // Delete all blocks linked to the existing schedule
+        await tx.timeBlock.deleteMany({
+          where: { scheduleId: existing.id },
+        })
+        // Delete the schedule itself
+        await tx.dailySchedule.delete({
+          where: { id: existing.id },
+        })
+      }
+
       const schedule = await tx.dailySchedule.create({
         data,
       })
@@ -34,7 +58,6 @@ export class DailyScheduleService {
         })
 
         if (templateBlocks.length > 0) {
-          // Map them to today's schedule blocks (excluding their unique IDs and templates IDs)
           const newBlocks = templateBlocks.map((b) => ({
             title: b.title,
             description: b.description,
@@ -57,7 +80,6 @@ export class DailyScheduleService {
         }
       }
 
-      // Return the schedule with the copied blocks
       return tx.dailySchedule.findUnique({
         where: { id: schedule.id },
         include: {

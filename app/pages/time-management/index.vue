@@ -54,14 +54,23 @@ async function handleDelete() {
         <h1 class="text-3xl font-bold font-display text-primary">Time Templates</h1>
         <p class="text-on-surface-variant">Design your daily schedule blueprints.</p>
       </div>
-      <button
-        id="create-template-btn"
-        class="flex items-center gap-2 px-4 py-2.5 bg-primary-container text-on-primary-container rounded-xl font-semibold hover:opacity-90 transition-opacity"
-        @click="showCreateModal = true"
-      >
-        <Icon name="heroicons:plus" class="w-5 h-5" />
-        New Template
-      </button>
+      <div class="flex gap-3">
+        <NuxtLink
+          to="/time-management/schedule"
+          class="flex items-center gap-2 px-4 py-2.5 bg-surface-container-low hover:bg-surface-container text-on-surface rounded-xl font-semibold border border-white/5 transition-all duration-300"
+        >
+          <Icon name="heroicons:calendar-days" class="w-5 h-5 text-primary-container" />
+          Today's Schedule
+        </NuxtLink>
+        <button
+          id="create-template-btn"
+          class="flex items-center gap-2 px-4 py-2.5 bg-primary-container text-on-primary-container rounded-xl font-semibold hover:opacity-90 transition-opacity"
+          @click="showCreateModal = true"
+        >
+          <Icon name="heroicons:plus" class="w-5 h-5" />
+          New Template
+        </button>
+      </div>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3">
