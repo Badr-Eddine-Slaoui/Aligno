@@ -179,7 +179,7 @@ const handleConfirmDeleteBlock = async () => {
       :item-name="pendingDeleteBlock ? `${pendingDeleteBlock.startTime} – ${pendingDeleteBlock.endTime}: ${pendingDeleteBlock.activity}` : undefined"
       confirm-label="Delete Block"
       :loading="isDeletingBlock"
-      @update:model-value="(v) => { if (!v) pendingDeleteBlock.value = null }"
+      @update:model-value="(v) => { if (!v) pendingDeleteBlock = null }"
       @confirm="handleConfirmDeleteBlock"
     />
   </div>
