@@ -207,7 +207,7 @@ async function handleDelete() {
       :item-name="templateToDelete?.name"
       confirm-label="Delete Template"
       @confirm="handleDelete"
-      @update:model-value="(v) => { if (!v) { showDeleteConfirm.value = false; deletingId.value = null } }"
+      @update:model-value="(v) => { if (!v) { showDeleteConfirm = false; deletingId = null } }"
     />
   </div>
 </template>
