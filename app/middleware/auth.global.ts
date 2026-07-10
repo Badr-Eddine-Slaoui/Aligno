@@ -13,10 +13,13 @@ export default defineNuxtRouteMiddleware((to) => {
 
   const authStore = useAuthStore()
 
-  // While the session is being restored, allow navigation through.
-  // The full-screen loading overlay in app.vue covers all content,
-  // and the plugin will redirect to the correct page once restore completes.
-  if (authStore.isSessionRestoring) return
+  // While the session is being restored, abort navigation to prevent
+  // page components/layouts from rendering. The plugin will initiate
+  // the redirect once restoration completes.
+  if (authStore.isSessionRestoring) {
+    return abortNavigation()
+  }
+
 
 
   const isGuestRoute = GUEST_ROUTES.some(r => to.path === r || to.path.startsWith(r + '?'))
@@ -24,9 +27,8 @@ export default defineNuxtRouteMiddleware((to) => {
   if (!authStore.isAuthenticated && !isGuestRoute) {
     return navigateTo({
       path: '/login',
-      query: { redirect: to.fullPath },
-      replace: true,
-    })
+      query: { redirect: to.fullPath }
+    }, { replace: true })
   }
 
   if (authStore.isAuthenticated && isGuestRoute) {
@@ -34,3 +36,4 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo(redirect, { replace: true })
   }
 })
+
