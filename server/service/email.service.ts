@@ -17,7 +17,7 @@ export class EmailService {
 
   constructor() {
     const apiKey = process.env.RESEND_API_KEY
-    if (apiKey && apiKey !== 're_your_api_key') {
+    if (apiKey && apiKey !== 're_your_api_key' && apiKey !== 're_test_key') {
       this.resend = new Resend(apiKey)
       logger.info(`EmailService initialised. From: ${this.from}`)
     } else {
