@@ -13,11 +13,24 @@ export class DailyTemplateRepository implements IDailyTemplateDAO {
   }
 
   async findById(id: string) {
-    return prisma.dailyTemplate.findUnique({ where: { id } })
+    return prisma.dailyTemplate.findUnique({
+      where: { id },
+      include: {
+        timeBlocks: {
+          orderBy: { position: 'asc' },
+        },
+      },
+    })
   }
 
   async findByUserId(userId: string) {
-    return prisma.dailyTemplate.findMany({ where: { userId } })
+    return prisma.dailyTemplate.findMany({
+      where: { userId },
+      include: {
+        _count: { select: { timeBlocks: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
   }
 
   async findActive(userId: string) {

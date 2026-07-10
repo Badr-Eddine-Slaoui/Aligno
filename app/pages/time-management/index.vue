@@ -155,7 +155,7 @@ async function handleDelete() {
             >
               {{ template.isActive ? 'Active' : 'Inactive' }}
             </span>
-            <span class="text-xs text-on-surface-variant">{{ (template.timeBlocks?.length ?? 0) }} blocks</span>
+            <span class="text-xs text-on-surface-variant">{{ (template._count?.timeBlocks ?? template.timeBlocks?.length ?? 0) }} blocks</span>
           </div>
         </NuxtLink>
       </AppCard>

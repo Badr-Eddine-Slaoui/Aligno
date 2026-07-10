@@ -24,7 +24,7 @@ const baseTimeBlockSchema = z.object({
   isCompleted: z.boolean().default(false),
   isLocked: z.boolean().default(false),
 
-  repeatType: z.enum(RepeatTypeEnum).default("ONCE"),
+  repeatType: z.enum(RepeatTypeEnum).default("NONE"),
   repeatDays: z.string().optional(),
   repeatEnd: z.coerce.date().optional(),
 
