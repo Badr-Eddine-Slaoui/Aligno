@@ -62,6 +62,8 @@ export class AuthService {
     const hashedVerifyToken = hashToken(rawVerifyToken)
     const verifyExpires = new Date(Date.now() + EMAIL_VERIFY_HOURS * 60 * 60 * 1000)
 
+    const isDev = process.env.NODE_ENV !== 'production'
+
     const user = await userRepository.create({
       firstName: dto.firstName,
       lastName: dto.lastName,
@@ -72,6 +74,7 @@ export class AuthService {
       profilePictureUrl,
       emailVerifyToken: hashedVerifyToken,
       emailVerifyExpires: verifyExpires,
+      emailVerified: isDev, // Auto-verify in development for instant login without Resend setup
     })
 
     await emailService.sendVerificationEmail(user.email, user.firstName, rawVerifyToken)
