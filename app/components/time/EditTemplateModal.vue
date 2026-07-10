@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DailyTemplate } from '~/types'
+import { parseApiError } from '~/utils/errors'
 
 const props = defineProps<{ template: DailyTemplate }>()
 const emit = defineEmits<{ close: []; updated: [] }>()
@@ -11,12 +12,12 @@ const form = reactive({
   isActive: props.template.isActive,
 })
 const isSubmitting = ref(false)
-const error = ref<string | null>(null)
+const fieldErrors = reactive<Record<string, string>>({})
 
 async function submit() {
   if (!form.name.trim()) return
   isSubmitting.value = true
-  error.value = null
+  Object.keys(fieldErrors).forEach(k => delete fieldErrors[k])
   try {
     await updateTemplate(props.template.id, {
       name: form.name.trim(),
@@ -25,7 +26,14 @@ async function submit() {
     })
     emit('updated')
   } catch (err: any) {
-    error.value = err?.data?.statusMessage ?? 'Failed to update template'
+    const { errors: apiErrors, message } = parseApiError(err)
+    if (apiErrors) {
+      Object.entries(apiErrors).forEach(([key, msgs]) => {
+        fieldErrors[key] = Array.isArray(msgs) ? msgs[0] : String(msgs)
+      })
+    } else {
+      fieldErrors._general = message || 'Failed to update template'
+    }
   } finally {
     isSubmitting.value = false
   }
@@ -59,8 +67,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
               v-model="form.name"
               type="text"
               required
-              class="px-4 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container"
+              class="px-4 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container transition-colors"
+              :class="fieldErrors.name ? 'border-error focus:border-error' : 'border-outline-variant'"
             />
+            <p v-if="fieldErrors.name" class="text-error text-xs font-mono font-medium">{{ fieldErrors.name }}</p>
           </div>
 
           <div class="flex flex-col gap-1.5">
@@ -78,7 +88,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             <span class="text-sm text-on-surface">Active template</span>
           </label>
 
-          <p v-if="error" class="text-sm text-error">{{ error }}</p>
+          <p v-if="fieldErrors._general" class="text-sm text-error">{{ fieldErrors._general }}</p>
 
           <div class="flex gap-3 pt-2">
             <button type="button" @click="emit('close')" class="flex-1 py-2.5 rounded-xl border border-outline-variant text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors">Cancel</button>

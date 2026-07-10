@@ -15,16 +15,8 @@ const editingAccount = ref<BankAccount | null>(null)
 const openCreateAccount = () => { editingAccount.value = null; showAccountModal.value = true }
 const openEditAccount = (acc: BankAccount) => { editingAccount.value = acc; showAccountModal.value = true }
 
-const submitAccount = async (payload: Parameters<typeof wallet.createBankAccount>[0] & { id?: string }) => {
-  try {
-    if (editingAccount.value) {
-      await wallet.updateBankAccount(editingAccount.value.id, payload)
-    } else {
-      await wallet.createBankAccount(payload)
-    }
-    showAccountModal.value = false
-    await wallet.fetchMonthlyChart()
-  } catch {}
+const onAccountSaved = async () => {
+  await wallet.fetchMonthlyChart()
 }
 
 // ─── Transaction modal ────────────────────────────────────────────────────────
@@ -34,16 +26,8 @@ const editingTx = ref<Transaction | null>(null)
 const openCreateTx = () => { if (!wallet.activeAccountId.value) return; editingTx.value = null; showTxModal.value = true }
 const openEditTx = (tx: Transaction) => { editingTx.value = tx; showTxModal.value = true }
 
-const submitTx = async (payload: { status: 'INCOME' | 'EXPENSE'; amount: number; category: string; description?: string; date: string; bankAccountId?: string }) => {
-  try {
-    if (editingTx.value) {
-      await wallet.updateTransaction(editingTx.value.id, payload)
-    } else {
-      await wallet.createTransaction({ ...payload, bankAccountId: payload.bankAccountId! })
-    }
-    showTxModal.value = false
-    await wallet.fetchMonthlyChart()
-  } catch {}
+const onTxSaved = async () => {
+  await wallet.fetchMonthlyChart()
 }
 
 // ─── Subscription modal ───────────────────────────────────────────────────────
@@ -53,16 +37,8 @@ const editingSub = ref<Subscription | null>(null)
 const openCreateSub = () => { if (!wallet.activeAccountId.value) return; editingSub.value = null; showSubModal.value = true }
 const openEditSub = (sub: Subscription) => { editingSub.value = sub; showSubModal.value = true }
 
-const submitSub = async (payload: { name: string; status: 'INCOME' | 'EXPENSE'; amount: number; category: string; paymentMethod: string; isPaid: boolean; startDate: string; endDate?: string; bankAccountId?: string }) => {
-  try {
-    if (editingSub.value) {
-      await wallet.updateSubscription(editingSub.value.id, payload)
-    } else {
-      await wallet.createSubscription({ ...payload, bankAccountId: payload.bankAccountId! })
-    }
-    showSubModal.value = false
-    await wallet.fetchMonthlyChart()
-  } catch {}
+const onSubSaved = async () => {
+  await wallet.fetchMonthlyChart()
 }
 
 const toggleSubPaid = async (sub: Subscription) => {
@@ -75,12 +51,8 @@ const toggleSubPaid = async (sub: Subscription) => {
 // ─── Budget modal ─────────────────────────────────────────────────────────────
 const showBudgetModal = ref(false)
 
-const submitBudget = async (payload: { amount: number; month: number; year: number }) => {
-  try {
-    await wallet.setBudget(payload)
-    showBudgetModal.value = false
-    await wallet.fetchMonthlyChart()
-  } catch {}
+const onBudgetSaved = async () => {
+  await wallet.fetchMonthlyChart()
 }
 
 // ─── Delete confirm ───────────────────────────────────────────────────────────
@@ -298,31 +270,27 @@ watch(wallet.activeAccountId, async (id) => {
     <WalletAccountModal
       v-model="showAccountModal"
       :account="editingAccount"
-      :loading="wallet.isLoading.value"
-      @submit="submitAccount"
+      @saved="onAccountSaved"
     />
 
     <WalletTransactionModal
       v-model="showTxModal"
       :transaction="editingTx"
       :bank-account-id="wallet.activeAccountId.value ?? ''"
-      :loading="wallet.isLoading.value"
-      @submit="submitTx"
+      @saved="onTxSaved"
     />
 
     <WalletSubscriptionModal
       v-model="showSubModal"
       :subscription="editingSub"
       :bank-account-id="wallet.activeAccountId.value ?? ''"
-      :loading="wallet.isLoading.value"
-      @submit="submitSub"
+      @saved="onSubSaved"
     />
 
     <WalletBudgetModal
       v-model="showBudgetModal"
       :current-amount="currentMonthBudget"
-      :loading="wallet.isLoading.value"
-      @submit="submitBudget"
+      @saved="onBudgetSaved"
     />
 
     <WalletDeleteConfirm

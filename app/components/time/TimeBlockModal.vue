@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TimeBlock, TimeCategory, TimePriority, RepeatType } from '~/types'
+import { parseApiError } from '~/utils/errors'
 
 const props = defineProps<{ block?: TimeBlock | null; templateId?: string; scheduleId?: string }>()
 const emit = defineEmits<{ close: []; saved: [] }>()
@@ -22,7 +23,7 @@ const categories: TimeCategory[] = ['WORK', 'STUDY', 'HEALTH', 'BREAK', 'PERSONA
 const priorities: TimePriority[] = ['LOW', 'MEDIUM', 'HIGH']
 
 const isSubmitting = ref(false)
-const error = ref<string | null>(null)
+const fieldErrors = reactive<Record<string, string>>({})
 
 function calcDuration() {
   const startParts = form.startTime.split(':')
@@ -40,7 +41,7 @@ watch(() => [form.startTime, form.endTime], calcDuration)
 async function submit() {
   if (!form.title.trim()) return
   isSubmitting.value = true
-  error.value = null
+  Object.keys(fieldErrors).forEach(k => delete fieldErrors[k])
   try {
     if (isEdit.value && props.block) {
       await updateTimeBlock(props.block.id, {
@@ -69,7 +70,14 @@ async function submit() {
     }
     emit('saved')
   } catch (err: any) {
-    error.value = err?.data?.statusMessage ?? 'Failed to save block'
+    const { errors: apiErrors, message } = parseApiError(err)
+    if (apiErrors) {
+      Object.entries(apiErrors).forEach(([key, msgs]) => {
+        fieldErrors[key] = Array.isArray(msgs) ? msgs[0] : String(msgs)
+      })
+    } else {
+      fieldErrors._general = message || 'Failed to save block'
+    }
   } finally {
     isSubmitting.value = false
   }
@@ -99,26 +107,41 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         <form @submit.prevent="submit" class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
             <label for="block-title" class="text-sm font-medium text-on-surface">Title <span class="text-error">*</span></label>
-            <input id="block-title" v-model="form.title" type="text" placeholder="e.g. Deep Work Session" required class="px-4 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container" />
+            <input id="block-title" v-model="form.title" type="text" placeholder="e.g. Deep Work Session" required
+              class="px-4 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container transition-colors"
+              :class="fieldErrors.title ? 'border-error focus:border-error' : 'border-outline-variant'" />
+            <p v-if="fieldErrors.title" class="text-error text-xs font-mono font-medium">{{ fieldErrors.title }}</p>
           </div>
 
           <div class="flex flex-col gap-1.5">
             <label for="block-description" class="text-sm font-medium text-on-surface">Description</label>
-            <input id="block-description" v-model="form.description" type="text" class="px-4 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container" />
+            <input id="block-description" v-model="form.description" type="text"
+              class="px-4 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container transition-colors"
+              :class="fieldErrors.description ? 'border-error focus:border-error' : 'border-outline-variant'" />
+            <p v-if="fieldErrors.description" class="text-error text-xs font-mono font-medium">{{ fieldErrors.description }}</p>
           </div>
 
           <div class="grid grid-cols-3 gap-3">
             <div class="flex flex-col gap-1.5">
               <label for="block-start" class="text-sm font-medium text-on-surface">Start</label>
-              <input id="block-start" v-model="form.startTime" type="time" class="px-3 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container" />
+              <input id="block-start" v-model="form.startTime" type="time"
+                class="px-3 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container"
+                :class="fieldErrors.startTime ? 'border-error' : 'border-outline-variant'" />
+              <p v-if="fieldErrors.startTime" class="text-error text-xs font-mono font-medium">{{ fieldErrors.startTime }}</p>
             </div>
             <div class="flex flex-col gap-1.5">
               <label for="block-end" class="text-sm font-medium text-on-surface">End</label>
-              <input id="block-end" v-model="form.endTime" type="time" class="px-3 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container" />
+              <input id="block-end" v-model="form.endTime" type="time"
+                class="px-3 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container"
+                :class="fieldErrors.endTime ? 'border-error' : 'border-outline-variant'" />
+              <p v-if="fieldErrors.endTime" class="text-error text-xs font-mono font-medium">{{ fieldErrors.endTime }}</p>
             </div>
             <div class="flex flex-col gap-1.5">
               <label for="block-duration" class="text-sm font-medium text-on-surface">Duration (min)</label>
-              <input id="block-duration" v-model.number="form.duration" type="number" min="1" class="px-3 py-2.5 bg-surface-container rounded-xl border border-outline-variant text-sm focus:outline-none focus:border-primary-container" />
+              <input id="block-duration" v-model.number="form.duration" type="number" min="1"
+                class="px-3 py-2.5 bg-surface-container rounded-xl border text-sm focus:outline-none focus:border-primary-container"
+                :class="fieldErrors.duration ? 'border-error' : 'border-outline-variant'" />
+              <p v-if="fieldErrors.duration" class="text-error text-xs font-mono font-medium">{{ fieldErrors.duration }}</p>
             </div>
           </div>
 
@@ -137,7 +160,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             </div>
           </div>
 
-          <p v-if="error" class="text-sm text-error">{{ error }}</p>
+          <p v-if="fieldErrors._general" class="text-sm text-error">{{ fieldErrors._general }}</p>
 
           <div class="flex gap-3 pt-2">
             <button type="button" @click="emit('close')" class="flex-1 py-2.5 rounded-xl border border-outline-variant text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors">Cancel</button>

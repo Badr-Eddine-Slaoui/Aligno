@@ -1,28 +1,19 @@
 <script setup lang="ts">
 import type { Subscription } from '~/types'
+import { parseApiError } from '~/utils/errors'
 
 const props = defineProps<{
   modelValue: boolean
   subscription?: Subscription | null
   bankAccountId: string
-  loading?: boolean
 }>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  submit: [payload: {
-    name: string
-    status: 'INCOME' | 'EXPENSE'
-    amount: number
-    category: string
-    paymentMethod: string
-    isPaid: boolean
-    startDate: string
-    endDate?: string
-    bankAccountId?: string
-  }]
+  saved: []
 }>()
 
+const wallet = useWallet()
 const isEditing = computed(() => !!props.subscription)
 
 const form = reactive({
@@ -36,6 +27,9 @@ const form = reactive({
   endDate: '',
 })
 
+const errors = reactive<Record<string, string>>({})
+const isLoading = ref(false)
+
 watch(() => props.modelValue, (open) => {
   if (open) {
     const s = props.subscription
@@ -47,28 +41,49 @@ watch(() => props.modelValue, (open) => {
     form.isPaid = s?.isPaid ?? false
     form.startDate = s ? new Date(s.startDate).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10)
     form.endDate = s?.endDate ? new Date(s.endDate).toISOString().substring(0, 10) : ''
+    Object.keys(errors).forEach(k => delete errors[k])
   }
 })
 
-const submit = () => {
-  emit('submit', {
-    name: form.name,
-    status: form.status,
-    amount: Number(form.amount),
-    category: form.category,
-    paymentMethod: form.paymentMethod,
-    isPaid: form.isPaid,
-    startDate: new Date(form.startDate).toISOString(),
-    endDate: form.endDate ? new Date(form.endDate).toISOString() : undefined,
-    bankAccountId: isEditing.value ? undefined : props.bankAccountId,
-  })
+const submit = async () => {
+  Object.keys(errors).forEach(k => delete errors[k])
+  isLoading.value = true
+  try {
+    const payload = {
+      name: form.name,
+      status: form.status,
+      amount: Number(form.amount),
+      category: form.category,
+      paymentMethod: form.paymentMethod,
+      isPaid: form.isPaid,
+      startDate: new Date(form.startDate).toISOString(),
+      endDate: form.endDate ? new Date(form.endDate).toISOString() : undefined,
+      bankAccountId: isEditing.value ? undefined : props.bankAccountId,
+    }
+    if (isEditing.value && props.subscription) {
+      await wallet.updateSubscription(props.subscription.id, payload)
+    } else {
+      await wallet.createSubscription({ ...payload, bankAccountId: props.bankAccountId })
+    }
+    emit('update:modelValue', false)
+    emit('saved')
+  } catch (err: any) {
+    const { errors: apiErrors } = parseApiError(err)
+    if (apiErrors) {
+      Object.entries(apiErrors).forEach(([key, msgs]) => {
+        errors[key] = Array.isArray(msgs) ? msgs[0] : String(msgs)
+      })
+    }
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
 <template>
   <AppModal :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" :title="isEditing ? 'Edit Subscription' : 'Add Subscription'">
     <form @submit.prevent="submit" class="space-y-5">
-      <AppInput v-model="form.name" label="Name" placeholder="e.g. Netflix, Gym" required />
+      <AppInput v-model="form.name" label="Name" placeholder="e.g. Netflix, Gym" :error="errors.name" required />
 
       <div class="flex flex-col gap-2">
         <label class="font-display font-medium text-xs tracking-wider uppercase text-on-surface-variant">Status Type</label>
@@ -82,11 +97,12 @@ const submit = () => {
             <Icon name="heroicons:arrow-trending-up" class="w-3.5 h-3.5" /> Income
           </button>
         </div>
+        <p v-if="errors.status" class="text-error text-xs font-mono mt-1 font-medium">{{ errors.status }}</p>
       </div>
 
-      <AppInput v-model="form.amount" type="number" label="Recurring Amount" placeholder="e.g. 99" required />
-      <AppInput v-model="form.category" label="Category" placeholder="e.g. Entertainment, Health" required />
-      <AppInput v-model="form.paymentMethod" label="Payment Method" placeholder="e.g. Credit Card, Direct Debit" required />
+      <AppInput v-model="form.amount" type="number" label="Recurring Amount" placeholder="e.g. 99" :error="errors.amount" required />
+      <AppInput v-model="form.category" label="Category" placeholder="e.g. Entertainment, Health" :error="errors.category" required />
+      <AppInput v-model="form.paymentMethod" label="Payment Method" placeholder="e.g. Credit Card, Direct Debit" :error="errors.paymentMethod" required />
 
       <div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-low border border-white/5 cursor-pointer select-none" @click="form.isPaid = !form.isPaid">
         <div class="w-4 h-4 rounded border flex items-center justify-center transition-all"
@@ -98,12 +114,12 @@ const submit = () => {
         </label>
       </div>
 
-      <AppInput v-model="form.startDate" type="date" label="Start Date" required />
-      <AppInput v-model="form.endDate" type="date" label="End Date (Optional)" />
+      <AppInput v-model="form.startDate" type="date" label="Start Date" :error="errors.startDate" required />
+      <AppInput v-model="form.endDate" type="date" label="End Date (Optional)" :error="errors.endDate" />
 
       <div class="flex justify-end gap-3 pt-3 border-t border-white/5">
         <AppButton variant="ghost" @click="emit('update:modelValue', false)">Cancel</AppButton>
-        <AppButton variant="solid" color="primary" type="submit" :loading="loading">
+        <AppButton variant="solid" color="primary" type="submit" :loading="isLoading">
           {{ isEditing ? 'Save' : 'Add' }}
         </AppButton>
       </div>
