@@ -25,12 +25,23 @@ export class DailyScheduleRepository implements IDailyScheduleDAO {
   async findById(id: string) {
     return prisma.dailySchedule.findUnique({
       where: { id },
+      include: {
+        blocks: {
+          orderBy: { position: 'asc' },
+        },
+      },
     })
   }
 
   async findByUser(userId: string) {
     return prisma.dailySchedule.findMany({
       where: { userId },
+      include: {
+        blocks: {
+          orderBy: { position: 'asc' },
+        },
+      },
+      orderBy: { date: 'desc' },
     })
   }
 
@@ -42,6 +53,11 @@ export class DailyScheduleRepository implements IDailyScheduleDAO {
       where: {
         userId,
         date,
+      },
+      include: {
+        blocks: {
+          orderBy: { position: 'asc' },
+        },
       },
     })
   }

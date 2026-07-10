@@ -153,8 +153,16 @@ export class DailyScheduleController {
     if (!userId) throw createError({ statusCode: 401 })
 
     const result = await this.service.create(body as CreateDailyScheduleDTO, userId)
+    if (!result) return { success: true, data: null }
 
-    return { success: true, data: result }
+    const { blocks, ...rest } = result as any
+    return {
+      success: true,
+      data: {
+        ...rest,
+        timeBlocks: blocks || []
+      }
+    }
   }
 
   async getByUser(event: H3Event) {
@@ -162,8 +170,15 @@ export class DailyScheduleController {
     if (!userId) throw createError({ statusCode: 401 })
 
     const result = await this.service.getByUser(userId)
+    const mapped = (result || []).map((s: any) => {
+      const { blocks, ...rest } = s
+      return {
+        ...rest,
+        timeBlocks: blocks || []
+      }
+    })
 
-    return { success: true, data: result }
+    return { success: true, data: mapped }
   }
 
   async getById(event: H3Event) {
@@ -171,8 +186,16 @@ export class DailyScheduleController {
     if (!id) throw createError({ statusCode: 400, message: 'ID required' })
 
     const result = await this.service.getById(id)
+    if (!result) return { success: true, data: null }
 
-    return { success: true, data: result }
+    const { blocks, ...rest } = result as any
+    return {
+      success: true,
+      data: {
+        ...rest,
+        timeBlocks: blocks || []
+      }
+    }
   }
 
   async update(event: H3Event) {
@@ -182,8 +205,16 @@ export class DailyScheduleController {
     const body = await readBody(event)
 
     const result = await this.service.update(id, body as UpdateDailyScheduleDTO)
+    if (!result) return { success: true, data: null }
 
-    return { success: true, data: result }
+    const { blocks, ...rest } = result as any
+    return {
+      success: true,
+      data: {
+        ...rest,
+        timeBlocks: blocks || []
+      }
+    }
   }
 
   async delete(event: H3Event) {
