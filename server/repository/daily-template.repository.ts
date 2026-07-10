@@ -27,7 +27,7 @@ export class DailyTemplateRepository implements IDailyTemplateDAO {
     return prisma.dailyTemplate.findMany({
       where: { userId },
       include: {
-        _count: { select: { timeBlocks: true } },
+        _count: { select: { blocks: true } },
       },
       orderBy: { createdAt: 'desc' },
     })
