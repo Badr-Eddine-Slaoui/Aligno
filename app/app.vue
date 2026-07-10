@@ -21,9 +21,10 @@ useHead({
       <p class="font-display font-semibold text-lg text-primary tracking-widest animate-pulse">ALIGNO</p>
     </div>
 
-    <NuxtLayout>
+    <NuxtLayout v-if="!authStore.isSessionRestoring">
       <NuxtPage />
     </NuxtLayout>
+
 
     <!-- Global Toast Container -->
     <ClientOnly>
