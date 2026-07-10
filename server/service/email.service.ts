@@ -47,12 +47,17 @@ export class EmailService {
       const vnode = h(VerificationEmail, { firstName, url })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: 'Verify your email — Aligno',
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Verification email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -88,12 +93,17 @@ export class EmailService {
       const vnode = h(PasswordResetEmail, { firstName, url })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: 'Reset your password — Aligno',
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Password reset email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -141,12 +151,17 @@ export class EmailService {
       })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: `You've been invited to collaborate on "${projectName}" — Aligno`,
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Project invite email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -188,12 +203,17 @@ export class EmailService {
       })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: `Project "${projectName}" is due tomorrow! — Aligno`,
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Project due reminder email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -237,12 +257,17 @@ export class EmailService {
       })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: `Task "${cardTitle}" is due tomorrow! — Aligno`,
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Card due reminder email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -286,12 +311,17 @@ export class EmailService {
       })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: `New task assigned: "${cardTitle}" — Aligno`,
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Card assigned email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
@@ -329,12 +359,17 @@ export class EmailService {
       })
       const { html } = await useRender(vnode)
 
-      await this.resend.emails.send({
+      const response = await this.resend.emails.send({
         from: this.from,
         to: email,
         subject: `Removed from project "${projectName}" — Aligno`,
         html,
       })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Resend API error')
+      }
+
       logger.info(`Member removed email sent successfully to ${email}`)
     } catch (error) {
       sentry.captureException(error)
