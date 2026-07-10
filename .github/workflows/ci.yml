@@ -69,7 +69,7 @@ jobs:
         run: npx prisma migrate deploy
 
       - name: Run Type Checks
-        run: npx vue-tsc --noEmit
+        run: ./node_modules/.bin/vue-tsc --noEmit
 
       - name: Run Vitest Test Suite
         run: npm run test

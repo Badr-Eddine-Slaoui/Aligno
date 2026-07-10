@@ -26,7 +26,7 @@ const pendingDeleteLabelId = ref<string | null>(null)
 const isDeletingLabel = ref(false)
 
 const labelToDelete = computed(() =>
-  projectsHelper.labels?.value?.find((l) => l.id === pendingDeleteLabelId.value)
+  projectLabels.value.find((l: any) => l.id === pendingDeleteLabelId.value)
 )
 
 const colors = [
@@ -242,7 +242,7 @@ const toggleAssign = (labelId: string) => {
     :item-name="labelToDelete?.name"
     confirm-label="Delete Label"
     :loading="isDeletingLabel"
-    @update:model-value="(v) => { if (!v) pendingDeleteLabelId.value = null }"
+    @update:model-value="(v) => { if (!v) pendingDeleteLabelId = null }"
     @confirm="confirmDeleteLabel"
   />
 </template>

@@ -176,7 +176,7 @@ const handleConfirmDeleteBlock = async () => {
       :model-value="!!pendingDeleteBlock"
       title="Delete Time Block"
       message="This time block will be permanently removed from the template."
-      :item-name="pendingDeleteBlock ? `${pendingDeleteBlock.startTime} – ${pendingDeleteBlock.endTime}: ${pendingDeleteBlock.activity}` : undefined"
+      :item-name="pendingDeleteBlock ? `${pendingDeleteBlock.startTime} – ${pendingDeleteBlock.endTime}: ${pendingDeleteBlock.title}` : undefined"
       confirm-label="Delete Block"
       :loading="isDeletingBlock"
       @update:model-value="(v) => { if (!v) pendingDeleteBlock = null }"
