@@ -27,8 +27,6 @@ import { useRoute } from 'vue-router'
 import { parseApiError } from '~/utils/errors'
 import type { ProjectMember, ProjectProgress } from '~/types'
 
-const route = useRoute()
-const projectId = route.params.id as string
 
 const projectsHelper = useProjects()
 const auth = useAuth()

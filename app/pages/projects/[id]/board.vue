@@ -26,8 +26,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { KanbanCard } from '~/types'
 
-const route = useRoute()
-const projectId = route.params.id as string
 
 const projectsHelper = useProjects()
 

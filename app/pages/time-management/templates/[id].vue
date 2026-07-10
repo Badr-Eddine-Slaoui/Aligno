@@ -7,8 +7,6 @@ const route = useRoute()
 const id = route.params.id as string
 
 const appUrl = useRuntimeConfig().public.appUrl
-const route = useRoute()
-const id = route.params.id as string
 
 useSeoMeta({
   title: 'Template Editor – Aligno',
