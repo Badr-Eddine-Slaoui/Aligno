@@ -4,8 +4,10 @@ useSeoMeta({
   description: 'Aligno is an all-in-one productivity app for managing projects, daily schedules, and finances.',
 })
 
-onMounted(() => {
-  navigateTo('/dashboard')
+definePageMeta({
+  middleware: [
+    () => navigateTo('/dashboard', { replace: true })
+  ]
 })
 </script>
 

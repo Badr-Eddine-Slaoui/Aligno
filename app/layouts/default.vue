@@ -25,7 +25,8 @@ const navLinks = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-surface flex">
+  <div class="h-screen overflow-hidden bg-surface text-on-surface flex">
+    <!-- Mobile overlay backdrop -->
     <div
       v-if="isMobileOpen"
       class="fixed inset-0 bg-black/50 z-30 lg:hidden"
@@ -33,15 +34,16 @@ const navLinks = [
       @click="closeMobile"
     />
 
+    <!-- Sidebar -->
     <aside
-      class="glass border-r border-outline-variant transition-all duration-300 flex flex-col z-40 fixed lg:static h-full"
+      class="glass border-r border-outline-variant transition-all duration-300 flex flex-col z-40 h-full flex-shrink-0 fixed lg:relative"
       :class="[
         isSidebarOpen ? 'lg:w-64' : 'lg:w-20',
         isMobileOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'
       ]"
       aria-label="Main navigation"
     >
-      <div class="h-16 flex items-center px-6 border-b border-outline-variant gap-3 select-none">
+      <div class="h-16 flex items-center px-6 border-b border-outline-variant gap-3 select-none shrink-0">
         <Icon name="heroicons:sparkles" class="w-6 h-6 text-primary-container flex-shrink-0" />
         <span
           v-if="isSidebarOpen || isMobileOpen"
@@ -49,7 +51,7 @@ const navLinks = [
         >ALIGNO</span>
       </div>
 
-      <nav class="flex-1 p-4 flex flex-col gap-2" role="navigation">
+      <nav class="flex-1 p-4 flex flex-col gap-2 overflow-y-auto" role="navigation">
         <NuxtLink
           v-for="link in navLinks"
           :key="link.to"
@@ -63,7 +65,7 @@ const navLinks = [
         </NuxtLink>
       </nav>
 
-      <div class="p-4 border-t border-outline-variant flex items-center justify-between">
+      <div class="p-4 border-t border-outline-variant flex items-center justify-between shrink-0">
         <NuxtLink to="/profile" class="flex items-center gap-3 overflow-hidden hover:opacity-80 transition-opacity" @click="closeMobile">
           <AppAvatar :src="auth.user.value?.profilePictureUrl" :first-name="auth.user.value?.firstName" :last-name="auth.user.value?.lastName" size="sm" />
           <div v-if="isSidebarOpen || isMobileOpen" class="flex flex-col overflow-hidden">
@@ -82,8 +84,9 @@ const navLinks = [
       </div>
     </aside>
 
-    <div class="flex-1 flex flex-col overflow-x-hidden min-h-screen lg:ml-0">
-      <header class="h-16 glass border-b border-outline-variant flex items-center justify-between px-6 lg:px-8 z-10 sticky top-0">
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+      <header class="h-16 glass border-b border-outline-variant flex items-center justify-between px-6 lg:px-8 z-10 shrink-0">
         <button
           aria-label="Toggle sidebar"
           @click="toggleSidebar"
@@ -97,7 +100,7 @@ const navLinks = [
         </div>
       </header>
 
-      <main class="flex-1 p-6 lg:p-8" role="main">
+      <main class="flex-1 overflow-y-auto p-6 lg:p-8" role="main">
         <slot />
       </main>
     </div>

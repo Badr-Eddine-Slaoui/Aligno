@@ -1,28 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { Notivue, NotivueSwipe } from 'notivue'
 import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()
-const isMounted = ref(false)
 
 useHead({
   htmlAttrs: {
     lang: 'en'
   }
 })
-
-onMounted(() => {
-  isMounted.value = true
-})
 </script>
 
 <template>
   <div>
     <NuxtRouteAnnouncer />
-    
+
     <!-- Fullscreen Loading Screen during session restore -->
-    <div v-if="isMounted && authStore.isSessionRestoring" class="fixed inset-0 bg-surface z-50 flex flex-col items-center justify-center gap-4">
+    <div v-if="authStore.isSessionRestoring" class="fixed inset-0 bg-surface z-50 flex flex-col items-center justify-center gap-4">
       <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       <p class="font-display font-semibold text-lg text-primary tracking-widest animate-pulse">ALIGNO</p>
     </div>

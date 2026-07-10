@@ -12,25 +12,21 @@ export default defineNuxtPlugin(async () => {
   const authStore = useAuthStore()
   const runtimeConfig = useRuntimeConfig()
 
-  // Only run on client side
   if (!process.client) return
 
   authStore.isSessionRestoring = true
   try {
-    // Use $fetch.raw so we can read response headers directly (X-Access-Token)
     const res = await $fetch.raw('/auth/me', {
       baseURL: runtimeConfig.public.apiBase,
       method: 'GET',
       credentials: 'include',
     })
 
-    // Extract the silently-refreshed access token from the response header
     const newToken = res.headers.get('X-Access-Token')
     const body = res._data as any
 
     if (body?.success && body?.data) {
       authStore.setUser(body.data)
-      // Always set token — use the header value if present, otherwise keep existing
       if (newToken) {
         authStore.setToken(newToken)
       }
@@ -41,15 +37,17 @@ export default defineNuxtPlugin(async () => {
     authStore.isSessionRestoring = false
 
     const route = useRoute()
-    const isGuestRoute = GUEST_ROUTES.includes(route.path)
+    const isGuestRoute = GUEST_ROUTES.some(r => route.path === r || route.path.startsWith(r + '?'))
 
     if (!authStore.isAuthenticated && !isGuestRoute) {
-      navigateTo({
+      await navigateTo({
         path: '/login',
         query: { redirect: route.fullPath },
+        replace: true,
       })
     } else if (authStore.isAuthenticated && isGuestRoute) {
-      navigateTo('/dashboard')
+      const redirect = (route.query.redirect as string) || '/dashboard'
+      await navigateTo(redirect, { replace: true })
     }
   }
 })

@@ -8,25 +8,29 @@ const GUEST_ROUTES = [
   '/verify-email',
 ]
 
-export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore()
-
-  // Skip middleware during server build or prerendering to prevent execution delays
+export default defineNuxtRouteMiddleware((to) => {
   if (process.server) return
 
-  // Wait for session restoration to complete before enforcing route protection
-  if (authStore.isSessionRestoring) return
+  const authStore = useAuthStore()
 
-  const isGuestRoute = GUEST_ROUTES.includes(to.path)
+  // While the session is being restored, block navigation entirely.
+  // The plugin that restores the session will call router.push() once done.
+  if (authStore.isSessionRestoring) {
+    return abortNavigation()
+  }
+
+  const isGuestRoute = GUEST_ROUTES.some(r => to.path === r || to.path.startsWith(r + '?'))
 
   if (!authStore.isAuthenticated && !isGuestRoute) {
     return navigateTo({
       path: '/login',
-      query: { redirect: to.fullPath }
+      query: { redirect: to.fullPath },
+      replace: true,
     })
   }
 
   if (authStore.isAuthenticated && isGuestRoute) {
-    return navigateTo('/dashboard')
+    const redirect = (to.query.redirect as string) || '/dashboard'
+    return navigateTo(redirect, { replace: true })
   }
 })
