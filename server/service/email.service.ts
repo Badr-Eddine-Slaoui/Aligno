@@ -25,6 +25,17 @@ export class EmailService {
     }
   }
 
+  private shouldSkip(email: string): boolean {
+    if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
+      return true
+    }
+    const domain = email.split('@')[1]?.toLowerCase()
+    if (domain === 'test.com' || domain === 'example.com' || email.includes('test')) {
+      return true
+    }
+    return !this.resend
+  }
+
   async sendVerificationEmail(
     email: string,
     firstName: string,
@@ -35,12 +46,8 @@ export class EmailService {
 
     logger.info(`[Verification Link for ${email}]: ${url}`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping verification email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -81,12 +88,8 @@ export class EmailService {
 
     logger.info(`[Password Reset Link for ${email}]: ${url}`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping password reset email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -131,12 +134,8 @@ export class EmailService {
     logger.info(`[Project Invite Accept Link for ${email}]: ${acceptUrl}`)
     logger.info(`[Project Invite Decline Link for ${email}]: ${declineUrl}`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping project invite email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -181,12 +180,8 @@ export class EmailService {
   ): Promise<void> {
     logger.info(`[Project Due Date Reminder for ${email}]: Project "${projectName}" is due tomorrow!`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping project due date reminder email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -230,12 +225,8 @@ export class EmailService {
   ): Promise<void> {
     logger.info(`[Card Due Date Reminder for ${email}]: Card "${cardTitle}" in "${projectName}" is due tomorrow!`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping card due date reminder email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -280,12 +271,8 @@ export class EmailService {
   ): Promise<void> {
     logger.info(`[Card Assigned Notification for ${email}]: Assigned "${cardTitle}" in "${projectName}" by ${assignerName}`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping card assigned email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
@@ -329,12 +316,8 @@ export class EmailService {
   ): Promise<void> {
     logger.info(`[Member Removed Notification for ${email}]: Removed from "${projectName}" by ${removerName}`)
 
-    if (process.env.NODE_ENV === 'test') {
-      return
-    }
-
-    if (!this.resend) {
-      logger.info('Skipping email delivery (no Resend API key configured).')
+    if (this.shouldSkip(email)) {
+      logger.info(`Skipping member removed email to ${email} (test env/mock domain/no Resend).`)
       return
     }
 
