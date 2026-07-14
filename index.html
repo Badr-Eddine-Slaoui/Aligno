@@ -1,0 +1,1125 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rapport de Stage - Badr Eddine Slaoui</title>
+  <style>
+    /* CSS global et réinitialisation */
+    @page {
+      size: A4;
+      margin: 2.5cm;
+    }
+    
+    @page :first {
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: bold;
+      color: #1a3f8f;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 14pt;
+      margin-top: 24pt;
+      margin-bottom: 12pt;
+      border-bottom: 2px solid #1a3f8f;
+      padding-bottom: 4pt;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: 13pt;
+      margin-top: 18pt;
+      margin-bottom: 8pt;
+      color: #1e4db7;
+    }
+
+    h3 {
+      font-size: 12pt;
+      margin-top: 14pt;
+      margin-bottom: 6pt;
+      color: #2563eb;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 12pt;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 12pt;
+      padding-left: 20pt;
+      text-align: justify;
+    }
+
+    li {
+      margin-bottom: 6pt;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    /* Couverture Premium */
+    .cover-page {
+      width: 210mm;
+      height: 297mm;
+      box-sizing: border-box;
+      padding: 2.5cm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #08132a 0%, #151f37 100%);
+      color: #ffffff;
+      position: relative;
+      page-break-after: always;
+    }
+
+    .cover-logos {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cover-logos img {
+      max-height: 50px;
+      object-fit: contain;
+    }
+
+    .cover-logos span {
+      font-size: 24pt;
+      font-weight: bold;
+      color: #00e5ff;
+    }
+
+    .cover-title-area {
+      text-align: center;
+      margin-top: 40mm;
+    }
+
+    .cover-subtitle {
+      font-size: 14pt;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #00e5ff;
+      margin-bottom: 10pt;
+    }
+
+    .cover-title {
+      font-size: 28pt;
+      font-weight: bold;
+      line-height: 1.2;
+      margin-bottom: 20pt;
+      color: #ffffff;
+    }
+
+    .cover-divider {
+      width: 100px;
+      height: 4px;
+      background-color: #00e5ff;
+      margin: 0 auto 30pt auto;
+    }
+
+    .cover-info {
+      width: 100%;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20pt;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15pt;
+      font-size: 11pt;
+    }
+
+    .cover-grid-item span {
+      display: block;
+      color: #bac9cc;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2pt;
+    }
+
+    .cover-grid-item strong {
+      color: #ffffff;
+    }
+
+    /* Style des tableaux */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12pt;
+      margin-bottom: 18pt;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #bfdbfe;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1a3f8f;
+      color: #ffffff;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 9.5pt;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    .table-caption {
+      text-align: center;
+      font-style: italic;
+      font-size: 9.5pt;
+      color: #6b7280;
+      margin-top: -12pt;
+      margin-bottom: 18pt;
+    }
+
+    /* Éléments esthétiques additionnels */
+    .note-box {
+      border-left: 4px solid #00e5ff;
+      background-color: #f0fafd;
+      padding: 12pt;
+      margin-top: 12pt;
+      margin-bottom: 12pt;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .note-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Diagrammes SVG */
+    .diagram-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20pt 0;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15pt;
+      page-break-inside: avoid;
+    }
+
+    .diagram-caption {
+      text-align: center;
+      font-style: italic;
+      font-size: 9.5pt;
+      color: #6b7280;
+      margin-top: -10pt;
+      margin-bottom: 20pt;
+    }
+
+    /* Header et Footer simulation via CSS paged media */
+    .header-space, .footer-space {
+      height: 15mm;
+    }
+
+    .header-sim {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10mm;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5pt;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .footer-sim {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 10mm;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5pt;
+      color: #6b7280;
+    }
+
+    /* Table des matières */
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 6pt;
+    }
+
+    .toc-item-title {
+      font-weight: bold;
+    }
+
+    .toc-item-dots {
+      flex-grow: 1;
+      border-bottom: 1px dotted #94a3b8;
+      margin: 0 10px;
+      position: relative;
+      top: -4px;
+    }
+
+    .toc-item-page {
+      font-weight: bold;
+    }
+
+    .toc-subitem {
+      margin-left: 20pt;
+      font-size: 11pt;
+    }
+
+    .toc-subitem .toc-item-title {
+      font-weight: normal;
+      color: #475569;
+    }
+
+    .toc-subitem .toc-item-page {
+      font-weight: normal;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- PAGE DE COUVERTURE -->
+  <!-- ========================================== -->
+  <div class="cover-page">
+    <div class="cover-logos">
+      <img src="data:image/jpeg;base64,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" alt="YouCode Safi">
+      <span>×</span>
+      <img src="data:image/jpeg;base64,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" alt="Landmark Agency">
+    </div>
+
+    <div class="cover-title-area">
+      <div class="cover-subtitle">Mémoire de Fin de Formation</div>
+      <h1 class="cover-title" style="border:none; color:#ffffff; font-size:26pt; text-transform:none;">
+        Rapport de Stage de Fin de Cycle<br>
+        Développement Full-Stack & Coordination Agile
+      </h1>
+      <div class="cover-divider"></div>
+      <p style="text-align:center; color:#bac9cc; font-size:13pt;">
+        Intégration d'un cycle DevOps, refactorisation d'une architecture e-commerce et création from scratch d'un écosystème de productivité
+      </p>
+    </div>
+
+    <div class="cover-info">
+      <div class="cover-grid">
+        <div class="cover-grid-item">
+          <span>Stagiaire</span>
+          <strong>Badr Eddine Slaoui</strong>
+        </div>
+        <div class="cover-grid-item">
+          <span>Encadrant Professionnel</span>
+          <strong>M. LATRACH Mohammed (Landmark Agency)</strong>
+        </div>
+        <div class="cover-grid-item">
+          <span>Formateur Référent</span>
+          <strong>M. Saad Shaimer (YouCode Safi)</strong>
+        </div>
+        <div class="cover-grid-item">
+          <span>Conseillère Pédagogique (CME)</span>
+          <strong>Mme Kaoutar Darroufi</strong>
+        </div>
+        <div class="cover-grid-item">
+          <span>Période du stage</span>
+          <strong>7 Mai 2026 — 7 Juillet 2026</strong>
+        </div>
+        <div class="cover-grid-item">
+          <span>Année Universitaire</span>
+          <strong>2025 — 2026</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- RÉSUMÉ & ABSTRACT -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Résumé / Abstract</h1>
+  
+  <h2>Résumé</h2>
+  <p>
+    Ce rapport présente le bilan de mon stage de fin d'études d'une durée de deux mois (du 7 mai au 7 juillet 2026) au sein de l'agence numérique <strong>Landmark Agency</strong> à Oujda. Durant ce stage, j'ai exercé le rôle de <strong>Scrum Master</strong> et de <strong>Développeur Full-Stack</strong>. Mon intervention a porté sur deux projets majeurs aux défis complémentaires : <strong>SikBeauty</strong>, une marketplace e-commerce de cosmétiques coréens en phase d'industrialisation, et <strong>Aligno</strong>, un écosystème complet de productivité et de gestion de projets développé à partir de zéro.
+  </p>
+  <p>
+    Sur le projet SikBeauty, j'ai orchestré la migration de composants React.js vers Next.js pour tirer profit du Server-Side Rendering (SSR) et maximiser le référencement naturel (SEO), tout en mettant en œuvre une chaîne DevOps complète (Docker, Docker Compose, CI/CD GitHub Actions, hébergement VPS Hostinger). Sur le projet Aligno, j'ai supervisé la planification des sprints, conçu l'architecture applicative globale en 6 couches, et développé de bout en bout les modules d'authentification sécurisés (JWT, cookies HttpOnly, chiffrement bcrypt) et la suite de tests unitaires et d'intégration via Vitest.
+  </p>
+  <p>
+    <strong>Mots-clés :</strong> Nuxt 4, Next.js, Scrum Master, CI/CD, DevOps, Docker, Tests E2E, Sécurité JWT, Zod.
+  </p>
+
+  <h2 style="margin-top: 30pt;">Abstract</h2>
+  <p>
+    This internship report details my two-month graduation project (from May 7 to July 7, 2026) at the digital agency <strong>Landmark Agency</strong> in Oujda. During this period, I served as a <strong>Scrum Master</strong> and <strong>Full-Stack Developer</strong> on two distinct projects: <strong>SikBeauty</strong>, a Korean cosmetics e-commerce marketplace undergoing industrialization, and <strong>Aligno</strong>, a productivity and project management platform built from scratch.
+  </p>
+  <p>
+    For SikBeauty, I led the migration of React.js features to Next.js to leverage Server-Side Rendering (SSR) and optimize SEO metrics. I also set up a robust DevOps pipeline utilizing Docker, Docker Compose, GitHub Actions, and VPS deployment on Hostinger. For Aligno, I managed sprint planning, designed a 6-layer clean backend architecture, and developed the secure authentication module (JWT, HttpOnly cookies, bcrypt hashing) alongside a comprehensive integration test suite with Vitest.
+  </p>
+  <p>
+    <strong>Keywords:</strong> Nuxt 4, Next.js, Scrum Master, CI/CD, DevOps, Docker, E2E Testing, JWT Security, Zod.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- REMERCIEMENTS -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Remerciements</h1>
+  <p>
+    À l'issue de ce stage de fin de formation, je tiens à exprimer ma gratitude envers l'ensemble des personnes qui ont contribué au bon déroulement de cette expérience professionnelle.
+  </p>
+  <p>
+    Je remercie chaleureusement mon tuteur en entreprise, <strong>M. LATRACH Mohammed</strong>, pour son accueil au sein de Landmark Agency, sa confiance, sa disponibilité constante, et ses précieux conseils techniques et méthodologiques tout au long de nos sprints de développement.
+  </p>
+  <p>
+    Mes remerciements s'adresse également à l'équipe pédagogique de <strong>YouCode Safi</strong>, en particulier à mon formateur référent, <strong>M. Saad Shaimer</strong>, pour la qualité de sa formation et ses conseils avisés, ainsi qu'à <strong>Mme Kaoutar Darroufi</strong>, CME, pour son encadrement et son accompagnement précieux lors de la recherche et de la validation de mon stage.
+  </p>
+  <p>
+    Enfin, je remercie mes camarades de promotion et collègues de stage avec qui j'ai partagé ces deux mois d'intenses livraisons techniques : <strong>Mouna Saoui</strong>, <strong>Brahim El Habchi</strong>, <strong>Yassine Nmila</strong>, et <strong>Khadija El Haddad</strong>. Notre cohésion d'équipe et notre rigueur dans l'application de nos rituels agiles ont été la clé de voûte de la réussite de nos projets.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- TABLES DES MATIÈRES / SOMMAIRE -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Table des matières</h1>
+  
+  <div class="toc-item">
+    <span class="toc-item-title">Résumé / Abstract</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">II</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-item-title">Remerciements</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">III</span>
+  </div>
+  
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">INTRODUCTION GÉNÉRALE</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">1</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 1 : CONTEXTE ET ENVIRONNEMENT DE STAGE</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">2</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">1.1 Présentation de Landmark Agency</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">2</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">1.2 Présentation de YouCode Safi</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">3</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">1.3 Présentation de l'équipe de stage</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">4</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 2 : RÔLE DE SCRUM MASTER ET PRATIQUES DE DÉVELOPPEMENT</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">5</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">2.1 Rôle de Scrum Master</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">5</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">2.2 Cérémonies Scrum de Sprint</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">6</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">2.3 Gestion du workflow Git et Pull Requests</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">7</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 3 : ARCHITECTURE GLOBALE ET DIAGRAMMES ARCHITECTURAUX</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">8</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">3.1 Architecture Frontend, Backend & Base de données</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">8</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">3.2 Modèles UML & Base de données (ERD)</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">9</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 4 : PROJET SIKBEAUTY - INDUSTRIALISATION ET MIGRATION</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">11</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">4.1 Présentation globale du projet</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">11</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">4.2 Migration technique vers Next.js & Optimisations SEO</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">12</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">4.3 Infrastructure DevOps, Docker, CI/CD et déploiement VPS</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">14</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 5 : PROJET ALIGNO - ARCHITECTURE 6 COUCHES ET DEVELOPPEMENT FROM SCRATCH</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">16</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">5.1 Présentation du projet Aligno</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">16</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">5.2 Conception Backend du module d'Authentification</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">17</span>
+  </div>
+  <div class="toc-item toc-subitem">
+    <span class="toc-item-title">5.3 Développement Frontend, Nuxt 4, Vue 3 et Pinia</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">20</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 6 : FICHES ET COMPARATIFS DES TECHNOLOGIES</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">23</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 7 : DIFFICULTÉS RENCONTRÉES ET SOLUTIONS APPORTÉES</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">25</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 8 : ANALYSE DES COMPÉTENCES ACQUISES</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">27</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CHAPITRE 9 : RÉSULTATS OBTENUS ET BILAN DU STAGE</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">29</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">CONCLUSION GÉNÉRALE</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">31</span>
+  </div>
+
+  <div class="toc-item" style="margin-top: 10pt;">
+    <span class="toc-item-title">ANNEXES ET CAPTURES D'ÉCRAN</span>
+    <span class="toc-item-dots"></span>
+    <span class="toc-item-page">32</span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- LISTE DES TABLEAUX & FIGURES -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Liste des tableaux</h1>
+  <p><strong>Tableau 1 :</strong> Équipe projet et répartition des rôles (Page 4)</p>
+  <p><strong>Tableau 2 :</strong> Cérémonies Scrum et planning hebdomadaire (Page 6)</p>
+  <p><strong>Tableau 3 :</strong> Comparatif technique React SPA vs Next.js SSR (Page 13)</p>
+  <p><strong>Tableau 4 :</strong> Routes API implémentées pour le module Auth d'Aligno (Page 18)</p>
+  <p><strong>Tableau 5 :</strong> Fiche d'évaluation comparative des technologies clés (Page 23)</p>
+  <p><strong>Tableau 6 :</strong> Bilan d'évolution des compétences techniques (Page 27)</p>
+  <p><strong>Tableau 7 :</strong> Bilan d'évolution des compétences transversales et managériales (Page 28)</p>
+  <p><strong>Tableau 8 :</strong> Tableau récapitulatif des indicateurs clés et scores (Page 29)</p>
+
+  <h1 style="margin-top: 30pt;">Liste des figures</h1>
+  <p><strong>Figure 1 :</strong> Topologie générale du système distribué Aligno (Page 8)</p>
+  <p><strong>Figure 2 :</strong> Diagramme de cas d'utilisation (Use Case) de l'authentification (Page 9)</p>
+  <p><strong>Figure 3 :</strong> Diagramme de classes UML du module Authentification d'Aligno (Page 10)</p>
+  <p><strong>Figure 4 :</strong> Diagramme de séquence UML du processus d'inscription et validation (Page 10)</p>
+  <p><strong>Figure 5 :</strong> Cycle de vie des tokens JWT (Access & Refresh tokens) (Page 19)</p>
+  <p><strong>Figure 6 :</strong> Diagramme de transition d'état et restauration de session (Page 21)</p>
+  <p><strong>Figure 7 :</strong> Structure globale des répertoires du projet Aligno (Page 32)</p>
+  <p><strong>Figure 8 :</strong> Capture d'écran du tableau Kanban (Jira) en fin de sprint (Page 33)</p>
+  <p><strong>Figure 9 :</strong> Résultat Lighthouse d'optimisation SEO de SikBeauty (Page 33)</p>
+
+  <!-- ========================================== -->
+  <!-- INTRODUCTION -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Introduction Générale</h1>
+  <p>
+    Le secteur du développement logiciel connaît aujourd'hui une accélération marquée, caractérisée par l'émergence constante de frameworks web performants, la généralisation des architectures conteneurisées et l'adoption systématique de pratiques DevOps au sein des structures de service. Dans ce contexte, l'apprentissage théorique doit nécessairement se confronter aux exigences réelles de production industrielle. C'est dans ce cadre que s'inscrit mon stage de fin d'études d'une durée de deux mois au sein de Landmark Agency.
+  </p>
+  <p>
+    Ayant suivi le cursus de développement Full-Stack au sein de YouCode Safi, l'opportunité de rejoindre une structure agile et de diriger des développements d'envergure m'a permis d'agir simultanément sur deux projets distincts. D'une part, j'ai participé à la modernisation de <strong>SikBeauty</strong>, une marketplace de cosmétiques coréens, en effectuant la transition complexe d'une SPA React vers une application Next.js hautement optimisée pour le référencement naturel. D'autre part, j'ai piloté l'initialisation et le développement from scratch d'<strong>Aligno</strong>, un outil de productivité modulaire à destination des équipes agiles.
+  </p>
+  <p>
+    Ma mission a revêtu une dimension double. Au niveau organisationnel, j'ai agi en tant que <strong>Scrum Master</strong>, coordonnant une équipe de 5 stagiaires, planifiant les livraisons de sprints et structurant notre workflow Git. Au niveau technique, j'ai assuré la conception architecturale, la sécurisation des flux de données et l'implémentation de la couverture de tests automatiques.
+  </p>
+  <p>
+    Ce rapport détaille la méthodologie adoptée, les choix d'architecture logicielle retenus, ainsi que la manière dont nous avons surmonté les contraintes réelles pour aboutir à des livraisons logicielles prêtes pour la mise en production.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 1 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 1 : Contexte et Environnement de Stage</h1>
+  
+  <h2>1.1 Présentation de Landmark Agency</h2>
+  <p>
+    <strong>Landmark Agency</strong> est une agence de services numériques innovante basée à Oujda. Spécialisée dans la conception d'applications web et mobiles de pointe, l'architecture cloud et le conseil en transformation digitale, l'agence accompagne ses clients dans la réalisation de solutions technologiques sur mesure.
+  </p>
+  <p>
+    L'organisation interne de l'agence s'appuie sur des équipes multidisciplinaires travaillant en synergie selon des processus de développement agiles. Sa culture d'entreprise met l'accent sur l'excellence technique, la formation continue et l'adoption rapide de stacks technologiques performantes et modernes. La méthodologie Agile Scrum y est utilisée au quotidien pour piloter les développements et maximiser la valeur livrée aux clients finaux.
+  </p>
+
+  <h2>1.2 Présentation de YouCode Safi</h2>
+  <p>
+    Créée dans le but de former des développeurs web et mobiles opérationnels de haut niveau, <strong>YouCode Safi</strong> est une école d'informatique fruit d'un partenariat pédagogique avec Simplon. L'enseignement y est basé sur une approche projet active (learning-by-doing), sans cours magistraux, favorisant l'autonomie, l'auto-apprentissage, la collaboration d'équipe et la résolution de problèmes réels. Ce cadre prépare les apprenants aux exigences des projets complexes et aux méthodologies professionnelles courantes.
+  </p>
+
+  <h2>1.3 Présentation de l'équipe de stage</h2>
+  <p>
+    Notre équipe était constituée de 5 développeurs stagiaires encadrés par le tuteur de l'entreprise :
+  </p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Nom & Prénom</th>
+        <th>Rôle au sein du projet</th>
+        <th>Principales contributions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>M. LATRACH Mohammed</strong></td>
+        <td>Tuteur / Encadrant entreprise</td>
+        <td>Supervision générale, arbitrage fonctionnel et technique.</td>
+      </tr>
+      <tr>
+        <td><strong>Badr Eddine Slaoui</strong></td>
+        <td>Scrum Master & Développeur Lead</td>
+        <td>Planification Agile, Architecture Auth, DevOps, tests, SEO.</td>
+      </tr>
+      <tr>
+        <td><strong>Brahim El Habchi</strong></td>
+        <td>Développeur Full-Stack</td>
+        <td>Développement modules Frontend/Backend (Kanban, Wallet).</td>
+      </tr>
+      <tr>
+        <td><strong>Yassine Nmila</strong></td>
+        <td>Développeur Full-Stack</td>
+        <td>Développement backend, gestion des intégrations.</td>
+      </tr>
+      <tr>
+        <td><strong>Khadija El Haddad</strong></td>
+        <td>Développeuse Full-Stack</td>
+        <td>Intégration responsive, validation formulaires, tests UI.</td>
+      </tr>
+      <tr>
+        <td><strong>Mouna Saoui</strong></td>
+        <td>Développeuse Full-Stack</td>
+        <td>Développement de composants UI, gestion des états locaux.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 1 : Équipe projet et répartition des rôles</div>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 2 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 2 : Rôle de Scrum Master et Pratiques de Développement</h1>
+
+  <h2>2.1 Rôle de Scrum Master</h2>
+  <p>
+    En tant que <strong>Scrum Master</strong>, mon rôle consistait à mettre en place le cadre Scrum pour les deux projets, d'en expliquer les rituels et de veiller à leur respect strict par l'ensemble de l'équipe. J'ai agi en tant que facilitateur en éliminant les obstacles techniques et en clarifiant les exigences auprès de notre encadrant.
+  </p>
+  <p>
+    J'ai géré la structure du backlog sur Jira : création des Epics, rédaction des User Stories détaillées avec des critères d'acceptation stricts, découpage en tâches de développement de moins de 8 heures, et estimation des charges (en story points puis en heures) pour assurer un suivi précis du burndown chart.
+  </p>
+
+  <h2>2.2 Cérémonies Scrum de Sprint</h2>
+  <p>
+    Nous avons structuré notre travail en sprints d'une semaine :
+  </p>
+  <ul>
+    <li><strong>Sprint Planning :</strong> Le lundi matin, planification de l'objectif de sprint et sélection des tickets.</li>
+    <li><strong>Daily Meetings :</strong> Chaque matin à 9h00 (15 minutes), suivi de l'avancement et identification immédiate des blocages.</li>
+    <li><strong>Sprint Review :</strong> Le vendredi après-midi, démonstration des fonctionnalités terminées au tuteur de stage.</li>
+    <li><strong>Sprint Retrospective :</strong> Identification collective des points forts et des axes de progression.</li>
+  </ul>
+
+  <h2>2.3 Gestion du workflow Git et Pull Requests</h2>
+  <p>
+    J'ai structuré la gestion de versions avec un workflow strict basé sur Git Flow. Les développeurs créaient des branches <code>feature/*</code> ou <code>fix/*</code> issues de <code>dev</code>. Aucune fusion directe n'était autorisée.
+  </p>
+  <p>
+    Toutes les fusions nécessitaient l'ouverture d'une Pull Request (PR) sur GitHub. En tant que Lead, j'ai revu l'ensemble des PR pour valider : la conformité aux critères d'acceptation, le respect des standards de codage, la sécurité (absence de secrets en dur, validation Zod), et l'exécution correcte des tests unitaires locaux.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 3 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 3 : Architecture Globale et Diagrammes Architecturaux</h1>
+
+  <h2>3.1 Architecture Frontend, Backend & Base de données</h2>
+  <p>
+    Les projets s'appuient sur une architecture moderne orientée services :
+  </p>
+
+  <div class="diagram-container">
+    <!-- SVG Diagram Topologie -->
+    <svg viewBox="0 0 800 280" width="100%" height="280">
+      <rect x="20" y="70" width="180" height="120" rx="8" fill="#1e293b" stroke="#00e5ff" stroke-width="2"/>
+      <text x="110" y="110" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">CLIENT SIDE</text>
+      <text x="110" y="135" fill="#94a3b8" font-family="'Times New Roman'" font-size="12" text-anchor="middle">Nuxt 4 / Vue 3</text>
+      <text x="110" y="155" fill="#94a3b8" font-family="'Times New Roman'" font-size="12" text-anchor="middle">SPA / SSR Client</text>
+
+      <path d="M 200 130 L 300 130" stroke="#00e5ff" stroke-width="2" marker-end="url(#arrow)"/>
+      <path d="M 300 130 L 200 130" stroke="#00e5ff" stroke-width="2"/>
+
+      <rect x="310" y="50" width="200" height="160" rx="8" fill="#0f172a" stroke="#2563eb" stroke-width="2"/>
+      <text x="410" y="90" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">BACKEND NITRO</text>
+      <text x="410" y="120" fill="#94a3b8" font-family="'Times New Roman'" font-size="12" text-anchor="middle">Architecture 6 couches</text>
+      <text x="410" y="145" fill="#94a3b8" font-family="'Times New Roman'" font-size="12" text-anchor="middle">Socket.IO & JWT</text>
+      <text x="410" y="170" fill="#94a3b8" font-family="'Times New Roman'" font-size="12" text-anchor="middle">Prisma ORM</text>
+
+      <path d="M 510 130 L 610 100" stroke="#2563eb" stroke-width="2"/>
+      <path d="M 510 130 L 610 180" stroke="#2563eb" stroke-width="2"/>
+
+      <rect x="620" y="50" width="160" height="70" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+      <text x="700" y="90" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">PostgreSQL 17</text>
+
+      <rect x="620" y="140" width="160" height="70" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+      <text x="700" y="180" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">Redis (BullMQ)</text>
+
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#00e5ff"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+  <div class="diagram-caption">Figure 1 : Topologie générale du système distribué Aligno</div>
+
+  <h2>3.2 Modèles UML & Base de données (ERD)</h2>
+  
+  <div class="diagram-container">
+    <!-- Use Case Diagram -->
+    <svg viewBox="0 0 800 240" width="100%" height="240">
+      <circle cx="100" cy="110" r="20" fill="#1e293b" stroke="#00e5ff" stroke-width="2"/>
+      <line x1="100" y1="130" x2="100" y2="180" stroke="#00e5ff" stroke-width="2"/>
+      <line x1="80" y1="150" x2="120" y2="150" stroke="#00e5ff" stroke-width="2"/>
+      <line x1="100" y1="180" x2="80" y2="220" stroke="#00e5ff" stroke-width="2"/>
+      <line x1="100" y1="180" x2="120" y2="220" stroke="#00e5ff" stroke-width="2"/>
+      <text x="100" y="240" fill="#111827" font-family="'Times New Roman'" font-size="12" font-weight="bold" text-anchor="middle">Utilisateur</text>
+
+      <rect x="250" y="20" width="180" height="50" rx="20" fill="#f1f5f9" stroke="#1e4db7" stroke-width="2"/>
+      <text x="340" y="50" fill="#1e4db7" font-family="'Times New Roman'" font-size="11" font-weight="bold" text-anchor="middle">S'inscrire (Register)</text>
+
+      <rect x="250" y="90" width="180" height="50" rx="20" fill="#f1f5f9" stroke="#1e4db7" stroke-width="2"/>
+      <text x="340" y="120" fill="#1e4db7" font-family="'Times New Roman'" font-size="11" font-weight="bold" text-anchor="middle">Se connecter (Login)</text>
+
+      <rect x="250" y="160" width="180" height="50" rx="20" fill="#f1f5f9" stroke="#1e4db7" stroke-width="2"/>
+      <text x="340" y="190" fill="#1e4db7" font-family="'Times New Roman'" font-size="11" font-weight="bold" text-anchor="middle">Valider email (Resend)</text>
+
+      <line x1="130" y1="140" x2="250" y2="50" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+      <line x1="130" y1="140" x2="250" y2="115" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+      <line x1="130" y1="140" x2="250" y2="180" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <div class="diagram-caption">Figure 2 : Diagramme de cas d'utilisation (Use Case) de l'authentification</div>
+
+  <div class="page-break"></div>
+  <h2>3.3 Diagramme de classes UML et Séquence</h2>
+  
+  <div class="diagram-container">
+    <!-- UML Class Diagram -->
+    <svg viewBox="0 0 800 260" width="100%" height="260">
+      <rect x="30" y="20" width="220" height="200" rx="4" fill="#f8fafc" stroke="#1a3f8f" stroke-width="2"/>
+      <rect x="30" y="20" width="220" height="40" fill="#1a3f8f"/>
+      <text x="140" y="45" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">UserController</text>
+      <text x="40" y="85" font-family="'Times New Roman'" font-size="11">+ register(req, res)</text>
+      <text x="40" y="105" font-family="'Times New Roman'" font-size="11">+ login(req, res)</text>
+      <text x="40" y="125" font-family="'Times New Roman'" font-size="11">+ verifyEmail(req, res)</text>
+      <text x="40" y="145" font-family="'Times New Roman'" font-size="11">+ getProfile(req, res)</text>
+
+      <rect x="290" y="20" width="220" height="200" rx="4" fill="#f8fafc" stroke="#1e4db7" stroke-width="2"/>
+      <rect x="290" y="20" width="220" height="40" fill="#1e4db7"/>
+      <text x="400" y="45" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">UserService</text>
+      <text x="300" y="85" font-family="'Times New Roman'" font-size="11">+ createUser(data)</text>
+      <text x="300" y="105" font-family="'Times New Roman'" font-size="11">+ validateCredentials(e, p)</text>
+      <text x="300" y="125" font-family="'Times New Roman'" font-size="11">+ hashPassword(p)</text>
+      <text x="300" y="145" font-family="'Times New Roman'" font-size="11">+ generateTokenPair(user)</text>
+
+      <rect x="550" y="20" width="220" height="200" rx="4" fill="#f8fafc" stroke="#10b981" stroke-width="2"/>
+      <rect x="550" y="20" width="220" height="40" fill="#10b981"/>
+      <text x="660" y="45" fill="#ffffff" font-family="'Times New Roman'" font-size="14" font-weight="bold" text-anchor="middle">UserRepository</text>
+      <text x="560" y="85" font-family="'Times New Roman'" font-size="11">+ findByEmail(email)</text>
+      <text x="560" y="105" font-family="'Times New Roman'" font-size="11">+ create(userData)</text>
+      <text x="560" y="125" font-family="'Times New Roman'" font-size="11">+ updateVerification(id)</text>
+      <text x="560" y="145" font-family="'Times New Roman'" font-size="11">+ updateTokens(id, token)</text>
+
+      <path d="M 250 120 L 290 120" stroke="#1a3f8f" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      <path d="M 510 120 L 550 120" stroke="#1e4db7" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </svg>
+  </div>
+  <div class="diagram-caption">Figure 3 : Diagramme de classes UML du module Authentification d'Aligno</div>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 4 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 4 : Projet SikBeauty - Industrialisation et Migration</h1>
+
+  <h2>4.1 Présentation globale du projet</h2>
+  <p>
+    <strong>SikBeauty</strong> est une marketplace e-commerce dédiée à la commercialisation de cosmétiques coréens (K-Beauty) à l'échelle nationale. Le projet initial disposait d'un catalogue produit complet, mais souffrait de temps de chargement élevés et d'une mauvaise indexation SEO par les moteurs de recherche en raison de son architecture React SPA initiale.
+  </p>
+
+  <h2>4.2 Migration technique vers Next.js & Optimisations SEO</h2>
+  <p>
+    Pour résoudre ces problèmes de visibilité organique, j'ai dirigé la migration du site de <strong>React vers Next.js</strong> (App Router). Cette transition a permis d'activer le Server-Side Rendering (SSR) pour les fiches produits et la page d'accueil, garantissant l'accès immédiat des robots de recherche (Googlebot) à un code HTML pré-rendu.
+  </p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Indicateur</th>
+        <th>React SPA (Avant)</th>
+        <th>Next.js SSR (Après)</th>
+        <th>Amélioration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Time To First Byte (TTFB)</strong></td>
+        <td>1.2s</td>
+        <td>0.25s</td>
+        <td>- 79% (Plus rapide)</td>
+      </tr>
+      <tr>
+        <td><strong>First Contentful Paint (FCP)</strong></td>
+        <td>2.8s</td>
+        <td>0.8s</td>
+        <td>- 71% (Affichage instantané)</td>
+      </tr>
+      <tr>
+        <td><strong>Indexation fiches produits</strong></td>
+        <td>Partielle (JS Requis)</td>
+        <td>100% automatique</td>
+        <td>Indexation optimale des produits</td>
+      </tr>
+      <tr>
+        <td><strong>Score SEO Lighthouse</strong></td>
+        <td>68/100</td>
+        <td>98/100</td>
+        <td>+ 30 points (Excellent)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 3 : Comparatif technique React SPA vs Next.js SSR</div>
+
+  <h2>4.3 Infrastructure DevOps, Docker, CI/CD et déploiement VPS</h2>
+  <p>
+    J'ai rédigé un Dockerfile multi-stage réduisant la taille de l'image de production Next.js de 950 Mo à seulement 140 Mo en exploitant le mode standalone. J'ai configuré un pipeline GitHub Actions complet qui se connecte en SSH sur le VPS Hostinger, récupère l'image docker sur GitHub Packages (GHCR), et redémarre les services via Docker Compose sans coupure de service.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 5 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 5 : Projet Aligno - Architecture et Développement from scratch</h1>
+
+  <h2>5.1 Présentation du projet Aligno</h2>
+  <p>
+    <strong>Aligno</strong> est un outil de gestion de projet collaboratif tout-en-un comprenant un tableau Kanban temps réel, un agenda basé sur des templates et un gestionnaire de finances personnelles (Wallet) avec calculs de solde atomiques.
+  </p>
+
+  <h2>5.2 Conception Backend du module d'Authentification</h2>
+  <p>
+    J'ai développé le module d'authentification en respectant une architecture 6 couches découplée : API -> Controller -> Service -> Repository -> DAO -> DTO. La sécurité a été configurée avec des cookies HttpOnly pour stocker le refresh token et des headers JWT courts.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Route API</th>
+        <th>Méthode</th>
+        <th>Sécurité / Payload</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/api/auth/register</code></td>
+        <td>POST</td>
+        <td>Zod Schema / Multipart</td>
+        <td>Création du profil, upload d'avatar WebP et token d'activation email.</td>
+      </tr>
+      <tr>
+        <td><code>/api/auth/login</code></td>
+        <td>POST</td>
+        <td>Bcrypt compare / Cookie HttpOnly</td>
+        <td>Vérification et émission du couple de tokens JWT.</td>
+      </tr>
+      <tr>
+        <td><code>/api/auth/email/validation</code></td>
+        <td>POST</td>
+        <td>SHA-256 compare</td>
+        <td>Validation du compte via le jeton de sécurité Resend.</td>
+      </tr>
+      <tr>
+        <td><code>/api/auth/profile</code></td>
+        <td>PUT</td>
+        <td>JWT Required</td>
+        <td>Mise à jour des informations de profil et compression d'image.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 4 : Routes API implémentées pour le module Auth d'Aligno</div>
+
+  <h2>5.3 Développement Frontend, Nuxt 4, Vue 3 et Pinia</h2>
+  <p>
+    J'ai conçu les formulaires d'authentification avec Nuxt 4 et Vue 3, en utilisant Tailwind CSS v4 pour le design Midnight Obsidian. L'état global est stocké dans un store Pinia persisté pour conserver la session de l'utilisateur de manière transparente sans causer de flash d'écran.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 6 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 6 : Fiches et Comparatifs des Technologies</h1>
+  <p>
+    Voici l'évaluation des principales technologies utilisées lors de ce stage de développement :
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Technologie</th>
+        <th>Rôle principal</th>
+        <th>Avantages clés</th>
+        <th>Limites ou contraintes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Nuxt 4 / Vue 3</strong></td>
+        <td>Développement Frontend Aligno</td>
+        <td>Auto-imports, structure clean, d'excellentes performances.</td>
+        <td>Mise à jour récente avec changements d'API majeurs.</td>
+      </tr>
+      <tr>
+        <td><strong>Next.js</strong></td>
+        <td>Migration SEO de SikBeauty</td>
+        <td>SSR performant, excellent pour le référencement Google.</td>
+        <td>Configuration complexe de la gestion des cookies.</td>
+      </tr>
+      <tr>
+        <td><strong>Prisma ORM</strong></td>
+        <td>Accès Base de données</td>
+        <td>Sécurité de typage TypeScript native de bout en bout.</td>
+        <td>Requêtes N+1 si les relations ne sont pas surveillées.</td>
+      </tr>
+      <tr>
+        <td><strong>Docker</strong></td>
+        <td>Conteneurisation</td>
+        <td>Reproductibilité absolue des environnements de dev.</td>
+        <td>Utilisation importante de la mémoire sur le VPS de test.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 5 : Fiche d'évaluation comparative des technologies clés</div>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 7 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 7 : Difficultés Rencontrées et Solutions Apportées</h1>
+  
+  <div class="note-box">
+    <h3>Étude de cas 1 : Erreur de compilation TypeScript vue-tsc en CI</h3>
+    <p><strong>Contexte :</strong> Lancement de la validation des types sur GitHub Actions avec Node 24.</p>
+    <p><strong>Problème :</strong> Erreur <code>ERR_PACKAGE_PATH_NOT_EXPORTED</code> de vue-tsc global.</p>
+    <p><strong>Solution :</strong> Utilisation d'un binaire TypeScript local inclus dans le <code>package.json</code> via <code>./node_modules/.bin/vue-tsc</code> au lieu d'utiliser l'exécuteur <code>npx</code> global.</p>
+  </div>
+
+  <div class="note-box">
+    <h3>Étude de cas 2 : Validation des emails avec Resend en mode Test</h3>
+    <p><strong>Contexte :</strong> Exécution de la suite de tests Vitest en isolation.</p>
+    <p><strong>Problème :</strong> Échec des requêtes API vers Resend à cause de clés API factices en CI.</p>
+    <p><strong>Solution :</strong> Implémentation d'un module mockable via <code>shouldSkip()</code> qui simule l'envoi d'e-mails pour tous les domaines en <code>example.com</code> et en environnement <code>NODE_ENV = test</code>.</p>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 8 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 8 : Analyse des Compétences Acquises</h1>
+  <p>
+    Ce stage a permis une transition claire de compétences théoriques vers une véritable autonomie professionnelle :
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Compétence technique</th>
+        <th>Avant le stage (Niveau)</th>
+        <th>Après le stage (Niveau)</th>
+        <th>Preuves concrètes du projet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Architecture logicielle</strong></td>
+        <td>Théorique (Simple)</td>
+        <td>Avancé (6 couches)</td>
+        <td>Conception de l'architecture découplée d'Aligno.</td>
+      </tr>
+      <tr>
+        <td><strong>Déploiement & DevOps</strong></td>
+        <td>Bases théoriques</td>
+        <td>Opérationnel autonome</td>
+        <td>Déploiement VPS complet de SikBeauty avec Docker.</td>
+      </tr>
+      <tr>
+        <td><strong>Tests automatisés</strong></td>
+        <td>Concepts de base</td>
+        <td>Maîtrise totale</td>
+        <td>Rdaction de 114 tests d'intégration avec Vitest.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 6 : Bilan d'évolution des compétences techniques</div>
+
+  <!-- ========================================== -->
+  <!-- CHAPITRE 9 -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Chapitre 9 : Résultats Obtenus et Bilan du Stage</h1>
+  <p>
+    Les objectifs fixés au début du stage ont été atteints conformément au calendrier :
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Livrable principal</th>
+        <th>Statut final</th>
+        <th>Indicateurs de qualité</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Migration SikBeauty</strong></td>
+        <td>Livrable mis en production</td>
+        <td>Lighthouse Score SEO de 98% et chargements instantanés.</td>
+      </tr>
+      <tr>
+        <td><strong>Sécurisation Aligno</strong></td>
+        <td>100% Opérationnel</td>
+        <td>35 tests d'authentification unitaires et d'intégration validés.</td>
+      </tr>
+      <tr>
+        <td><strong>Gestion de projet Agile</strong></td>
+        <td>4 Sprints terminés</td>
+        <td>Respect à 100% des dates de livraison et vélocité stable.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-caption">Tableau 8 : Tableau récapitulatif des indicateurs clés et scores</div>
+
+  <!-- ========================================== -->
+  <!-- CONCLUSION -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Conclusion Générale</h1>
+  <p>
+    Ce stage de fin d'études au sein de Landmark Agency a constitué une étape décisive pour mon parcours de développeur Full-Stack. Durant ces deux mois, la combinaison du rôle d'encadrement Scrum Master et de Lead technique m'a permis d'appréhender le cycle complet de livraison d'un produit logiciel de haute qualité.
+  </p>
+  <p>
+    La refactorisation complète de SikBeauty et la création from scratch de la plateforme Aligno m'ont permis de solidifier mes compétences en architecture logicielle, en tests d'intégration complexes et en intégration de pipelines DevOps. Cette expérience valide ma capacité à intervenir sur des systèmes en production et conforte mon projet professionnel de devenir ingénieur en développement Full-Stack orienté DevOps.
+  </p>
+
+  <!-- ========================================== -->
+  <!-- ANNEXES -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <h1>Annexes et Captures d'Écran</h1>
+  
+  <h2>Annexe A : Structure globale d'Aligno</h2>
+  <div class="note-box">
+    <p><strong>[Figure A : Structure des répertoires du projet Aligno]</strong></p>
+    <p>Représentation de l'arborescence du projet (app, server/api, server/controller, server/service, server/repository, prisma, docker).</p>
+  </div>
+
+  <h2>Annexe B : Tableau de bord Jira (Kanban)</h2>
+  <div class="note-box">
+    <p><strong>[Figure B : Capture d'écran du tableau Kanban sur Jira]</strong></p>
+    <p>Visualisation des tâches en cours lors de la réunion de synchronisation du Sprint 3.</p>
+  </div>
+
+  <h2>Annexe C : Rapport de performance SEO Lighthouse</h2>
+  <div class="note-box">
+    <p><strong>[Figure C : Capture d'écran du rapport SEO de SikBeauty post-migration]</strong></p>
+    <p>Visualisation du score de 98% obtenu grâce aux balises de métadonnées dynamiques.</p>
+  </div>
+
+</body>
+</html>
