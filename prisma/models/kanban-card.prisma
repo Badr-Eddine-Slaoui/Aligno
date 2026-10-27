@@ -1,0 +1,20 @@
+model KanbanCard {
+  id                  String       @id @default(cuid())
+  title               String
+  description         String?
+  dueDate             DateTime?    @map("due_date")
+  priority            String       @default("MEDIUM")
+  position            Int
+  dueDateReminderSent Boolean      @default(false) @map("due_date_reminder_sent")
+  assigneeId          String?      @map("assignee_id")
+  columnId            String       @map("column_id")
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+
+  column              KanbanColumn @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  assignee            User?        @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  subtasks            Subtask[]
+  labels              CardLabel[]
+
+  @@map("kanban_cards")
+}

@@ -1,0 +1,67 @@
+enum TimeCategory {
+  WORK
+  STUDY
+  HEALTH
+  BREAK
+  PERSONAL
+  MEETING
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum RepeatType {
+  NONE
+  ONCE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+model TimeBlock {
+  id          String   @id @default(cuid())
+
+  title       String
+  description String?
+
+  startTime   String
+  endTime     String
+
+  duration    Int
+
+  category    TimeCategory
+  priority    Priority @default(MEDIUM)
+
+  position    Int @default(0)
+
+  isCompleted Boolean @default(false)
+  isLocked    Boolean @default(false)
+
+  repeatType  RepeatType @default(ONCE)
+  repeatDays  String?
+  repeatEnd   DateTime?
+
+  // Si le bloc appartient à un template
+  templateId  String?
+  template    DailyTemplate? @relation(fields: [templateId], references: [id])
+
+  // Si le bloc appartient à une journée réelle
+  scheduleId  String?
+  schedule    DailySchedule? @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  userId      String
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("time_blocks")
+
+  @@index([userId])
+  @@index([scheduleId])
+  @@index([templateId])
+}

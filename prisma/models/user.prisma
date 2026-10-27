@@ -1,0 +1,31 @@
+model User {
+  id                   String    @id @default(cuid())
+  firstName            String    @map("first_name")
+  lastName             String    @map("last_name")
+  age                  Int
+  email                String    @unique
+  phone                String    @unique
+  passwordHash         String    @map("password_hash")
+  profilePictureUrl    String?   @map("profile_picture_url")
+  emailVerified        Boolean   @default(false) @map("email_verified")
+  emailVerifyToken     String?   @map("email_verify_token")
+  emailVerifyExpires   DateTime? @map("email_verify_expires")
+  refreshToken         String?   @map("refresh_token")
+  resetPasswordToken   String?   @map("reset_password_token")
+  resetPasswordExpires DateTime? @map("reset_password_expires")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  projects             Project[]
+  memberships          ProjectMember[]   @relation("UserMemberships")
+  invitesSent          ProjectMember[]   @relation("UserInvites")
+  assignedCards        KanbanCard[]
+  notifications        Notification[]
+  bankAccounts         BankAccount[]
+  budgets              Budget[]
+  dailyTemplates DailyTemplate[]
+  dailySchedules DailySchedule[]
+  timeBlocks     TimeBlock[]
+
+  @@map("users")
+}

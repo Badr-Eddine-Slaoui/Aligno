@@ -1,0 +1,204 @@
+import { authController } from '../../controller/auth.controller'
+
+defineRouteMeta({
+  openAPI: {
+    $global: {
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            description: 'Send the access token as Authorization: Bearer <token>.',
+          },
+        },
+        schemas: {
+          UserResponse: {
+            type: 'object',
+            required: ['id', 'firstName', 'lastName', 'age', 'email', 'phone', 'profilePictureUrl', 'emailVerified', 'createdAt', 'updatedAt'],
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              firstName: { type: 'string', description: '2 to 50 characters.' },
+              lastName: { type: 'string', description: '2 to 50 characters.' },
+              age: { type: 'integer', minimum: 13, maximum: 120 },
+              email: { type: 'string', format: 'email' },
+              phone: { type: 'string', example: '+212612345678' },
+              profilePictureUrl: { type: ['string', 'null'], description: 'Profile image URL or null when unset.' },
+              emailVerified: { type: 'boolean' },
+              createdAt: { type: 'string', format: 'date-time' },
+              updatedAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          AuthSuccessResponse: {
+            type: 'object',
+            required: ['success', 'data'],
+            properties: {
+              success: { type: 'boolean', const: true },
+              data: {
+                type: 'object',
+                required: ['accessToken', 'user'],
+                properties: {
+                  accessToken: {
+                    type: 'string',
+                    description: 'JWT access token valid for 15 minutes.',
+                  },
+                  user: { $ref: '#/components/schemas/UserResponse' },
+                },
+              },
+            },
+          },
+          ErrorResponse: {
+            type: 'object',
+            required: ['success', 'message'],
+            properties: {
+              success: { type: 'boolean', const: false },
+              message: { type: 'string' },
+              errors: {
+                type: 'object',
+                additionalProperties: {
+                  type: 'array',
+                  items: { type: 'string' },
+                },
+              },
+            },
+          },
+          ValidationErrorResponse: {
+            type: 'object',
+            required: ['success', 'message', 'errors'],
+            properties: {
+              success: { type: 'boolean', const: false },
+              message: { type: 'string' },
+              errors: {
+                type: 'object',
+                additionalProperties: {
+                  type: 'array',
+                  items: { type: 'string' },
+                },
+              },
+            },
+          },
+          LoginRequest: {
+            type: 'object',
+            required: ['email', 'password'],
+            properties: {
+              email: { type: 'string', format: 'email', example: 'john@example.com' },
+              password: { type: 'string', description: 'Required.' , example: 'P@ssw0rd!' },
+            },
+          },
+        },
+      },
+    },
+    tags: ['Auth'],
+    summary: 'Log in with email and password',
+    description:
+      'Authenticates a user with email and password, blocks already authenticated guests, verifies the password, blocks unverified accounts, issues a JWT access token, and stores a refresh token in an HttpOnly cookie.',
+    operationId: 'authLogin',
+    security: [],
+    requestBody: {
+      required: true,
+      description: 'Email and password are required to authenticate the account.',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/LoginRequest',
+          },
+          examples: {
+            default: {
+              summary: 'Login payload',
+              value: {
+                email: 'john@example.com',
+                password: 'P@ssw0rd!',
+              },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'Login successful',
+        headers: {
+          'Set-Cookie': {
+            description: 'Refresh token cookie set by the server.',
+            schema: {
+              type: 'string',
+              example: 'refresh_token=eyJhbGciOiJIUzI1NiIs...; HttpOnly; Path=/; Max-Age=2592000; SameSite=Strict',
+            },
+          },
+        },
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/AuthSuccessResponse' },
+            examples: {
+              default: {
+                summary: 'Successful login',
+                value: {
+                  success: true,
+                  data: {
+                    accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                    user: {
+                      id: '550e8400-e29b-41d4-a716-446655440000',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                      age: 25,
+                      email: 'john@example.com',
+                      phone: '+212612345678',
+                      profilePictureUrl: 'https://cdn.example.com/uploads/users/john.webp',
+                      emailVerified: true,
+                      createdAt: '2026-05-22T12:00:00.000Z',
+                      updatedAt: '2026-05-22T12:00:00.000Z',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      401: {
+        description: 'Invalid email or password',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' },
+            examples: {
+              default: { value: { success: false, message: 'Invalid email or password' } },
+            },
+          },
+        },
+      },
+      403: {
+        description: 'Email not yet verified or guests only',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' },
+            examples: {
+              guestsOnly: { value: { success: false, message: 'Guests only' } },
+              unverifiedEmail: { value: { success: false, message: 'Please verify your email address before logging in' } },
+            },
+          },
+        },
+      },
+      422: {
+        description: 'Validation errors',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ValidationErrorResponse' },
+            examples: {
+              default: {
+                value: {
+                  success: false,
+                  message: 'Validation failed',
+                  errors: {
+                    email: ['Invalid email address'],
+                    password: ['Password is required'],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+})
+
+export default defineEventHandler((event) => authController.login(event))

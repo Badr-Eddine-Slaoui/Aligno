@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport de Stage — Badr Eddine Slaoui</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap');
+
+  @page {
+    size: A4;
+    margin: 2.5cm 2.5cm 2.8cm 2.5cm;
+    @bottom-center {
+      content: "— " counter(page) " —";
+      font-family: 'Times New Roman', serif;
+      font-size: 10pt;
+      color: #6b7280;
+    }
+  }
+
+  @page cover-page { margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #1a1a2e;
+    background: #fff;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    page: cover-page;
+    width: 210mm;
+    height: 297mm;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(160deg, #07112a 0%, #0f1c3d 45%, #091429 100%);
+    color: #fff;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+  }
+  .cover-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.8cm 2.5cm 0;
+    position: relative; z-index: 2;
+  }
+  .cover-header img { max-height: 52px; object-fit: contain; filter: brightness(1.1); }
+  .cover-header-sep {
+    font-size: 20pt;
+    color: rgba(0,229,255,0.5);
+    font-weight: 300;
+  }
+  .cover-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 2.5cm;
+    position: relative; z-index: 2;
+    text-align: center;
+  }
+  .cover-tag {
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #00e5ff;
+    margin-bottom: 16pt;
+    font-family: 'Times New Roman', serif;
+  }
+  .cover-main-title {
+    font-size: 27pt;
+    font-weight: bold;
+    line-height: 1.25;
+    color: #ffffff;
+    margin-bottom: 10pt;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .cover-sub-title {
+    font-size: 12.5pt;
+    color: rgba(186,201,220,0.85);
+    line-height: 1.6;
+    margin-bottom: 28pt;
+  }
+  .cover-separator {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #00e5ff, #2563eb);
+    border-radius: 2px;
+    margin: 0 auto 32pt;
+  }
+  .cover-footer {
+    padding: 0 2.5cm 1.6cm;
+    position: relative; z-index: 2;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.2cm;
+  }
+  .cover-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14pt;
+  }
+  .cover-info-item { text-align: left; }
+  .cover-info-item .label {
+    display: block;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(186,201,220,0.55);
+    margin-bottom: 3pt;
+  }
+  .cover-info-item .value {
+    font-size: 10pt;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .cover-info-item .value.accent { color: #00e5ff; }
+
+  /* ── HEADERS/FOOTERS via fixed positioning ── */
+  .running-header {
+    display: none;
+  }
+
+  /* ── PAGE BREAKS ── */
+  .page-break { page-break-before: always; }
+  .avoid-break { page-break-inside: avoid; }
+
+  /* ── FRONT MATTER PAGES ── */
+  .front-section { padding-top: 0.5cm; }
+  .front-section h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #1a3f8f;
+    border-bottom: 2.5px solid #1a3f8f;
+    padding-bottom: 6pt;
+    margin-bottom: 20pt;
+  }
+
+  /* ── BODY TYPOGRAPHY ── */
+  h1.chapter-title {
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(135deg, #1a3f8f, #2563eb);
+    padding: 14pt 18pt;
+    border-radius: 6px;
+    margin-bottom: 24pt;
+    letter-spacing: 0.5px;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1a3f8f;
+    margin-top: 22pt;
+    margin-bottom: 10pt;
+    padding-left: 10pt;
+    border-left: 4px solid #2563eb;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #1e4db7;
+    margin-top: 16pt;
+    margin-bottom: 8pt;
+    page-break-after: avoid;
+  }
+  h4 {
+    font-size: 12pt;
+    font-style: italic;
+    color: #374151;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+  }
+  p {
+    margin-bottom: 11pt;
+    text-align: justify;
+    hyphens: auto;
+  }
+  ul, ol {
+    margin: 0 0 11pt 22pt;
+    text-align: justify;
+  }
+  li { margin-bottom: 5pt; }
+  code, .code-inline {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: #1e4db7;
+  }
+  strong { color: #1a1a2e; }
+
+  /* ── TABLES ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin: 14pt 0 4pt;
+    page-break-inside: avoid;
+  }
+  thead th {
+    background: linear-gradient(135deg, #1a3f8f, #1e4db7);
+    color: #fff;
+    font-weight: bold;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 9pt 11pt;
+    text-align: left;
+    border: 1px solid #1a3f8f;
+  }
+  tbody td {
+    padding: 7pt 11pt;
+    border: 1px solid #dbeafe;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: #f8fafc; }
+  tbody tr:hover td { background: #eff6ff; }
+  .table-caption {
+    text-align: center;
+    font-style: italic;
+    font-size: 9pt;
+    color: #6b7280;
+    margin-bottom: 16pt;
+    margin-top: 5pt;
+  }
+
+  /* ── BOXES ── */
+  .info-box {
+    border-left: 4px solid #00e5ff;
+    background: linear-gradient(135deg, #f0fafd, #e8f4fc);
+    padding: 12pt 14pt;
+    margin: 14pt 0;
+    border-radius: 0 8px 8px 0;
+    page-break-inside: avoid;
+  }
+  .info-box p:last-child { margin-bottom: 0; }
+  .warning-box {
+    border-left: 4px solid #f59e0b;
+    background: #fffbeb;
+    padding: 12pt 14pt;
+    margin: 14pt 0;
+    border-radius: 0 8px 8px 0;
+    page-break-inside: avoid;
+  }
+  .case-study-box {
+    border: 2px solid #dbeafe;
+    border-radius: 10px;
+    padding: 14pt 16pt;
+    margin: 16pt 0;
+    background: #f8faff;
+    page-break-inside: avoid;
+  }
+  .case-study-box h3 {
+    border-left: none;
+    color: #1a3f8f;
+    background: linear-gradient(90deg, #dbeafe, transparent);
+    padding: 6pt 10pt;
+    border-radius: 4px;
+    margin-top: 0;
+    font-size: 11pt;
+  }
+  .case-study-field {
+    display: flex;
+    gap: 8pt;
+    margin-bottom: 6pt;
+    font-size: 10.5pt;
+  }
+  .case-study-field .field-label {
+    font-weight: bold;
+    color: #1e4db7;
+    min-width: 90pt;
+    flex-shrink: 0;
+  }
+
+  /* ── DIAGRAMS ── */
+  .diagram-wrap {
+    display: flex;
+    justify-content: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14pt;
+    margin: 16pt 0 4pt;
+    page-break-inside: avoid;
+  }
+  .fig-caption {
+    text-align: center;
+    font-style: italic;
+    font-size: 9pt;
+    color: #6b7280;
+    margin-bottom: 18pt;
+  }
+
+  /* ── TABLE OF CONTENTS ── */
+  .toc-row {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 7pt;
+  }
+  .toc-row.chapter { font-weight: bold; color: #1a3f8f; font-size: 11.5pt; margin-top: 6pt; }
+  .toc-row.sub { margin-left: 18pt; font-size: 10.5pt; color: #374151; }
+  .toc-row.subsub { margin-left: 36pt; font-size: 10pt; color: #6b7280; }
+  .toc-title { flex: 1; }
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #b0b8c8;
+    margin: 0 8pt;
+    align-self: flex-end;
+    min-width: 20pt;
+    height: 1px;
+    margin-bottom: 4pt;
+  }
+  .toc-page { font-weight: bold; min-width: 24pt; text-align: right; }
+  .toc-row.sub .toc-page, .toc-row.subsub .toc-page { font-weight: normal; }
+
+  /* ── SKILL BADGE (for competency tables) ── */
+  .badge {
+    display: inline-block;
+    padding: 2pt 7pt;
+    border-radius: 12px;
+    font-size: 9pt;
+    font-weight: bold;
+  }
+  .badge-before { background: #fee2e2; color: #991b1b; }
+  .badge-after  { background: #d1fae5; color: #065f46; }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9.5pt;
+    background: #0f1c3d;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 14pt 16pt;
+    overflow-x: auto;
+    margin: 12pt 0 14pt;
+    page-break-inside: avoid;
+    white-space: pre;
+  }
+  .code-block .kw { color: #00e5ff; }
+  .code-block .str { color: #a5f3a5; }
+  .code-block .cm { color: #6b7280; font-style: italic; }
+  .code-block .fn { color: #fbbf24; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    width: 80px;
+    vertical-align: middle;
+  }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, #1a3f8f, #00e5ff); border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-header">
+    <img src="data:image/jpeg;base64,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" alt="YouCode Safi">
+    <span class="cover-header-sep">×</span>
+    <img src="data:image/jpeg;base64,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" alt="Landmark Agency">
+  </div>
+  <div class="cover-body">
+    <div class="cover-tag">Rapport de Stage &nbsp;·&nbsp; Fin de Formation 2025–2026</div>
+    <div class="cover-main-title">
+      Développement Full-Stack &amp; Coordination Agile<br>
+      <span style="font-size:18pt;color:rgba(255,255,255,0.75);">Chez Landmark Agency — Oujda</span>
+    </div>
+    <div class="cover-separator"></div>
+    <div class="cover-sub-title">
+      Migration Next.js · Architecture en 6 Couches · CI/CD · DevOps<br>
+      Sécurité JWT · Tests Vitest · Scrum Master · Aligno &amp; SikBeauty
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div class="cover-grid">
+      <div class="cover-info-item">
+        <span class="label">Stagiaire</span>
+        <span class="value accent">Badr Eddine Slaoui</span>
+      </div>
+      <div class="cover-info-item">
+        <span class="label">Encadrant Entreprise</span>
+        <span class="value">M. LATRACH Mohammed</span>
+      </div>
+      <div class="cover-info-item">
+        <span class="label">Formateur Référent</span>
+        <span class="value">M. Saad Shaimer (YouCode)</span>
+      </div>
+      <div class="cover-info-item">
+        <span class="label">CME</span>
+        <span class="value">Mme Kaoutar Darroufi</span>
+      </div>
+      <div class="cover-info-item">
+        <span class="label">Période</span>
+        <span class="value">7 Mai — 7 Juillet 2026</span>
+      </div>
+      <div class="cover-info-item">
+        <span class="label">Établissement</span>
+        <span class="value">YouCode Safi &nbsp;·&nbsp; 2025–2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+<div class="front-section">
+<h1>Résumé</h1>
+<p>Ce rapport de stage présente le bilan de deux mois d'immersion professionnelle au sein de <strong>Landmark Agency</strong> (Oujda), du 7 mai au 7 juillet 2026. Au cours de cette période, j'ai exercé un double rôle de <strong>Scrum Master</strong> et de <strong>Développeur Full-Stack Lead</strong> sur deux projets de natures différentes mais complémentaires.</p>
+<p>Le premier projet, <strong>SikBeauty</strong>, est une marketplace e-commerce de cosmétiques coréens. Ma mission a consisté à orchestrer la migration technique d'une Single Page Application React vers une architecture Next.js avec Server-Side Rendering, afin d'améliorer drastiquement l'indexation SEO et les performances. J'ai également déployé une infrastructure DevOps complète comprenant Docker, un pipeline CI/CD GitHub Actions et un hébergement sur VPS Hostinger.</p>
+<p>Le second projet, <strong>Aligno</strong>, est un écosystème de productivité complet développé entièrement de zéro, intégrant un tableau Kanban collaboratif en temps réel, un gestionnaire de temps par blueprints et un module de finances personnelles. J'ai conçu et implémenté l'architecture backend en 6 couches (Route Handler, Controller, Service, Repository, DAO, DTO/Mapper), et développé le module d'authentification sécurisé complet, avec validation des e-mails via Resend, gestion des tokens JWT, cookies HttpOnly et une suite de 35 tests d'intégration avec Vitest.</p>
+<p>En tant que Scrum Master, j'ai planifié et coordonné 4 sprints hebdomadaires, géré le backlog Jira, structuré le workflow Git, réalisé les revues de code et accompagné techniquement mes 4 collègues développeurs.</p>
+<p><strong>Mots-clés :</strong> Nuxt 4, Vue 3, Next.js, TypeScript, Prisma ORM, PostgreSQL, Docker, GitHub Actions, Scrum Master, JWT, bcrypt, Zod, Vitest, SEO, DevOps, Architecture en Couches.</p>
+
+<h1 style="margin-top:30pt;">Abstract</h1>
+<p>This internship report documents two months of professional immersion at <strong>Landmark Agency</strong> (Oujda, Morocco), from May 7 to July 7, 2026. During this period, I held a dual role as <strong>Scrum Master</strong> and <strong>Lead Full-Stack Developer</strong> on two complementary projects.</p>
+<p>The first project, <strong>SikBeauty</strong>, is a Korean cosmetics e-commerce marketplace. I led the technical migration from a React SPA to a Next.js SSR architecture, dramatically improving SEO indexation and page performance. I also set up a complete DevOps infrastructure including Docker, a GitHub Actions CI/CD pipeline, and VPS deployment on Hostinger.</p>
+<p>The second project, <strong>Aligno</strong>, is a comprehensive productivity ecosystem built from scratch, featuring a real-time collaborative Kanban board, a time management module with daily blueprints, and a personal finance tracker. I designed and implemented a 6-layer clean backend architecture and built the entire secure authentication module with email verification via Resend, JWT tokens, HttpOnly cookies, and a suite of 35 integration tests using Vitest.</p>
+<p><strong>Keywords:</strong> Nuxt 4, Vue 3, Next.js, TypeScript, Prisma ORM, PostgreSQL, Docker, GitHub Actions, Scrum Master, JWT, bcrypt, Zod, Vitest, SEO, DevOps, Layered Architecture.</p>
+</div>
+<div class="page-break"></div>
+<div class="front-section">
+<h1>Remerciements</h1>
+<p>À l'issue de ce stage de fin de formation, il m'est particulièrement agréable de pouvoir exprimer ma reconnaissance à toutes les personnes qui ont contribué, de près ou de loin, au bon déroulement de cette expérience professionnelle marquante.</p>
+<p>Je tiens tout d'abord à adresser mes remerciements les plus sincères à <strong>M. LATRACH Mohammed</strong>, encadrant de stage chez Landmark Agency, pour la confiance qu'il m'a accordée en me confiant des responsabilités techniques de haut niveau dès le premier jour. Ses retours réguliers, ses orientations précises et sa vision professionnelle exigeante ont constitué une source d'apprentissage permanente et ont profondément influencé ma manière d'aborder le développement logiciel.</p>
+<p>Je remercie également <strong>M. Saad Shaimer</strong>, formateur référent au sein de YouCode Safi, dont l'enseignement rigoureux et la pédagogie bienveillante ont constitué le socle de mes compétences techniques. Ses évaluations régulières et ses orientations judicieuses durant toute la durée de la formation ont guidé mon évolution.</p>
+<p>Ma gratitude va aussi à <strong>Mme Kaoutar Darroufi</strong>, CME, pour son suivi attentif et humain, ses encouragements constants et l'intérêt sincère qu'elle a toujours porté au développement personnel et professionnel des apprenants.</p>
+<p>Je souhaite enfin remercier chaleureusement mes collègues de stage, sans qui la réalisation de ces deux projets d'envergure n'aurait pas été possible :</p>
+<ul>
+  <li><strong>Mouna Saoui</strong> — pour sa rigueur, son sens du détail et son investissement constant dans chacune de ses contributions.</li>
+  <li><strong>Brahim El Habchi</strong> — pour sa créativité, sa réactivité et sa capacité à concevoir des solutions techniques élégantes.</li>
+  <li><strong>Yassine Nmila</strong> — pour sa polyvalence, son esprit d'initiative et sa contribution précieuse à chaque sprint.</li>
+  <li><strong>Khadija El Haddad</strong> — pour son professionnalisme, sa persévérance et la qualité irréprochable de son travail.</li>
+</ul>
+<p>À tous, merci.</p>
+</div>
+<div class="page-break"></div>
+<div class="front-section">
+<h1>Sommaire</h1>
+
+  <div class="toc-row chapter">
+    <span class="toc-title">Résumé / Abstract</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">II</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Remerciements</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">III</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Introduction Générale</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">1</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 1 : Contexte et Environnement de Stage</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">3</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">1.1 Présentation de Landmark Agency</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">3</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">1.2 Présentation de YouCode Safi</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">5</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">1.3 Présentation de l'équipe de stage</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">6</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 2 : Méthodes de Travail et Rôle de Scrum Master</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">7</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">2.1 La méthodologie Agile Scrum</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">7</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">2.2 Rôle et responsabilités du Scrum Master</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">8</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">2.3 Gestion du Git Flow et revues de code</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">10</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 3 : Architecture Globale des Projets</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">11</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">3.1 Topologie système d'Aligno</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">11</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">3.2 Architecture Backend en 6 couches</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">12</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">3.3 Diagrammes UML et ERD</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">13</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">3.4 Déploiement et Infrastructure</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">15</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 4 : Projet SikBeauty — Migration et Industrialisation</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">16</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">4.1 Présentation et contexte</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">16</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">4.2 Migration React vers Next.js et optimisation SSR/SEO</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">17</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">4.3 DevOps, Docker et CI/CD GitHub Actions</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">20</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">4.4 Déploiement sur VPS Hostinger</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">22</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">4.5 Contributions Backend</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">23</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 5 : Projet Aligno — Conception et Développement from Scratch</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">24</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.1 Présentation d'Aligno</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">24</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.2 Initialisation du projet et configuration</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">25</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.3 Développement Backend du module Authentification</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">26</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.4 Tests unitaires et d'intégration avec Vitest</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">31</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.5 Planification Frontend sur Jira</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">33</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.6 Développement Frontend — Module Auth (Nuxt 4)</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">34</span>
+  </div>
+  <div class="toc-row sub">
+    <span class="toc-title">5.7 Phase de finalisation du projet</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">37</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 6 : Présentation des Technologies</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">39</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 7 : Difficultés Rencontrées — Études de Cas</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">44</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 8 : Bilan des Compétences Acquises</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">47</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Chapitre 9 : Résultats Obtenus</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">50</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Conclusion Générale</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">52</span>
+  </div>
+  <div class="toc-row chapter">
+    <span class="toc-title">Annexes</span>
+    <span class="toc-dots"></span>
+    <span class="toc-page">54</span>
+  </div>
+</div>
+<div class="page-break"></div>
+<div class="front-section">
+<h1>Liste des Figures</h1>
+<p><strong>Fig. 1 :</strong> Topologie générale du système distribué Aligno .......... 11</p><p><strong>Fig. 2 :</strong> Architecture Backend en 6 couches (layered architecture) .......... 12</p><p><strong>Fig. 3 :</strong> Diagramme de cas d'utilisation (Use Case) — Module Auth .......... 13</p><p><strong>Fig. 4 :</strong> Diagramme de séquence — Inscription et validation e-mail .......... 14</p><p><strong>Fig. 5 :</strong> Diagramme Entité-Association (ERD) simplifié d'Aligno .......... 14</p><p><strong>Fig. 6 :</strong> Diagramme de déploiement — Pipeline CI/CD et VPS .......... 15</p><p><strong>Fig. 7 :</strong> Schéma du Git Flow appliqué aux deux projets .......... 10</p><p><strong>Fig. 8 :</strong> Structure des répertoires du projet Aligno .......... Annexe A</p><p><strong>Fig. 9 :</strong> Capture — Tableau Kanban (Jira) en Sprint 3 .......... Annexe B</p><p><strong>Fig. 10 :</strong> Capture — Rapport Lighthouse SEO de SikBeauty .......... Annexe C</p><p><strong>Fig. 11 :</strong> Capture — Pipeline GitHub Actions (CI/CD) .......... Annexe D</p>
+
+<h1 style="margin-top:28pt;">Liste des Tableaux</h1>
+<p><strong>Tableau 1 :</strong> Équipe projet et répartition des rôles .......... 6</p><p><strong>Tableau 2 :</strong> Cérémonies Scrum et planning hebdomadaire .......... 9</p><p><strong>Tableau 3 :</strong> Comparatif React SPA vs Next.js SSR (performances) .......... 18</p><p><strong>Tableau 4 :</strong> Métriques SEO Lighthouse avant/après migration .......... 19</p><p><strong>Tableau 5 :</strong> Variables d'environnement du projet Aligno .......... 25</p><p><strong>Tableau 6 :</strong> Registre des endpoints API du module Authentification .......... 28</p><p><strong>Tableau 7 :</strong> Règles de validation Zod par endpoint .......... 30</p><p><strong>Tableau 8 :</strong> Contrôles de sécurité implémentés dans Aligno .......... 31</p><p><strong>Tableau 9 :</strong> Couverture des tests Vitest (35 tests) .......... 32</p><p><strong>Tableau 10 :</strong> Fiches technologiques — Stack Frontend .......... 39</p><p><strong>Tableau 11 :</strong> Fiches technologiques — Stack Backend et Temps Réel .......... 41</p><p><strong>Tableau 12 :</strong> Fiches technologiques — DevOps et Qualité .......... 43</p><p><strong>Tableau 13 :</strong> Bilan comparatif compétences techniques Avant/Après .......... 48</p><p><strong>Tableau 14 :</strong> Bilan compétences transversales et managériales .......... 49</p><p><strong>Tableau 15 :</strong> Récapitulatif des indicateurs clés du stage .......... 50</p>
+</div>
+<div class="page-break"></div>
+<h1 class="chapter-title">Introduction Générale</h1>
+<p>Le secteur du développement logiciel est aujourd'hui marqué par une transformation continue, alimentée par l'émergence de frameworks meta performants, la démocratisation des architectures microservices et l'adoption généralisée des pratiques DevOps au sein des organisations numériques. Dans ce contexte d'évolution rapide, la formation théorique dispensée en école doit impérativement se confronter aux réalités du terrain, aux contraintes de production et aux exigences de la livraison continue de valeur logicielle.</p>
+<p>C'est dans cette perspective que s'inscrit mon stage de fin d'études, effectué au sein de <strong>Landmark Agency</strong>, une agence numérique innovante basée à Oujda, du 7 mai au 7 juillet 2026. Ce stage de deux mois a représenté l'opportunité rare et exigeante d'occuper simultanément un rôle de coordination agile et de développement technique de haut niveau, sur deux projets distincts aux natures complémentaires.</p>
+<p>D'un côté, le projet <strong>SikBeauty</strong> a demandé une intervention d'industrialisation : transformer une application React existante en plateforme Next.js performante, outillée d'un pipeline CI/CD robuste et d'une infrastructure Docker déployée en production. De l'autre, <strong>Aligno</strong> a représenté le défi de concevoir et de construire from scratch un écosystème logiciel complet — un système de productivité intégrant gestion de projets Kanban, planification du temps et suivi des finances personnelles — avec une architecture rigoureuse, des tests automatisés et une interface soignée.</p>
+<p>Ma double casquette de <strong>Scrum Master</strong> et de <strong>Développeur Full-Stack Lead</strong> m'a amené à opérer à plusieurs niveaux : planification des sprints et gestion du backlog Jira, revues de code et coordination d'une équipe de cinq personnes, conception architecturale, développement de fonctionnalités critiques, écriture de tests d'intégration et optimisation des performances en production.</p>
+<p>Ce rapport constitue le compte-rendu académique et professionnel de cette expérience. Il est structuré de manière à refléter la progression logique de notre travail : après une présentation du contexte (Landmark Agency, YouCode), des méthodes de travail (Scrum, Git Flow), et de l'architecture technique globale, nous détaillons nos contributions sur chacun des deux projets, puis nous dressons un bilan des compétences acquises, des difficultés surmontées et des résultats obtenus.</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 1 — Contexte et Environnement de Stage</h1>
+<h2>1.1 Présentation de Landmark Agency</h2>
+<p>Fondée à Oujda dans le nord-est du Maroc, <strong>Landmark Agency</strong> est une agence de services numériques spécialisée dans la création d'applications web et mobiles sur mesure, le conseil en architecture logicielle et l'accompagnement à la transformation digitale de ses clients. L'agence se distingue par une capacité à prendre en charge des projets complexes de bout en bout, depuis la conception fonctionnelle jusqu'au déploiement en production, en passant par la définition de l'architecture technique et la mise en place des processus qualité.</p>
+<p>La culture d'entreprise de Landmark Agency repose sur trois piliers fondamentaux : <strong>l'exigence technique</strong>, <strong>la formation continue</strong> et <strong>l'adoption proactive de technologies modernes</strong>. Les équipes évoluent dans un environnement de travail stimulant, où la veille technologique est encouragée et où chaque projet constitue une opportunité d'explorer de nouveaux paradigmes. La stack technologique de l'agence est résolument orientée JavaScript : Node.js, React/Next.js, Nuxt/Vue.js, TypeScript, avec une expertise forte en DevOps (Docker, GitHub Actions, VPS).</p>
+<p>La méthodologie de développement adoptée est le <strong>Scrum Agile</strong>, avec des sprints hebdomadaires structurés autour des cérémonies classiques (Planning, Daily, Review, Retrospective). Cette organisation permet une livraison rapide et continue de valeur, tout en maintenant une visibilité claire sur l'avancement de chaque projet. Les outils utilisés sont Jira pour la gestion de projet, GitHub pour le versioning et la collaboration, et Slack pour la communication interne.</p>
+
+<h2>1.2 Présentation de YouCode Safi</h2>
+<p><strong>YouCode Safi</strong> est une école de formation aux métiers du numérique, fruit d'un partenariat pédagogique avec le réseau Simplon. Sa pédagogie repose sur l'apprentissage par projets (<em>learning by doing</em>), sans cours magistraux traditionnels : les apprenants progressent en résolvant des problèmes réels, en travaillant en équipe et en se confrontant quotidiennement aux technologies du marché. Cette approche développe chez les stagiaires une forte capacité d'adaptation, d'auto-apprentissage et de collaboration professionnelle.</p>
+<p>L'objectif de YouCode est de former des développeurs Full-Stack opérationnels, capables de s'intégrer immédiatement dans une équipe professionnelle. La formation aborde les fondamentaux du développement web (HTML, CSS, JavaScript), puis progresse vers des technologies avancées (Node.js, React/Vue, bases de données relationnelles, DevOps), tout en intégrant des modules de développement personnel et de soft skills.</p>
+
+<h2>1.3 Présentation de l'équipe de stage</h2>
+<p>L'équipe projet était constituée de cinq développeurs stagiaires, coordonnés par l'encadrant de l'entreprise. La répartition des rôles a été définie dès le premier sprint, lors d'une session de planning collective :</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Nom & Prénom</th><th>Rôle principal</th><th>Modules principaux contribués</th></tr></thead>
+  <tbody><tr><td>M. LATRACH Mohammed</td><td>Encadrant / Product Owner</td><td>Supervision, arbitrage fonctionnel et technique, revue finale.</td></tr><tr><td>Badr Eddine Slaoui</td><td>Scrum Master & Dev Full-Stack Lead</td><td>Auth (Backend + Frontend), DevOps, SEO, Architecture, Tests, Git.</td></tr><tr><td>Brahim El Habchi</td><td>Développeur Full-Stack</td><td>Module Kanban (Backend + Frontend), intégration Socket.IO.</td></tr><tr><td>Yassine Nmila</td><td>Développeur Full-Stack</td><td>Module Wallet (Backend), gestion des transactions et budgets.</td></tr><tr><td>Khadija El Haddad</td><td>Développeuse Full-Stack</td><td>Module Time Management (Frontend), composants UI partagés.</td></tr><tr><td>Mouna Saoui</td><td>Développeuse Full-Stack</td><td>Module Wallet (Frontend), ApexCharts, Dashboard analytique.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 1 : Équipe projet et répartition des rôles</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 2 — Méthodes de Travail et Rôle de Scrum Master</h1>
+<h2>2.1 La méthodologie Agile Scrum</h2>
+<p>Scrum est un cadre de travail agile fondé sur des itérations courtes, appelées sprints, et sur une livraison incrémentale de valeur. Contrairement aux méthodologies en cascade (<em>waterfall</em>), Scrum privilégie l'adaptation continue aux changements et la communication permanente entre les membres de l'équipe. Les trois piliers fondamentaux de Scrum sont la <strong>transparence</strong> (tout le monde partage le même niveau d'information), l'<strong>inspection</strong> (le travail est régulièrement évalué) et l'<strong>adaptation</strong> (le plan est ajusté en fonction des observations).</p>
+<p>Nos sprints avaient une durée d'une semaine. Chaque sprint débutait par une session de Sprint Planning où l'équipe sélectionnait les tickets du backlog à traiter, se terminait par une Sprint Review de démonstration des fonctionnalités réalisées, et une Sprint Retrospective d'amélioration continue. Les Daily Meetings quotidiens (15 minutes maximum) permettaient de synchroniser l'équipe et d'identifier immédiatement les blocages.</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Cérémonie</th><th>Fréquence</th><th>Durée</th><th>Objectif</th></tr></thead>
+  <tbody><tr><td>Sprint Planning</td><td>Début de sprint (lundi)</td><td>1h – 1h30</td><td>Sélection des tickets, estimation, attribution des tâches.</td></tr><tr><td>Daily Meeting</td><td>Chaque matin</td><td>15 min max</td><td>Synchronisation : fait hier, prévu aujourd'hui, blocages.</td></tr><tr><td>Sprint Review</td><td>Fin de sprint (vendredi)</td><td>30 – 45 min</td><td>Démonstration des fonctionnalités à l'encadrant (Product Owner).</td></tr><tr><td>Sprint Retrospective</td><td>Fin de sprint</td><td>30 min</td><td>Analyse collective des points forts et axes d'amélioration.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 2 : Cérémonies Scrum et planning hebdomadaire</p>
+
+<h2>2.2 Rôle et responsabilités du Scrum Master</h2>
+<p>Tout au long du stage, j'ai exercé le rôle de <strong>Scrum Master</strong> sur les deux projets simultanément. Ce rôle est bien plus qu'une simple coordination administrative : il s'agit de mettre en place et de maintenir un environnement propice à la haute performance d'une équipe agile. Mes responsabilités étaient multiples et entrelacées.</p>
+<p>En amont de chaque sprint, j'assurais la <strong>gestion et le raffinage du backlog produit</strong> sur Jira. Cela impliquait de créer les Epics structurant chaque module fonctionnel (Authentification, Kanban, Wallet, Time Management, Dashboard), puis de rédiger des User Stories précises respectant la structure : <em>"En tant que [rôle], je veux [fonctionnalité] afin de [bénéfice]"</em>. Chaque User Story était ensuite décomposée en tâches de développement atomiques (moins de 8 heures chacune), accompagnées de critères d'acceptation clairs et testables.</p>
+<p>Lors du Sprint Planning, j'animais la session d'estimation en utilisant la technique du <strong>Planning Poker</strong> (adaptée à notre contexte). Chaque développeur estimait la charge de chaque tâche en story points, ce qui permettait d'équilibrer la charge de travail et d'éviter la sur-allocation. J'attribuais ensuite les tickets à chaque membre en fonction de ses compétences, de sa disponibilité et des dépendances entre les tâches.</p>
+<p>Au quotidien, j'animais les <strong>Daily Meetings</strong> en garantissant leur concision et leur efficacité. Lorsqu'un développeur signalait un blocage, j'intervenais soit pour apporter une solution technique immédiate, soit pour planifier une session de pair-programming. Je maintenais le tableau Kanban de Jira à jour en temps réel, ce qui offrait une visibilité complète sur l'état du sprint à tout moment.</p>
+<p>En fin de sprint, j'organisais les <strong>Sprint Reviews</strong> en préparant la démonstration des fonctionnalités et en coordonnant les présentations des développeurs. Les <strong>Sprint Retrospectives</strong> étaient structurées autour de trois axes : ce qui a bien fonctionné, ce qui doit être amélioré, et les actions concrètes à mettre en place dès le sprint suivant.</p>
+
+<h2>2.3 Gestion du Git Flow et revues de code</h2>
+<p>En tant que Lead technique, j'ai défini et imposé un <strong>Git Flow</strong> rigoureux pour les deux projets. L'arbre des branches était structuré ainsi :</p>
+<ul>
+  <li><code>main</code> : branche de production, protégée, accessible uniquement via PR approuvées.</li>
+  <li><code>dev</code> : branche d'intégration continue, base de toutes les branches de fonctionnalité.</li>
+  <li><code>feature/[ticket-id]-[description]</code> : branches de développement par fonctionnalité.</li>
+  <li><code>fix/[ticket-id]-[description]</code> : branches de correction de bugs.</li>
+  <li><code>chore/[description]</code> : branches de maintenance (mises à jour de dépendances, configuration).</li>
+</ul>
+<p>Toutes les fusions dans <code>dev</code> passaient obligatoirement par une <strong>Pull Request</strong> sur GitHub, que je relisais systématiquement. Mes revues de code portaient sur plusieurs dimensions : conformité aux critères d'acceptation de la User Story, respect des standards de codage TypeScript, sécurité (absence de secrets en dur, validation Zod présente), qualité de l'architecture (respect des couches), et passage des tests automatiques dans le pipeline CI.</p>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 720 200" width="720" height="200" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif" font-size="10">
+  <!-- Branches -->
+  
+    <line x1="60" y1="30" x2="680" y2="30" stroke="#1a3f8f" stroke-width="2.5"/>
+    <text x="10" y="34" fill="#1a3f8f" font-size="10" font-weight="bold">main</text>
+  
+    <line x1="60" y1="80" x2="680" y2="80" stroke="#2563eb" stroke-width="2.5"/>
+    <text x="10" y="84" fill="#2563eb" font-size="10" font-weight="bold">dev</text>
+  
+    <line x1="60" y1="130" x2="680" y2="130" stroke="#10b981" stroke-width="2.5"/>
+    <text x="10" y="134" fill="#10b981" font-size="10" font-weight="bold">feature/*</text>
+  
+    <line x1="60" y1="170" x2="680" y2="170" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="10" y="174" fill="#f59e0b" font-size="10" font-weight="bold">fix/*</text>
+  
+  <!-- Commits on main -->
+  <circle cx="120" cy="30" r="7" fill="#1a3f8f" stroke="#fff" stroke-width="2"/><circle cx="340" cy="30" r="7" fill="#1a3f8f" stroke="#fff" stroke-width="2"/><circle cx="560" cy="30" r="7" fill="#1a3f8f" stroke="#fff" stroke-width="2"/><circle cx="680" cy="30" r="7" fill="#1a3f8f" stroke="#fff" stroke-width="2"/>
+  <!-- Commits on dev -->
+  <circle cx="120" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/><circle cx="200" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/><circle cx="280" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/><circle cx="400" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/><circle cx="480" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/><circle cx="560" cy="80" r="6" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+  <!-- Feature branch -->
+  <path d="M200 80 Q220 105 240 130" stroke="#10b981" stroke-width="2" fill="none"/>
+  <circle cx="280" cy="130" r="6" fill="#10b981" stroke="#fff" stroke-width="1.5"/>
+  <circle cx="350" cy="130" r="6" fill="#10b981" stroke="#fff" stroke-width="1.5"/>
+  <path d="M350 130 Q380 105 400 80" stroke="#10b981" stroke-width="2" fill="none"/>
+  <!-- Fix branch -->
+  <path d="M480 80 Q500 125 520 170" stroke="#f59e0b" stroke-width="2" fill="none"/>
+  <circle cx="560" cy="170" r="6" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>
+  <path d="M560 170 Q580 125 560 80" stroke="#f59e0b" stroke-width="2" fill="none"/>
+  <!-- Merge to main arrows -->
+  <path d="M560 80 Q570 55 560 30" stroke="#10b981" stroke-width="2" stroke-dasharray="5" fill="none"/>
+  <!-- Labels -->
+  <text x="280" y="150" fill="#10b981" font-size="9" text-anchor="middle">feature/auth-module</text>
+  <text x="560" y="190" fill="#f59e0b" font-size="9" text-anchor="middle">fix/resend-test</text>
+  <text x="560" y="15" fill="#1a3f8f" font-size="9" text-anchor="middle">PR → Release</text>
+</svg></div><p class="fig-caption">Fig. 7 : Schéma du Git Flow appliqué aux deux projets (main → dev → feature / fix)</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 3 — Architecture Globale des Projets</h1>
+<h2>3.1 Topologie système d'Aligno</h2>
+<p>Aligno est construit sur une topologie de système distribué exploitant pleinement les capacités Full-Stack de Nuxt 4. Le serveur Nitro intégré à Nuxt sert simultanément les pages Vue.js (SSR) et les endpoints REST de l'API. La communication en temps réel pour les fonctionnalités collaboratives (Kanban, notifications) est assurée par Socket.IO, dont le bus de messages est synchronisé entre instances via un adaptateur Redis.</p>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 780 260" width="780" height="260" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#10b981"/>
+    </marker>
+  </defs>
+  <!-- Client -->
+  <rect x="20" y="80" width="160" height="100" rx="8" fill="#0f172a" stroke="#00e5ff" stroke-width="2"/>
+  <text x="100" y="118" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">CLIENT</text>
+  <text x="100" y="138" fill="#94a3b8" font-size="10.5" text-anchor="middle">Nuxt 4 / Vue 3</text>
+  <text x="100" y="155" fill="#94a3b8" font-size="10.5" text-anchor="middle">Pinia · Tailwind v4</text>
+  <!-- arrows -->
+  <line x1="180" y1="118" x2="240" y2="118" stroke="#2563eb" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="210" y="110" fill="#475569" font-size="9" text-anchor="middle">REST API</text>
+  <line x1="240" y1="138" x2="180" y2="138" stroke="#2563eb" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="210" y="155" fill="#475569" font-size="9" text-anchor="middle">WS (Socket.IO)</text>
+  <!-- Backend -->
+  <rect x="250" y="30" width="200" height="200" rx="8" fill="#07112a" stroke="#2563eb" stroke-width="2"/>
+  <text x="350" y="70" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">BACKEND NITRO</text>
+  <text x="350" y="92" fill="#94a3b8" font-size="10" text-anchor="middle">Route Handlers</text>
+  <line x1="350" y1="98" x2="350" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="350" y="126" fill="#cbd5e1" font-size="10" text-anchor="middle">Controllers (Zod)</text>
+  <line x1="350" y1="132" x2="350" y2="144" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="350" y="160" fill="#cbd5e1" font-size="10" text-anchor="middle">Services (Domain)</text>
+  <line x1="350" y1="166" x2="350" y2="178" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="350" y="196" fill="#94a3b8" font-size="10" text-anchor="middle">Repositories (Prisma)</text>
+  <!-- arrows to dbs -->
+  <line x1="450" y1="100" x2="510" y2="70" stroke="#10b981" stroke-width="2" marker-end="url(#arr2)"/>
+  <line x1="450" y1="160" x2="510" y2="160" stroke="#ef4444" stroke-width="2" marker-end="url(#arr2)"/>
+  <line x1="450" y1="210" x2="510" y2="230" stroke="#f59e0b" stroke-width="2" marker-end="url(#arr2)"/>
+  <!-- PostgreSQL -->
+  <rect x="520" y="30" width="150" height="70" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+  <text x="595" y="62" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">PostgreSQL 17</text>
+  <text x="595" y="80" fill="#94a3b8" font-size="9.5" text-anchor="middle">Prisma ORM · pg adapter</text>
+  <!-- Redis -->
+  <rect x="520" y="130" width="150" height="60" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+  <text x="595" y="157" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Redis</text>
+  <text x="595" y="175" fill="#94a3b8" font-size="9.5" text-anchor="middle">BullMQ · Socket.IO Adapter</text>
+  <!-- Resend -->
+  <rect x="520" y="210" width="150" height="55" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+  <text x="595" y="238" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Resend API</text>
+  <text x="595" y="255" fill="#94a3b8" font-size="9.5" text-anchor="middle">Transactional Emails</text>
+</svg></div><p class="fig-caption">Fig. 1 : Topologie générale du système distribué Aligno</p>
+
+<h2>3.2 Architecture Backend en 6 couches</h2>
+<p>Le backend d'Aligno applique un pattern d'architecture en couches (<em>Layered Architecture</em>) strict, inspiré du Domain-Driven Design. Ce choix architectural garantit la séparation des préoccupations, la testabilité unitaire de chaque couche et la maintenabilité à long terme du code. Chaque couche a une responsabilité unique et ne peut communiquer qu'avec les couches adjacentes.</p>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 620 300" width="620" height="300" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif">
+  <defs>
+    <marker id="da" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#1a3f8f"/>
+    </marker>
+  </defs>
+  
+    <rect x="100" y="20" width="420" height="36" rx="6" fill="#1a3f8f" opacity="1"/>
+    <text x="200" y="43" fill="#fff" font-size="12" font-weight="bold">Route Handler</text>
+    <text x="320" y="43" fill="rgba(255,255,255,0.75)" font-size="10.5">server/api/auth/*.ts</text>
+    <line x1="310" y1="56" x2="310" y2="65" stroke="#fff" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#da)"/>
+  
+    <rect x="100" y="65" width="420" height="36" rx="6" fill="#1e4db7" opacity="0.95"/>
+    <text x="200" y="88" fill="#fff" font-size="12" font-weight="bold">Controller</text>
+    <text x="320" y="88" fill="rgba(255,255,255,0.75)" font-size="10.5">Zod validation · cookie · envelope</text>
+    <line x1="310" y1="101" x2="310" y2="110" stroke="#fff" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#da)"/>
+  
+    <rect x="100" y="110" width="420" height="36" rx="6" fill="#2563eb" opacity="0.9"/>
+    <text x="200" y="133" fill="#fff" font-size="12" font-weight="bold">Service</text>
+    <text x="320" y="133" fill="rgba(255,255,255,0.75)" font-size="10.5">Domain logic · bcrypt · JWT · Resend</text>
+    <line x1="310" y1="146" x2="310" y2="155" stroke="#fff" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#da)"/>
+  
+    <rect x="100" y="155" width="420" height="36" rx="6" fill="#3b82f6" opacity="0.85"/>
+    <text x="200" y="178" fill="#fff" font-size="12" font-weight="bold">Repository</text>
+    <text x="320" y="178" fill="rgba(255,255,255,0.75)" font-size="10.5">Prisma queries (IUserDAO)</text>
+    <line x1="310" y1="191" x2="310" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#da)"/>
+  
+    <rect x="100" y="200" width="420" height="36" rx="6" fill="#60a5fa" opacity="0.8"/>
+    <text x="200" y="223" fill="#fff" font-size="12" font-weight="bold">DAO / Prisma</text>
+    <text x="320" y="223" fill="rgba(255,255,255,0.75)" font-size="10.5">PostgreSQL · pg connection pool</text>
+    <line x1="310" y1="236" x2="310" y2="245" stroke="#fff" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#da)"/>
+  
+    <rect x="100" y="245" width="420" height="36" rx="6" fill="#93c5fd" opacity="0.75"/>
+    <text x="200" y="268" fill="#fff" font-size="12" font-weight="bold">DTO / Mapper</text>
+    <text x="320" y="268" fill="rgba(255,255,255,0.75)" font-size="10.5">Type-safe DTOs · field stripping</text>
+    
+  
+</svg></div><p class="fig-caption">Fig. 2 : Architecture Backend en 6 couches (layered architecture) d'Aligno</p>
+
+<h2>3.3 Diagrammes UML et ERD</h2>
+<h3>3.3.1 Diagramme de cas d'utilisation — Module Authentification</h3>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 720 310" width="720" height="310" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif">
+  <!-- Actor -->
+  <circle cx="60" cy="100" r="20" fill="#1e4db7" stroke="#fff" stroke-width="2"/>
+  <line x1="60" y1="120" x2="60" y2="175" stroke="#1e4db7" stroke-width="2.5"/>
+  <line x1="35" y1="145" x2="85" y2="145" stroke="#1e4db7" stroke-width="2.5"/>
+  <line x1="60" y1="175" x2="35" y2="210" stroke="#1e4db7" stroke-width="2.5"/>
+  <line x1="60" y1="175" x2="85" y2="210" stroke="#1e4db7" stroke-width="2.5"/>
+  <text x="60" y="228" fill="#1a1a2e" font-size="11" text-anchor="middle" font-weight="bold">Utilisateur</text>
+  <!-- System boundary -->
+  <rect x="110" y="10" width="590" height="290" rx="10" fill="none" stroke="#bfdbfe" stroke-width="2" stroke-dasharray="6"/>
+  <text x="405" y="300" fill="#6b7280" font-size="10" text-anchor="middle">Système Aligno — Module Authentification</text>
+  <!-- Use cases -->
+  
+      <ellipse cx="180" cy="60" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="180" y="65" fill="#1a3f8f" font-size="10" text-anchor="middle">Inscription (Register)</text>
+      <line x1="90" y1="120" x2="85" y2="60" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="180" cy="110" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="180" y="115" fill="#1a3f8f" font-size="10" text-anchor="middle">Connexion (Login)</text>
+      <line x1="90" y1="120" x2="85" y2="110" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="180" cy="160" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="180" y="165" fill="#1a3f8f" font-size="10" text-anchor="middle">Vérification Email</text>
+      <line x1="90" y1="120" x2="85" y2="160" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="180" cy="210" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="180" y="215" fill="#1a3f8f" font-size="10" text-anchor="middle">Mot de passe oublié</text>
+      <line x1="90" y1="120" x2="85" y2="210" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="180" cy="260" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="180" y="265" fill="#1a3f8f" font-size="10" text-anchor="middle">Réinitialisation MDP</text>
+      <line x1="90" y1="120" x2="85" y2="260" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="430" cy="60" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="430" y="65" fill="#1a3f8f" font-size="10" text-anchor="middle">Consultation Profil</text>
+      <line x1="90" y1="120" x2="335" y2="60" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="430" cy="110" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="430" y="115" fill="#1a3f8f" font-size="10" text-anchor="middle">Mise à jour Profil</text>
+      <line x1="90" y1="120" x2="335" y2="110" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+      <ellipse cx="430" cy="160" rx="95" ry="22" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+      <text x="430" y="165" fill="#1a3f8f" font-size="10" text-anchor="middle">Déconnexion (Logout)</text>
+      <line x1="90" y1="120" x2="335" y2="160" stroke="#94a3b8" stroke-dasharray="4" stroke-width="1.5"/>
+    
+</svg></div><p class="fig-caption">Fig. 3 : Diagramme de cas d'utilisation (Use Case) — Module Authentification d'Aligno</p>
+
+<h3>3.3.2 Diagramme de séquence — Inscription et validation e-mail</h3>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 720 380" width="720" height="380" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif" font-size="10">
+  <defs>
+    <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#1a3f8f"/>
+    </marker>
+    <marker id="sa2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <!-- Actors -->
+  
+    <rect x="25" y="10" width="110" height="30" rx="5" fill="#1a3f8f"/>
+    <text x="80" y="30" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Client</text>
+    <line x1="80" y1="40" x2="80" y2="360" stroke="#dbeafe" stroke-width="1.5" stroke-dasharray="5"/>
+  
+    <rect x="165" y="10" width="110" height="30" rx="5" fill="#1a3f8f"/>
+    <text x="220" y="30" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Controller</text>
+    <line x1="220" y1="40" x2="220" y2="360" stroke="#dbeafe" stroke-width="1.5" stroke-dasharray="5"/>
+  
+    <rect x="305" y="10" width="110" height="30" rx="5" fill="#1a3f8f"/>
+    <text x="360" y="30" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Service</text>
+    <line x1="360" y1="40" x2="360" y2="360" stroke="#dbeafe" stroke-width="1.5" stroke-dasharray="5"/>
+  
+    <rect x="445" y="10" width="110" height="30" rx="5" fill="#1a3f8f"/>
+    <text x="500" y="30" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Repo/DB</text>
+    <line x1="500" y1="40" x2="500" y2="360" stroke="#dbeafe" stroke-width="1.5" stroke-dasharray="5"/>
+  
+    <rect x="585" y="10" width="110" height="30" rx="5" fill="#1a3f8f"/>
+    <text x="640" y="30" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Resend</text>
+    <line x1="640" y1="40" x2="640" y2="360" stroke="#dbeafe" stroke-width="1.5" stroke-dasharray="5"/>
+  
+  <!-- Messages -->
+  
+      <line x1="80" y1="70" x2="220" y2="70" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="150" y="66" fill="#1a3f8f" font-size="9" text-anchor="middle">POST /api/auth/register</text>
+    
+      <line x1="220" y1="95" x2="360" y2="95" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="290" y="91" fill="#1a3f8f" font-size="9" text-anchor="middle">createUser(data)</text>
+    
+      <line x1="360" y1="120" x2="500" y2="120" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="430" y="116" fill="#1a3f8f" font-size="9" text-anchor="middle">INSERT user (bcrypt hash)</text>
+    
+      <line x1="500" y1="145" x2="360" y2="145" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5" marker-end="url(#sa2)"/>
+      <text x="430" y="141" fill="#6b7280" font-size="9" text-anchor="middle">user record</text>
+    
+      <line x1="360" y1="170" x2="640" y2="170" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="500" y="166" fill="#1a3f8f" font-size="9" text-anchor="middle">sendVerificationEmail(token)</text>
+    
+      <line x1="640" y1="195" x2="360" y2="195" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5" marker-end="url(#sa2)"/>
+      <text x="500" y="191" fill="#6b7280" font-size="9" text-anchor="middle">email queued ✓</text>
+    
+      <line x1="360" y1="220" x2="220" y2="220" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5" marker-end="url(#sa2)"/>
+      <text x="290" y="216" fill="#6b7280" font-size="9" text-anchor="middle">{ user, token }</text>
+    
+      <line x1="220" y1="245" x2="80" y2="245" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5" marker-end="url(#sa2)"/>
+      <text x="150" y="241" fill="#6b7280" font-size="9" text-anchor="middle">201 Created + cookie</text>
+    
+      <line x1="80" y1="285" x2="220" y2="285" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="150" y="281" fill="#1a3f8f" font-size="9" text-anchor="middle">GET /api/auth/email/validation?token=...</text>
+    
+      <line x1="220" y1="310" x2="360" y2="310" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="290" y="306" fill="#1a3f8f" font-size="9" text-anchor="middle">verifyEmailToken(token)</text>
+    
+      <line x1="360" y1="335" x2="500" y2="335" stroke="#1a3f8f" stroke-width="1.8"  marker-end="url(#sa)"/>
+      <text x="430" y="331" fill="#1a3f8f" font-size="9" text-anchor="middle">UPDATE email_verified=true</text>
+    
+      <line x1="220" y1="360" x2="80" y2="360" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5" marker-end="url(#sa2)"/>
+      <text x="150" y="356" fill="#6b7280" font-size="9" text-anchor="middle">200 OK — Account verified</text>
+    
+</svg></div><p class="fig-caption">Fig. 4 : Diagramme de séquence UML — Inscription (Register) et validation de l'adresse e-mail via Resend</p>
+
+<div class="page-break"></div>
+<h3>3.3.3 Diagramme Entité-Association (ERD)</h3>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 720 360" width="720" height="360" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif" font-size="10">
+  <!-- User Table -->
+  <rect x="10" y="10" width="220" height="340" rx="6" fill="#f8fafc" stroke="#1a3f8f" stroke-width="2"/>
+  <rect x="10" y="10" width="220" height="36" rx="6" fill="#1a3f8f"/>
+  <text x="120" y="33" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">users</text>
+  
+    <text x="20" y="58" fill="#1a3f8f" font-size="9.5" font-weight="bold">id (PK, cuid)</text>
+    <line x1="10" y1="65" x2="230" y2="65" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="76" fill="#374151" font-size="9.5" font-weight="normal">first_name</text>
+    <line x1="10" y1="83" x2="230" y2="83" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="94" fill="#374151" font-size="9.5" font-weight="normal">last_name</text>
+    <line x1="10" y1="101" x2="230" y2="101" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="112" fill="#374151" font-size="9.5" font-weight="normal">age</text>
+    <line x1="10" y1="119" x2="230" y2="119" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="130" fill="#374151" font-size="9.5" font-weight="normal">email (UNIQUE)</text>
+    <line x1="10" y1="137" x2="230" y2="137" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="148" fill="#374151" font-size="9.5" font-weight="normal">phone (UNIQUE)</text>
+    <line x1="10" y1="155" x2="230" y2="155" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="166" fill="#374151" font-size="9.5" font-weight="normal">password_hash</text>
+    <line x1="10" y1="173" x2="230" y2="173" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="184" fill="#374151" font-size="9.5" font-weight="normal">profile_picture_url</text>
+    <line x1="10" y1="191" x2="230" y2="191" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="202" fill="#374151" font-size="9.5" font-weight="normal">email_verified</text>
+    <line x1="10" y1="209" x2="230" y2="209" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="220" fill="#374151" font-size="9.5" font-weight="normal">email_verify_token</text>
+    <line x1="10" y1="227" x2="230" y2="227" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="238" fill="#374151" font-size="9.5" font-weight="normal">email_verify_expires</text>
+    <line x1="10" y1="245" x2="230" y2="245" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="256" fill="#374151" font-size="9.5" font-weight="normal">refresh_token</text>
+    <line x1="10" y1="263" x2="230" y2="263" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="274" fill="#374151" font-size="9.5" font-weight="normal">reset_password_token</text>
+    <line x1="10" y1="281" x2="230" y2="281" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="292" fill="#374151" font-size="9.5" font-weight="normal">reset_password_expires</text>
+    <line x1="10" y1="299" x2="230" y2="299" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="310" fill="#374151" font-size="9.5" font-weight="normal">created_at</text>
+    <line x1="10" y1="317" x2="230" y2="317" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="20" y="328" fill="#374151" font-size="9.5" font-weight="normal">updated_at</text>
+    
+  
+
+  <!-- Project Table -->
+  <rect x="250" y="10" width="200" height="180" rx="6" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+  <rect x="250" y="10" width="200" height="36" rx="6" fill="#2563eb"/>
+  <text x="350" y="33" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">projects</text>
+  
+    <text x="260" y="58" fill="#374151" font-size="9.5">id (PK)</text>
+    <line x1="250" y1="65" x2="450" y2="65" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="76" fill="#374151" font-size="9.5">name</text>
+    <line x1="250" y1="83" x2="450" y2="83" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="94" fill="#374151" font-size="9.5">description</text>
+    <line x1="250" y1="101" x2="450" y2="101" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="112" fill="#374151" font-size="9.5">color</text>
+    <line x1="250" y1="119" x2="450" y2="119" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="130" fill="#374151" font-size="9.5">is_archived</text>
+    <line x1="250" y1="137" x2="450" y2="137" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="148" fill="#1e4db7" font-size="9.5">owner_id (FK → users)</text>
+    <line x1="250" y1="155" x2="450" y2="155" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="166" fill="#374151" font-size="9.5">created_at</text>
+    <line x1="250" y1="173" x2="450" y2="173" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="184" fill="#374151" font-size="9.5">updated_at</text>
+    
+  
+
+  <!-- BankAccount Table -->
+  <rect x="250" y="205" width="200" height="165" rx="6" fill="#f8fafc" stroke="#10b981" stroke-width="2"/>
+  <rect x="250" y="205" width="200" height="36" rx="6" fill="#10b981"/>
+  <text x="350" y="228" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">bank_accounts</text>
+  
+    <text x="260" y="252" fill="#374151" font-size="9.5">id (PK)</text>
+    <line x1="250" y1="258" x2="450" y2="258" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="270" fill="#374151" font-size="9.5">name</text>
+    <line x1="250" y1="276" x2="450" y2="276" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="288" fill="#374151" font-size="9.5">bank_name</text>
+    <line x1="250" y1="294" x2="450" y2="294" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="306" fill="#374151" font-size="9.5">account_number</text>
+    <line x1="250" y1="312" x2="450" y2="312" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="324" fill="#374151" font-size="9.5">balance</text>
+    <line x1="250" y1="330" x2="450" y2="330" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="342" fill="#374151" font-size="9.5">currency</text>
+    <line x1="250" y1="348" x2="450" y2="348" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="360" fill="#1e4db7" font-size="9.5">user_id (FK → users)</text>
+    <line x1="250" y1="366" x2="450" y2="366" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="260" y="378" fill="#374151" font-size="9.5">created_at</text>
+    
+  
+
+  <!-- Kanban Column -->
+  <rect x="470" y="10" width="240" height="160" rx="6" fill="#f8fafc" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="470" y="10" width="240" height="36" rx="6" fill="#f59e0b"/>
+  <text x="590" y="33" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">kanban_columns</text>
+  
+    <text x="480" y="58" fill="#374151" font-size="9.5">id (PK)</text>
+    <line x1="470" y1="65" x2="710" y2="65" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="76" fill="#374151" font-size="9.5">title</text>
+    <line x1="470" y1="83" x2="710" y2="83" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="94" fill="#374151" font-size="9.5">position</text>
+    <line x1="470" y1="101" x2="710" y2="101" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="112" fill="#1e4db7" font-size="9.5">project_id (FK → projects)</text>
+    <line x1="470" y1="119" x2="710" y2="119" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="130" fill="#374151" font-size="9.5">created_at</text>
+    
+  
+
+  <!-- Transactions -->
+  <rect x="470" y="185" width="240" height="185" rx="6" fill="#f8fafc" stroke="#ef4444" stroke-width="2"/>
+  <rect x="470" y="185" width="240" height="36" rx="6" fill="#ef4444"/>
+  <text x="590" y="208" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">transactions</text>
+  
+    <text x="480" y="232" fill="#374151" font-size="9.5">id (PK)</text>
+    <line x1="470" y1="238" x2="710" y2="238" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="250" fill="#374151" font-size="9.5">amount</text>
+    <line x1="470" y1="256" x2="710" y2="256" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="268" fill="#374151" font-size="9.5">type (INCOME/EXPENSE)</text>
+    <line x1="470" y1="274" x2="710" y2="274" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="286" fill="#374151" font-size="9.5">category</text>
+    <line x1="470" y1="292" x2="710" y2="292" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="304" fill="#374151" font-size="9.5">description</text>
+    <line x1="470" y1="310" x2="710" y2="310" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="322" fill="#374151" font-size="9.5">date</text>
+    <line x1="470" y1="328" x2="710" y2="328" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="340" fill="#1e4db7" font-size="9.5">bank_account_id (FK)</text>
+    <line x1="470" y1="346" x2="710" y2="346" stroke="#e2e8f0" stroke-width="0.8"/>
+  
+    <text x="480" y="358" fill="#374151" font-size="9.5">created_at</text>
+    
+  
+
+  <!-- Relations -->
+  <line x1="230" y1="80" x2="250" y2="80" stroke="#1a3f8f" stroke-width="1.8" stroke-dasharray="4"/>
+  <line x1="230" y1="260" x2="250" y2="260" stroke="#10b981" stroke-width="1.8" stroke-dasharray="4"/>
+  <line x1="450" y1="80" x2="470" y2="80" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="4"/>
+  <line x1="450" y1="260" x2="470" y2="260" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4"/>
+</svg></div><p class="fig-caption">Fig. 5 : Diagramme Entité-Association simplifié d'Aligno (tables principales : users, projects, bank_accounts, kanban_columns, transactions)</p>
+
+<h2>3.4 Déploiement et Infrastructure</h2>
+<div class="diagram-wrap avoid-break">
+<svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg" font-family="'Times New Roman', serif">
+  <defs>
+    <marker id="ca" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10Z" fill="#475569"/>
+    </marker>
+  </defs>
+  <!-- GitHub -->
+  <rect x="10" y="120" width="130" height="80" rx="8" fill="#1f2937" stroke="#475569" stroke-width="1.5"/>
+  <text x="75" y="152" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">GitHub Repo</text>
+  <text x="75" y="170" fill="#94a3b8" font-size="9.5" text-anchor="middle">Push to main/dev</text>
+  <text x="75" y="185" fill="#94a3b8" font-size="9.5" text-anchor="middle">PR Triggers CI</text>
+  <!-- GH Actions -->
+  <rect x="190" y="100" width="160" height="120" rx="8" fill="#0f172a" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="270" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">GitHub Actions</text>
+  <text x="270" y="150" fill="#94a3b8" font-size="9.5" text-anchor="middle">1. npm ci</text>
+  <text x="270" y="165" fill="#94a3b8" font-size="9.5" text-anchor="middle">2. prisma generate</text>
+  <text x="270" y="180" fill="#94a3b8" font-size="9.5" text-anchor="middle">3. vue-tsc --noEmit</text>
+  <text x="270" y="195" fill="#94a3b8" font-size="9.5" text-anchor="middle">4. vitest run</text>
+  <text x="270" y="210" fill="#10b981" font-size="9.5" text-anchor="middle">5. SSH Deploy</text>
+  <!-- VPS -->
+  <rect x="420" y="60" width="280" height="200" rx="8" fill="#07112a" stroke="#10b981" stroke-width="2"/>
+  <text x="560" y="90" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">VPS Hostinger (Ubuntu)</text>
+  <rect x="440" y="100" width="110" height="50" rx="5" fill="#1e293b" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="495" y="122" fill="#fff" font-size="10" text-anchor="middle">Nuxt 4 App</text>
+  <text x="495" y="138" fill="#94a3b8" font-size="9" text-anchor="middle">port 4000</text>
+  <rect x="565" y="100" width="110" height="50" rx="5" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="620" y="122" fill="#fff" font-size="10" text-anchor="middle">PostgreSQL 17</text>
+  <text x="620" y="138" fill="#94a3b8" font-size="9" text-anchor="middle">port 5432</text>
+  <rect x="440" y="165" width="110" height="50" rx="5" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="495" y="187" fill="#fff" font-size="10" text-anchor="middle">Redis 7</text>
+  <text x="495" y="203" fill="#94a3b8" font-size="9" text-anchor="middle">BullMQ + Socket.IO</text>
+  <rect x="565" y="165" width="110" height="50" rx="5" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="620" y="187" fill="#fff" font-size="10" text-anchor="middle">Nginx Proxy</text>
+  <text x="620" y="203" fill="#94a3b8" font-size="9" text-anchor="middle">SSL + Domaine</text>
+  <!-- Arrows -->
+  <line x1="140" y1="160" x2="190" y2="160" stroke="#475569" stroke-width="2" marker-end="url(#ca)"/>
+  <line x1="350" y1="160" x2="420" y2="160" stroke="#10b981" stroke-width="2" stroke-dasharray="6" marker-end="url(#ca)"/>
+  <text x="385" y="152" fill="#10b981" font-size="9" text-anchor="middle">SSH + Docker</text>
+</svg></div><p class="fig-caption">Fig. 6 : Diagramme de déploiement — Pipeline CI/CD GitHub Actions et infrastructure VPS Hostinger</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 4 — Projet SikBeauty — Migration et Industrialisation</h1>
+<h2>4.1 Présentation et contexte</h2>
+<p><strong>SikBeauty</strong> est une marketplace e-commerce spécialisée dans la vente de cosmétiques coréens (K-Beauty). La plateforme propose un catalogue de produits organisés par catégories et marques, un système de panier d'achat, une gestion des commandes et un espace client complet. Au moment de notre intervention, l'application était développée avec React (Create React App), une Single Page Application (SPA) standard, et souffrait de deux problèmes majeurs affectant directement son potentiel commercial.</p>
+<p>Le premier problème était d'ordre <strong>technique</strong> : les temps de chargement initiaux étaient élevés (FCP > 2.5s) en raison du bundle JavaScript important à télécharger et à exécuter côté client avant tout rendu. Le second était d'ordre <strong>commercial</strong> : les moteurs de recherche (Google, Bing) ne pouvaient pas indexer correctement les fiches produits, car leur contenu était généré dynamiquement par JavaScript après le chargement initial. Le score SEO Lighthouse de la page d'accueil était de 68/100, et celui des fiches produits était encore plus faible.</p>
+
+<h2>4.2 Migration React vers Next.js et optimisation SSR/SEO</h2>
+<p>Face à ces enjeux, la décision a été prise de migrer la partie commerciale critique de l'application (page d'accueil, catalogue, fiches produits) vers <strong>Next.js avec l'App Router</strong>. Cette architecture permet le Server-Side Rendering (SSR) pour les contenus dynamiques et le Static Site Generation (SSG) pour les contenus peu changeants, offrant le meilleur de deux mondes : contenu pré-rendu accessible aux robots de recherche et expérience utilisateur réactive.</p>
+<p>J'ai débuté par une phase d'<strong>audit complet</strong> des composants React existants, identifiant les trois catégories de problèmes à résoudre lors de la migration :</p>
+<ul>
+  <li>Les dépendances aux APIs du navigateur (<code>window</code>, <code>localStorage</code>) incompatibles avec l'exécution côté serveur.</li>
+  <li>Les hooks React utilisant <code>useEffect</code> avec des effets de bord immédiats, incompatibles avec le rendu serveur.</li>
+  <li>Les bibliothèques tierces sans support SSR (notamment les bibliothèques de graphiques et de carrousels).</li>
+</ul>
+<p>Pour chaque page migrée, j'ai appliqué la même démarche systématique : transformer les composants statiques en <strong>Server Components</strong> (pour les données ne nécessitant pas d'interactivité), annoter les composants interactifs avec la directive <code>'use client'</code>, et gérer les imports de bibliothèques non-SSR via <code>next/dynamic</code> avec l'option <code>ssr: false</code>.</p>
+<p>Grâce à mon expérience préalable avec React et Next.js, j'ai également assuré un rôle de <strong>mentor technique</strong> auprès des autres développeurs de l'équipe SikBeauty, qui découvraient les spécificités de l'App Router pour la première fois. J'ai organisé des sessions de pair-programming ciblées et rédigé des guides internes documentant les patterns à suivre et les anti-patterns à éviter.</p>
+
+<h3>4.2.1 Optimisation SEO technique</h3>
+<p>En tant que responsable SEO du projet, j'ai implémenté une stratégie complète d'optimisation du référencement naturel, tirant parti des capacités natives de Next.js. La génération des métadonnées est entièrement dynamique, calculée côté serveur à partir des données produit récupérées en base.</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Technique SEO</th><th>Avant (React SPA)</th><th>Après (Next.js SSR)</th><th>Impact</th></tr></thead>
+  <tbody><tr><td>Time To First Byte (TTFB)</td><td>1.2s</td><td>0.25s</td><td>↓ 79% — Réponse quasi instantanée.</td></tr><tr><td>First Contentful Paint (FCP)</td><td>2.8s</td><td>0.8s</td><td>↓ 71% — Affichage immédiat du contenu.</td></tr><tr><td>Largest Contentful Paint (LCP)</td><td>4.1s</td><td>1.4s</td><td>↓ 66% — Core Web Vital dans la zone verte.</td></tr><tr><td>Indexation fiches produits</td><td>Partielle (JS requis)</td><td>100% automatique</td><td>Toutes les fiches indexées par Google.</td></tr><tr><td>Score Performance Lighthouse</td><td>52/100</td><td>91/100</td><td>+39 points — Amélioration majeure.</td></tr><tr><td>Score SEO Lighthouse</td><td>68/100</td><td>98/100</td><td>+30 points — SEO quasi parfait.</td></tr><tr><td>Meta description dynamique</td><td>Absente</td><td>Générée par produit</td><td>CTR amélioré dans les SERP.</td></tr><tr><td>Open Graph + Twitter Cards</td><td>Statiques</td><td>Dynamiques par page</td><td>Partage sur réseaux sociaux optimisé.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 3 : Comparatif React SPA vs Next.js SSR — Métriques de performance et SEO</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Optimisation SEO</th><th>Description</th></tr></thead>
+  <tbody><tr><td>title dynamique</td><td>Généré avec generateMetadata() par page — format : "Produit | SikBeauty".</td></tr><tr><td>meta description</td><td>Extrait des 160 premiers caractères de la description produit.</td></tr><tr><td>canonical URLs</td><td>Attribut canonical sur chaque page pour éviter le contenu dupliqué.</td></tr><tr><td>Open Graph (og:*)</td><td>og:title, og:description, og:image, og:type — pour le partage réseaux sociaux.</td></tr><tr><td>Twitter Cards</td><td>twitter:card, twitter:title, twitter:image — pour l'aperçu sur Twitter/X.</td></tr><tr><td>sitemap.xml</td><td>Généré dynamiquement via sitemap.ts — toutes les fiches produits incluses.</td></tr><tr><td>robots.txt</td><td>Fichier configuré pour autoriser l'indexation des pages publiques.</td></tr><tr><td>next/image</td><td>Lazy loading automatique, formats WebP/AVIF, dimensionnement responsive.</td></tr><tr><td>Structured Data (JSON-LD)</td><td>Markup Product pour une éligibilité aux Rich Results Google.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 4 : Métriques SEO Lighthouse avant et après migration</p>
+
+<div class="page-break"></div>
+<h2>4.3 DevOps, Docker et CI/CD GitHub Actions</h2>
+<p>Une fois la migration technique réalisée, j'ai conçu et mis en place l'intégralité de l'infrastructure de déploiement et de livraison continue du projet SikBeauty.</p>
+<h3>4.3.1 Conteneurisation Docker multi-stage</h3>
+<p>J'ai rédigé un <strong>Dockerfile multi-stage</strong> optimisé pour Next.js en mode standalone. Cette approche réduit drastiquement la taille de l'image de production en séparant la phase de build (qui inclut toutes les dépendances de développement, les outils de compilation TypeScript, etc.) de la phase de production (qui ne contient que le serveur Node.js standalone et les assets statiques).</p>
+<div class="code-block"><span class="cm"># Étape 1 : Builder (inclut devDependencies + compilation)</span>
+<span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> builder
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci
+<span class="kw">COPY</span> . .
+<span class="kw">RUN</span> npm run build
+
+<span class="cm"># Étape 2 : Production (image minimale ~140Mo vs ~950Mo)</span>
+<span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> runner
+<span class="kw">WORKDIR</span> /app
+<span class="kw">ENV</span> NODE_ENV=production
+<span class="kw">COPY</span> --from=builder /app/.next/standalone ./
+<span class="kw">COPY</span> --from=builder /app/.next/static ./.next/static
+<span class="kw">EXPOSE</span> 3000
+<span class="kw">CMD</span> [<span class="str">"node"</span>, <span class="str">"server.js"</span>]</div>
+<p>Le fichier <code>docker-compose.yml</code> orchestre les services de l'environnement de développement : l'application Next.js, un conteneur PostgreSQL (pour le backend), et un service Redis. Les volumes Docker garantissent la persistance des données entre les redémarrages et le hot-reload du code pendant le développement.</p>
+
+<h3>4.3.2 Pipeline CI/CD GitHub Actions</h3>
+<p>J'ai rédigé le workflow GitHub Actions (fichier <code>.github/workflows/deploy.yml</code>) assurant un pipeline de livraison continue fiable. Le pipeline est déclenché sur chaque push vers les branches <code>main</code> et <code>dev</code> et se compose des étapes suivantes :</p>
+<ol>
+  <li><strong>Installation des dépendances</strong> (<code>npm ci</code>) avec mise en cache des <code>node_modules</code>.</li>
+  <li><strong>Vérification des types TypeScript</strong> (<code>npx tsc --noEmit</code>) — bloquant en cas d'erreur.</li>
+  <li><strong>Lint du code</strong> (ESLint) — bloquant en cas de violations de règles critiques.</li>
+  <li><strong>Build de production</strong> (<code>npm run build</code>) — vérification de la compilation.</li>
+  <li><strong>Connexion SSH au VPS Hostinger</strong> via la clé stockée dans les GitHub Secrets.</li>
+  <li><strong>Déploiement via Docker Compose</strong> : pull de la dernière image, recréation du conteneur, migration de la base de données.</li>
+</ol>
+
+<h2>4.4 Déploiement sur VPS Hostinger</h2>
+<p>Le déploiement en production s'est fait sur un VPS Ubuntu hébergé chez <strong>Hostinger</strong>. La configuration du serveur a nécessité plusieurs étapes : installation de Docker Engine et Docker Compose, configuration du firewall (UFW) pour n'exposer que les ports 80, 443 et 22, installation et configuration de <strong>Nginx</strong> comme reverse proxy pour acheminer le trafic vers le conteneur applicatif, et mise en place d'un certificat SSL automatique via <strong>Let's Encrypt</strong> (Certbot). Le nom de domaine a été configuré dans l'interface Hostinger en pointant les enregistrements DNS A vers l'adresse IP publique du VPS.</p>
+
+<h2>4.5 Contributions Backend</h2>
+<p>En complément de mes contributions principales, j'ai également apporté mon aide à l'équipe backend de SikBeauty en corrigeant plusieurs problèmes identifiés lors des revues de code et des tests : correction d'une fuite de connexions Prisma en environnement de test, résolution d'une incohérence de validation des données d'entrée sur l'API de gestion des commandes, et optimisation d'une requête Prisma générant des appels N+1 sur la liste des produits.</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 5 — Projet Aligno — Conception et Développement from Scratch</h1>
+<h2>5.1 Présentation d'Aligno</h2>
+<p><strong>Aligno</strong> est une application web Full-Stack de gestion de la productivité et du mode de vie, conçue pour harmoniser le travail, la gestion du temps et les finances personnelles sous une interface unique et cohérente. L'application intègre quatre modules fonctionnels principaux :</p>
+<ul>
+  <li><strong>Kanban (Project Management)</strong> : tableaux de bord collaboratifs avec colonnes, cartes, sous-tâches, labels et assignations, synchronisés en temps réel via Socket.IO.</li>
+  <li><strong>Time Management</strong> : système de blueprints de journée (templates de blocs de temps) permettant d'activer des plannings quotidiens personnalisés.</li>
+  <li><strong>Wallet</strong> : gestion multi-comptes bancaires, suivi des revenus et dépenses, gestion des abonnements récurrents, budgets mensuels et analyses graphiques.</li>
+  <li><strong>Dashboard</strong> : vue synthétique agrégeant les indicateurs clés de productivité et de santé financière.</li>
+</ul>
+<p>La stack technique d'Aligno reflète une ambition de modernité et de performance : <strong>Nuxt 4</strong> comme framework Full-Stack, <strong>Vue 3 avec Composition API</strong>, <strong>TypeScript</strong> strict, <strong>Tailwind CSS v4</strong> avec le design system Midnight Obsidian, <strong>Nuxt UI</strong> pour les composants, <strong>Pinia</strong> pour la gestion d'état, <strong>Prisma ORM</strong> avec <strong>PostgreSQL 17</strong>, <strong>Redis</strong> pour le cache et les queues <strong>BullMQ</strong>, et <strong>Socket.IO</strong> pour la collaboration en temps réel.</p>
+
+<h2>5.2 Initialisation du projet et configuration</h2>
+<p>J'ai pris en charge l'initialisation complète du projet Aligno. Cette phase fondatrice, souvent sous-estimée, conditionne la qualité et la maintenabilité de l'ensemble du développement. Elle comprenait :</p>
+<ul>
+  <li>La création du projet Nuxt 4 et la configuration du fichier <code>nuxt.config.ts</code> (modules, runtimeConfig, Tailwind, sécurité).</li>
+  <li>La mise en place de la structure de répertoires suivant le pattern layered architecture.</li>
+  <li>La configuration de <strong>Prisma ORM</strong> avec les modèles de base de données et le premier schéma.</li>
+  <li>La rédaction du <code>docker-compose.yml</code> orchestrant les quatre services : Nuxt App, PostgreSQL 17, Redis 7 Alpine, et pgAdmin 4 pour l'administration de la base.</li>
+  <li>La configuration des hooks Git via <strong>Husky</strong> : hook <code>pre-push</code> exécutant automatiquement la suite de tests Vitest dans le conteneur Docker avant chaque push.</li>
+  <li>La configuration du pipeline CI GitHub Actions avec les actions PostgreSQL intégrées.</li>
+</ul>
+
+<table class="avoid-break">
+  <thead><tr><th>Variable d'environnement</th><th>Requis</th><th>Description</th></tr></thead>
+  <tbody><tr><td>DATABASE_URL</td><td>✅</td><td>Chaîne de connexion PostgreSQL (prisma+pg adapter).</td></tr><tr><td>JWT_SECRET</td><td>✅</td><td>Clé secrète pour signer les access tokens (15 min).</td></tr><tr><td>JWT_REFRESH_SECRET</td><td>✅</td><td>Clé secrète pour signer les refresh tokens (30 jours).</td></tr><tr><td>RESEND_API_KEY</td><td>✅</td><td>Clé API Resend pour les e-mails transactionnels.</td></tr><tr><td>APP_URL</td><td>❌</td><td>URL de base de l'application (défaut : http://localhost:4000).</td></tr><tr><td>NUXT_PORT</td><td>❌</td><td>Port d'écoute du serveur Nitro (défaut : 4000).</td></tr><tr><td>LOG_LEVEL</td><td>❌</td><td>Niveau de log Pino (défaut : info).</td></tr><tr><td>SENTRY_DSN</td><td>❌</td><td>DSN Sentry pour le tracking des exceptions en production.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 5 : Variables d'environnement du projet Aligno</p>
+
+<div class="page-break"></div>
+<h2>5.3 Développement Backend du module Authentification</h2>
+<p>J'étais responsable de la conception et de l'implémentation complète du <strong>module d'authentification</strong> d'Aligno, qui constitue la fondation sécuritaire de toute l'application. Ce module, d'une complexité technique élevée, implémente un système d'authentification dual-token avec renouvellement silencieux, validation d'e-mail, et récupération de mot de passe.</p>
+
+<h3>5.3.1 Architecture en 6 couches</h3>
+<p>Chaque endpoint de l'API d'authentification traverse strictement les 6 couches de l'architecture :</p>
+<ol>
+  <li><strong>Route Handler</strong> (<code>server/api/auth/*.ts</code>) : point d'entrée HTTP. Définit la méthode HTTP, le path, et les spécifications OpenAPI/Swagger. Délègue immédiatement au Controller.</li>
+  <li><strong>Controller</strong> (<code>server/controller/auth.controller.ts</code>) : parse le corps de la requête, déclenche la validation Zod, gère les cookies HttpOnly, formate l'enveloppe de réponse JSON standardisée (<code>{ success, data }</code> ou <code>{ success, message, errors }</code>).</li>
+  <li><strong>Service</strong> (<code>server/service/auth.service.ts</code>) : orchestre la logique métier. Ne connaît pas la requête HTTP. Coordonne le hachage des mots de passe (bcrypt), la génération et vérification des tokens JWT, et l'envoi d'e-mails (Resend).</li>
+  <li><strong>Repository</strong> (<code>server/repository/user.repository.ts</code>) : implémentation concrète de l'interface DAO. Contient toutes les requêtes Prisma vers PostgreSQL.</li>
+  <li><strong>DAO</strong> (<code>server/dao/user.dao.ts</code>) : interface TypeScript définissant le contrat d'accès aux données. Permet de substituer facilement l'implémentation (ex : passer de PostgreSQL à MongoDB sans modifier les couches supérieures).</li>
+  <li><strong>DTO / Mapper</strong> (<code>server/dto/auth.dto.ts</code>, <code>server/mapper/user.mapper.ts</code>) : DTOs TypeScript assurant la sécurité de type entre les couches. Le Mapper garantit que les champs sensibles (mot de passe hashé, tokens de reset) ne sont jamais exposés dans les réponses API.</li>
+</ol>
+
+<h3>5.3.2 Endpoints développés</h3>
+
+<table class="avoid-break">
+  <thead><tr><th>Endpoint</th><th>Méthode</th><th>Auth</th><th>Description</th></tr></thead>
+  <tbody><tr><td><code>/api/auth/register</code></td><td>POST</td><td>Guest Only</td><td>Inscription, upload avatar WebP (Sharp), envoi e-mail de vérification Resend.</td></tr><tr><td><code>/api/auth/login</code></td><td>POST</td><td>Guest Only</td><td>Authentification bcrypt, émission du couple JWT (access 15min + refresh 30j cookie HttpOnly).</td></tr><tr><td><code>/api/auth/me</code></td><td>GET</td><td>Bearer JWT</td><td>Récupération du profil utilisateur (champs sensibles strippés par le Mapper).</td></tr><tr><td><code>/api/auth/logout</code></td><td>POST</td><td>Bearer JWT</td><td>Révocation du refresh token en DB, suppression du cookie HttpOnly.</td></tr><tr><td><code>/api/auth/email/validation</code></td><td>POST</td><td>Guest Only</td><td>Vérification du jeton e-mail (SHA-256 comparé avec le hash en DB).</td></tr><tr><td><code>/api/auth/forgot-password</code></td><td>POST</td><td>Guest Only</td><td>Génération d'un token de reset (1h), envoi e-mail Resend. Réponse identique que l'e-mail existe ou non (anti-énumération).</td></tr><tr><td><code>/api/auth/reset-password</code></td><td>POST</td><td>Guest Only</td><td>Vérification du token de reset, hachage du nouveau mot de passe, invalidation du token.</td></tr><tr><td><code>/api/auth/profile</code></td><td>PUT</td><td>Bearer JWT</td><td>Mise à jour des informations de profil et/ou de l'avatar (compression Sharp, suppression de l'ancienne image).</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 6 : Registre complet des endpoints API du module Authentification</p>
+
+<h3>5.3.3 Sécurité et validations</h3>
+
+<table class="avoid-break">
+  <thead><tr><th>Contrôle de sécurité</th><th>Implémentation technique</th></tr></thead>
+  <tbody><tr><td>Hachage des mots de passe</td><td>Bcrypt avec 12 rounds de sel. Le mot de passe en clair n'est jamais stocké ni loggé.</td></tr><tr><td>Access Token JWT</td><td>Durée de vie : 15 minutes. Signé avec JWT_SECRET. Transmis en header Authorization: Bearer.</td></tr><tr><td>Refresh Token JWT</td><td>Durée de vie : 30 jours. Signé avec JWT_REFRESH_SECRET. Stocké en cookie HttpOnly, Secure, SameSite=Strict. Seul son hash SHA-256 est persisté en base.</td></tr><tr><td>Renouvellement silencieux</td><td>Le middleware Auth intercepte les access tokens expirés et tente un renouvellement via le cookie refresh. Le nouveau token est retourné dans X-Access-Token.</td></tr><tr><td>Tokens de vérification/reset</td><td>Générés avec crypto.randomBytes(32). Seul leur hash SHA-256 est stocké en base.</td></tr><tr><td>Anti-énumération utilisateurs</td><td>forgot-password retourne le même message 200 que l'e-mail existe ou non.</td></tr><tr><td>Validation des entrées (Zod)</td><td>Tous les payloads sont validés par des schémas Zod stricts. Retour 422 avec erreurs par champ.</td></tr><tr><td>Stripping des champs sensibles</td><td>UserMapper.toResponseDto() supprime passwordHash, refreshToken, emailVerifyToken des réponses.</td></tr><tr><td>Traitement des images</td><td>Sharp redimensionne et compresse en WebP 400×400px. L'ancienne image est supprimée du disque.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 8 : Contrôles de sécurité implémentés dans le module Auth d'Aligno</p>
+
+<div class="page-break"></div>
+<h2>5.4 Tests unitaires et d'intégration avec Vitest</h2>
+<p>J'ai développé l'ensemble de la suite de tests du module Authentification, couvrant 35 scénarios distincts répartis en 9 fichiers de tests. La stratégie de test adopte une approche d'<strong>intégration complète</strong> : les tests ne mockent pas la base de données mais utilisent un serveur Nuxt réel (<code>@nuxt/test-utils/e2e</code>) connecté à une instance PostgreSQL de test, garantissant que chaque test valide le comportement de bout-en-bout, de la requête HTTP jusqu'à la persistance en base.</p>
+<p>La configuration Vitest impose l'exécution <strong>séquentielle des fichiers</strong> (<code>fileParallelism: false</code>) pour éviter les race conditions sur la base de données partagée. Chaque fichier de test nettoie la base de données dans un <code>beforeEach()</code> via la fonction <code>clearDatabase()</code>, garantissant l'isolation et le déterminisme des tests.</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Fichier de test</th><th>Nb tests</th><th>Scénarios couverts</th></tr></thead>
+  <tbody><tr><td>register.test.ts</td><td>8</td><td>Inscription réussie, e-mail dupliqué, téléphone dupliqué, prénom manquant, e-mail invalide, mot de passe trop court, confirmPassword ne correspond pas, champs obligatoires manquants.</td></tr><tr><td>login.test.ts</td><td>5</td><td>Connexion réussie + cookie refresh, utilisateur inexistant (401), mauvais mot de passe (401), e-mail non vérifié (403), e-mail manquant (422).</td></tr><tr><td>me.test.ts</td><td>3</td><td>Profil avec token valide (200), token manquant (401), token expiré (401).</td></tr><tr><td>logout.test.ts</td><td>2</td><td>Déconnexion réussie + révocation cookie, non autorisé (401).</td></tr><tr><td>validation.test.ts</td><td>3</td><td>Token de vérification valide, token invalide (400), token expiré (400).</td></tr><tr><td>forgot-password.test.ts</td><td>3</td><td>E-mail existant (200 — réponse générique), e-mail inexistant (200 — anti-énumération), e-mail manquant (422).</td></tr><tr><td>reset-password.test.ts</td><td>4</td><td>Reset valide, token invalide (400), token expiré (400), mot de passe manquant (422).</td></tr><tr><td>auth-middleware.test.ts</td><td>5</td><td>Access token valide, aucun credential (401), renouvellement silencieux avec X-Access-Token, cookie refresh invalide (401), hash refresh token ne correspond pas en DB (401).</td></tr><tr><td>guest-middleware.test.ts</td><td>2</td><td>Utilisateur authentifié bloqué sur /login (403), bloqué sur /register (403).</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 9 : Couverture des tests Vitest — Module Authentification (35 tests)</p>
+
+<h2>5.5 Planification Frontend sur Jira</h2>
+<p>Une fois le backend d'authentification terminé et testé, j'ai préparé la <strong>planification complète du développement frontend</strong> sur Jira, avant que les autres développeurs ne commencent à coder les interfaces. Cette phase de planification est cruciale pour éviter les doublons de travail, les conflits Git et les incohérences d'architecture.</p>
+<p>J'ai créé une Epic "Module Auth — Frontend" regroupant toutes les User Stories du module. Chaque User Story a été découpée en tâches précises avec des critères d'acceptation détaillés, puis distribuée aux membres de l'équipe en fonction de leur affinité avec chaque fonctionnalité. Les tâches ont été priorisées selon les dépendances fonctionnelles : le store Pinia et la couche API devaient être implémentés en premier, car toutes les pages en dépendaient.</p>
+
+<div class="page-break"></div>
+<h2>5.6 Développement Frontend — Module Auth (Nuxt 4)</h2>
+<p>J'ai développé toutes les interfaces du module d'authentification avec <strong>Nuxt 4</strong>, <strong>Vue 3 (Composition API)</strong>, <strong>TypeScript</strong>, <strong>Tailwind CSS v4</strong>, <strong>Nuxt UI</strong> et <strong>Pinia</strong>, en respectant le design system Midnight Obsidian défini en Sprint 0.</p>
+
+<h3>5.6.1 Store Pinia et composables</h3>
+<p>L'état d'authentification est géré par un store Pinia persisté (<code>pinia-plugin-persistedstate</code>). Contrairement au refresh token (stocké en cookie HttpOnly côté serveur), l'access token est conservé <strong>uniquement en mémoire</strong> (non persisté), pour des raisons de sécurité. Lors d'un rechargement de page, le composable <code>useAuth</code> effectue automatiquement une requête vers <code>/api/auth/me</code>, qui utilise le cookie refresh HttpOnly pour revalider la session et obtenir un nouveau access token.</p>
+
+<h3>5.6.2 Pages développées</h3>
+<p>Les pages du module Auth suivent toutes le même layout <code>auth.vue</code>, qui applique le thème Midnight Obsidian (fond sombre avec dégradé, effets glassmorphism). Chaque page implémente la validation côté client avant tout appel API, en utilisant des règles identiques aux schémas Zod côté serveur pour une expérience cohérente :</p>
+<ul>
+  <li><strong>Register</strong> : formulaire multi-champs avec upload d'avatar (prévisualisation en temps réel), indicateur de force du mot de passe (composant <code>PasswordStrength.vue</code>), sérialisation en <code>FormData</code> pour l'upload multipart.</li>
+  <li><strong>Login</strong> : gestion de la redirection post-connexion (<code>?redirect=</code>), affichage spécifique si l'e-mail n'est pas encore vérifié (code 403).</li>
+  <li><strong>Forgot Password</strong> : timer de 60 secondes pour éviter le spam de requêtes, avec feedback visuel du compte à rebours.</li>
+  <li><strong>Reset Password</strong> : vérification immédiate de la présence du token dans l'URL au montage du composant, avec affichage d'un écran d'erreur adapté si le token est absent ou invalide.</li>
+  <li><strong>Verify Email</strong> : validation automatique au montage si un token est présent en query param (<code>?token=</code>), avec un input de fallback pour saisie manuelle du code.</li>
+  <li><strong>Profile</strong> : affichage des données utilisateur, formulaire de mise à jour partielle des champs, upload d'un nouvel avatar avec compression et compression d'avertissement.</li>
+</ul>
+
+<h2>5.7 Phase de finalisation du projet</h2>
+<p>J'ai été responsable de la <strong>phase de finalisation</strong> du projet Aligno, précédant la livraison de la version de production. Cette phase, souvent sous-estimée, est pourtant déterminante pour la qualité perçue de l'application et sa viabilité à long terme.</p>
+<ul>
+  <li><strong>SEO et métadonnées</strong> : Implémentation de useHead() sur toutes les pages de l'application avec des titres, meta descriptions, Open Graph et URLs canoniques pertinents.</li>
+  <li><strong>Optimisation des performances</strong> : Audit des bundles JavaScript avec <code>nuxt analyze</code>, lazy loading des composants non critiques, optimisation des images avec <code>@nuxt/image</code>.</li>
+  <li><strong>Accessibilité (WCAG AA)</strong> : Audit de l'arborescence ARIA, contraste des couleurs, navigation clavier, labels des formulaires, attributs alt sur toutes les images.</li>
+  <li><strong>Dark Mode / Light Mode</strong> : Intégration du mécanisme de thème système de Nuxt UI, persistance du choix dans le store Pinia.</li>
+  <li><strong>Système de notifications</strong> : Intégration de <strong>Notivue</strong> comme système de toast global, avec des notifiations de succès, d'erreur et d'information cohérentes dans toute l'application.</li>
+  <li><strong>Fusion des branches et livraison</strong> : Gestion des Pull Requests finales, résolution des conflits Git, merge dans <code>main</code>, validation du pipeline CI complet, livraison du build de production.</li>
+</ul>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 6 — Présentation des Technologies</h1>
+
+<table class="avoid-break">
+  <thead><tr><th>Technologie</th><th>Version</th><th>Rôle</th><th>Avantages / Utilisation concrète</th></tr></thead>
+  <tbody><tr><td>Nuxt 4</td><td>4.x</td><td>Framework Full-Stack</td><td>SSR, file-based routing, server Nitro intégré. Utilisé comme unique framework pour le frontend ET le backend d'Aligno.</td></tr><tr><td>Vue 3</td><td>3.5+</td><td>Framework UI</td><td>Composition API, réactivité fine, slots scopés. Tous les composants d'interface d'Aligno sont en Vue 3.</td></tr><tr><td>TypeScript</td><td>5.x</td><td>Typage statique</td><td>Détection d'erreurs à la compilation, contrats d'interface entre les couches. Strict mode activé.</td></tr><tr><td>Tailwind CSS v4</td><td>4.x</td><td>Framework CSS</td><td>Utility-first, Vite plugin natif, sans conflict avec Nuxt UI. Design system Midnight Obsidian défini avec des variables CSS.</td></tr><tr><td>Nuxt UI</td><td>3.x</td><td>Composants UI</td><td>Bibliothèque de composants (Button, Input, Modal, Table…) construite sur Tailwind v4. Système de thèmes intégré.</td></tr><tr><td>Pinia</td><td>2.x</td><td>State Management</td><td>Store réactif avec support TypeScript natif. Stores : useAuthStore, useWalletStore, useKanbanStore…</td></tr><tr><td>Pinia Persisted</td><td>3.x</td><td>Persistance</td><td>Persistance sélective des stores dans localStorage (user, préférences de thème). Access token non persisté.</td></tr><tr><td>ApexCharts</td><td>3.x</td><td>Graphiques</td><td>Graphiques analytiques du module Wallet (revenus/dépenses par mois, répartition par catégorie).</td></tr><tr><td>VueUse</td><td>12.x</td><td>Composables utils</td><td>useLocalStorage, useEventListener, useMediaQuery… Réutilisation de patterns courants.</td></tr><tr><td>Next.js</td><td>14.x</td><td>Framework SSR</td><td>App Router avec SSR/SSG pour SikBeauty. generateMetadata pour le SEO dynamique.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 10 : Fiches technologiques — Stack Frontend</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Technologie</th><th>Version</th><th>Rôle</th><th>Avantages / Utilisation concrète</th></tr></thead>
+  <tbody><tr><td>Prisma ORM</td><td>5.x</td><td>Accès BDD</td><td>Schéma typé, migrations auto, requêtes type-safe. Adapter pg pour pool de connexions PostgreSQL.</td></tr><tr><td>PostgreSQL</td><td>17</td><td>Base de données</td><td>ACID, relations, UUID/CUID. Tables : users, projects, kanban_columns, cards, transactions, bank_accounts…</td></tr><tr><td>Zod</td><td>3.x</td><td>Validation</td><td>Schémas de validation runtime avec inférence TypeScript. Chaque endpoint API dispose de son schéma Zod dédié.</td></tr><tr><td>JWT (jose)</td><td>5.x</td><td>Tokens</td><td>Génération et vérification des access (15min) et refresh (30j) tokens. jose pour un support ESM natif.</td></tr><tr><td>bcrypt</td><td>5.x</td><td>Hachage MDP</td><td>12 rounds de sel. Comparaison à temps constant pour résister aux attaques timing.</td></tr><tr><td>Resend</td><td>3.x</td><td>E-mails</td><td>API d'envoi d'e-mails transactionnels. Templates en Vue Email (VerificationEmail, PasswordResetEmail).</td></tr><tr><td>Socket.IO</td><td>4.x</td><td>Temps réel</td><td>Mise à jour en temps réel du Kanban (déplacement de cartes, notifications). Connecté avec Redis Adapter.</td></tr><tr><td>Redis</td><td>7.x</td><td>Cache + Queue</td><td>Broker pour Socket.IO Adapter (sync multi-instances) et backend de BullMQ (queues d'e-mails différés).</td></tr><tr><td>BullMQ</td><td>5.x</td><td>File de messages</td><td>Jobs de rappels de dates d'échéance (due date reminders) pour les cartes Kanban.</td></tr><tr><td>Pino</td><td>9.x</td><td>Logging</td><td>Logger JSON structuré haute performance. pino-pretty pour le dev, JSON brut pour la production/Sentry.</td></tr><tr><td>Sentry</td><td>8.x</td><td>Monitoring</td><td>Capture des exceptions runtime (désactivé en NODE_ENV=test). DSN configuré en variable d'environnement.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 11 : Fiches technologiques — Stack Backend et Temps Réel</p>
+
+<table class="avoid-break">
+  <thead><tr><th>Technologie</th><th>Rôle</th><th>Utilisation concrète</th></tr></thead>
+  <tbody><tr><td>Docker</td><td>Conteneurisation</td><td>Dockerfile multi-stage pour Next.js (SikBeauty) et Nuxt 4 (Aligno). Image de prod ~140Mo.</td></tr><tr><td>Docker Compose</td><td>Orchestration</td><td>Services : app, postgres_db, redis, pgadmin. Health checks et depends_on pour l'ordre de démarrage.</td></tr><tr><td>GitHub Actions</td><td>CI/CD</td><td>Pipelines : install, generate, type-check, migrate, test, (deploy SSH). Déclenchés sur PR vers main/dev.</td></tr><tr><td>Hostinger VPS</td><td>Hébergement</td><td>Ubuntu Server. Nginx reverse proxy + Let's Encrypt SSL + Docker Compose en prod.</td></tr><tr><td>Git / GitHub</td><td>Versioning</td><td>Git Flow : main, dev, feature/*, fix/*. PRs obligatoires, revues de code systématiques.</td></tr><tr><td>Vitest</td><td>Tests</td><td>35 tests d'intégration Auth (Aligno). Sequential mode pour éviter les race conditions PostgreSQL.</td></tr><tr><td>Husky</td><td>Git Hooks</td><td>Hook pre-push : exécute vitest run dans le conteneur Docker avant chaque push.</td></tr><tr><td>Nuxt Security</td><td>Sécurité</td><td>Headers CSP, X-Frame-Options, X-Content-Type-Options, CORS configurés automatiquement.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 12 : Fiches technologiques — DevOps, Qualité et Sécurité</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 7 — Difficultés Rencontrées — Études de Cas</h1>
+<p>Cette section présente les difficultés techniques et organisationnelles les plus significatives rencontrées durant le stage, sous forme d'études de cas structurées. Chaque cas est analysé rigoureusement afin d'en tirer des enseignements durables.</p>
+
+
+<div class="case-study-box avoid-break">
+  <h3>&#9654; Cas 1 : Erreur de compilation vue-tsc dans le pipeline CI/CD</h3>
+  <div class="case-study-field"><span class="field-label">Contexte :</span><span>Configuration du pipeline GitHub Actions pour le projet Aligno. Node.js v24 était utilisé dans l'environnement CI.</span></div>
+  <div class="case-study-field"><span class="field-label">Problème :</span><span>La commande <code>npx vue-tsc --noEmit</code> échouait avec l'erreur <code>ERR_PACKAGE_PATH_NOT_EXPORTED</code> : le sous-chemin <code>./lib/tsc</code> n'était pas exporté par le package TypeScript installé. Le pipeline CI était bloquant.</span></div>
+  <div class="case-study-field"><span class="field-label">Analyse :</span><span>L'exécuteur <code>npx</code> installait une version globale de <code>vue-tsc</code> (3.3.7) qui tentait d'importer <code>./lib/tsc</code> depuis TypeScript. Cette exportation n'est plus disponible dans TypeScript ≥ 5.0 via le nouveau champ <code>exports</code> du package.json. La version globale de vue-tsc était incompatible avec la version locale de TypeScript.</span></div>
+  <div class="case-study-field"><span class="field-label">Solution :</span><span>Remplacement de <code>npx vue-tsc --noEmit</code> par <code>./node_modules/.bin/vue-tsc --noEmit</code> dans le workflow CI. Ajout de <code>vue-tsc</code> dans les <code>devDependencies</code> du <code>package.json</code> pour garantir sa présence après <code>npm ci</code>.</span></div>
+  <div class="case-study-field"><span class="field-label">Résultat :</span><span>Le pipeline CI passe en totalité. La vérification des types TypeScript est désormais stable et reproductible dans tous les environnements (local et CI).</span></div>
+  <div class="case-study-field"><span class="field-label">Enseignement :</span><span>Toujours préférer les binaires locaux (via <code>node_modules/.bin/</code>) aux outils globaux installés via <code>npx</code> dans les pipelines CI, afin d'assurer la cohérence des versions entre développement et intégration continue.</span></div>
+</div>
+
+
+<div class="case-study-box avoid-break">
+  <h3>&#9654; Cas 2 : Intégration de Resend dans les tests Vitest</h3>
+  <div class="case-study-field"><span class="field-label">Contexte :</span><span>Exécution de la suite de tests d'authentification en environnement de CI GitHub Actions, avec une clé API Resend de test factice.</span></div>
+  <div class="case-study-field"><span class="field-label">Problème :</span><span>Les tests de l'endpoint <code>/api/auth/register</code> et <code>/api/auth/forgot-password</code> échouaient avec une erreur 401 de l'API Resend, car la clé API configurée dans les secrets CI était invalide. La fonctionnalité d'envoi d'e-mail est obligatoire dans le flux d'inscription.</span></div>
+  <div class="case-study-field"><span class="field-label">Analyse :</span><span>En environnement de test, les e-mails ne doivent pas être réellement envoyés. Mock complet du service Resend aurait été une option, mais cela aurait réduit la valeur des tests d'intégration. La solution devait être transparente pour le reste du code.</span></div>
+  <div class="case-study-field"><span class="field-label">Solution :</span><span>Implémentation d'une logique <code>shouldSkip()</code> dans le EmailService : si <code>NODE_ENV === 'test'</code> OU si le domaine de l'e-mail destinataire est <code>example.com</code>, l'appel Resend est bypassé et un message est loggué. Les tokens de vérification sont quand même générés et persistés, permettant aux tests de les récupérer directement en base.</span></div>
+  <div class="case-study-field"><span class="field-label">Résultat :</span><span>Les 35 tests passent en CI sans aucun appel réel à l'API Resend. La logique d'authentification est testée de bout-en-bout sans dépendance externe. Le comportement en production reste inchangé.</span></div>
+  <div class="case-study-field"><span class="field-label">Enseignement :</span><span>La gestion des dépendances externes (APIs tierces, services e-mail) dans les tests d'intégration nécessite des mécanismes de contournement conditionnels. Il vaut mieux implémenter un bypass basé sur l'environnement que de mocker entièrement un service, car cela préserve la valeur des tests d'intégration.</span></div>
+</div>
+
+
+<div class="case-study-box avoid-break">
+  <h3>&#9654; Cas 3 : Migration React vers Next.js — Incompatibilités SSR</h3>
+  <div class="case-study-field"><span class="field-label">Contexte :</span><span>Migration des pages de la marketplace SikBeauty de React (Create React App) vers Next.js App Router.</span></div>
+  <div class="case-study-field"><span class="field-label">Problème :</span><span>Plusieurs composants React utilisaient directement des APIs du navigateur (<code>window.scrollY</code>, <code>localStorage.getItem</code>, <code>document.querySelector</code>) dans des hooks <code>useEffect</code> ou dans le corps de composants fonctionnels. Ces accès provoquaient des erreurs de type <code>ReferenceError: window is not defined</code> lors du rendu côté serveur.</span></div>
+  <div class="case-study-field"><span class="field-label">Analyse :</span><span>Next.js exécute les Server Components et le rendu initial des Client Components côté serveur (Node.js), où <code>window</code>, <code>document</code> et <code>localStorage</code> n'existent pas. Ces accès doivent être soit protégés par une condition <code>typeof window !== 'undefined'</code>, soit déplacés dans des hooks <code>useEffect</code> qui s'exécutent uniquement côté client.</span></div>
+  <div class="case-study-field"><span class="field-label">Solution :</span><span>Audit systématique de tous les composants avec un script de recherche grep identifiant les occurrences de <code>window</code>, <code>document</code> et <code>localStorage</code>. Refactorisation : (1) extraction dans des <code>useEffect</code> avec tableau de dépendances vide, (2) utilisation de <code>next/dynamic</code> avec <code>ssr: false</code> pour les composants non-SSR-compatibles, (3) remplacement de <code>localStorage</code> par <code>useCookie</code> de Nuxt (accessible côté serveur).</span></div>
+  <div class="case-study-field"><span class="field-label">Résultat :</span><span>Tous les composants migrés s'exécutent sans erreur en SSR. Le TTFB passe de 1.2s à 0.25s. L'indexation Google des fiches produits passe de partielle à 100%.</span></div>
+  <div class="case-study-field"><span class="field-label">Enseignement :</span><span>La migration vers SSR requiert une revue architecturale préalable rigoureuse. Les patterns React classiques (accès DOM dans le corps des composants) ne sont pas directement transposables. Une migration réussie impose un audit complet avant de commencer.</span></div>
+</div>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 8 — Bilan des Compétences Acquises</h1>
+
+<table class="avoid-break">
+  <thead><tr><th>Compétence technique</th><th>Niveau avant le stage</th><th>Niveau après le stage</th><th>Preuve concrète</th></tr></thead>
+  <tbody><tr><td>Architecture logicielle (couches)</td><td><span class="badge badge-before">Débutant</span></td><td><span class="badge badge-after">Avancé</span></td><td>Conception et implémentation de l'architecture 6 couches d'Aligno.</td></tr><tr><td>Développement Backend Node.js</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Expert</span></td><td>Module Auth complet avec sécurité avancée JWT, bcrypt, Zod.</td></tr><tr><td>Tests d'intégration (Vitest)</td><td><span class="badge badge-before">Débutant</span></td><td><span class="badge badge-after">Avancé</span></td><td>35 tests d'intégration couvrant 9 fichiers et 100% des endpoints Auth.</td></tr><tr><td>DevOps & CI/CD</td><td><span class="badge badge-before">Débutant</span></td><td><span class="badge badge-after">Autonome</span></td><td>Pipelines GitHub Actions, Dockerfiles multi-stage, déploiement VPS.</td></tr><tr><td>SSR / Next.js App Router</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Expert</span></td><td>Migration SikBeauty : SEO 98/100 Lighthouse, TTFB 0.25s.</td></tr><tr><td>SEO technique</td><td><span class="badge badge-before">Notions</span></td><td><span class="badge badge-after">Avancé</span></td><td>Métadonnées dynamiques, sitemap, Open Graph, robots.txt, Structured Data.</td></tr><tr><td>Sécurité Web</td><td><span class="badge badge-before">Notions</span></td><td><span class="badge badge-after">Avancé</span></td><td>Dual-token JWT, HttpOnly cookies, anti-énumération, hachage SHA-256.</td></tr><tr><td>TypeScript avancé</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Expert</span></td><td>DTOs génériques, interfaces DAO, type guards, strict mode complet.</td></tr><tr><td>PostgreSQL + Prisma ORM</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Avancé</span></td><td>Schéma complet, migrations, requêtes complexes avec relations include.</td></tr><tr><td>Accessibilité (WCAG)</td><td><span class="badge badge-before">Notions</span></td><td><span class="badge badge-after">Intermédiaire</span></td><td>Audit ARIA, contraste, navigation clavier appliqués en phase finale.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 13 : Bilan comparatif des compétences techniques — Avant et Après le stage</p>
+
+
+<table class="avoid-break">
+  <thead><tr><th>Compétence transversale</th><th>Niveau avant</th><th>Niveau après</th><th>Situation révélatrice</th></tr></thead>
+  <tbody><tr><td>Leadership technique</td><td><span class="badge badge-before">Aucun</span></td><td><span class="badge badge-after">Confirmé</span></td><td>Direction de l'équipe de 5 développeurs sur 2 projets simultanés.</td></tr><tr><td>Scrum Master</td><td><span class="badge badge-before">Théorique</span></td><td><span class="badge badge-after">Opérationnel</span></td><td>Animation de 8 sprints, planification, résolution des blocages.</td></tr><tr><td>Revue de code</td><td><span class="badge badge-before">Notions</span></td><td><span class="badge badge-after">Avancé</span></td><td>Review de 100% des PR sur les deux projets, refactorisation guidée.</td></tr><tr><td>Communication technique</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Expert</span></td><td>Documentation, User Stories, sessions de pair-programming, Daily Meetings.</td></tr><tr><td>Résolution de problèmes</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Expert</span></td><td>Résolution des 3 cas d'étude présentés dans le chapitre précédent.</td></tr><tr><td>Gestion du temps & priorisation</td><td><span class="badge badge-before">Intermédiaire</span></td><td><span class="badge badge-after">Avancé</span></td><td>Gestion simultanée de 2 projets avec planification Jira rigoureuse.</td></tr><tr><td>Mentorat</td><td><span class="badge badge-before">Aucun</span></td><td><span class="badge badge-after">Confirmé</span></td><td>Accompagnement des développeurs lors de la migration Next.js.</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 14 : Bilan des compétences transversales et managériales — Avant et Après le stage</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre 9 — Résultats Obtenus</h1>
+
+<table class="avoid-break">
+  <thead><tr><th>Livrable / Objectif</th><th>Indicateur de succès</th><th>Résultat obtenu</th><th>Statut</th></tr></thead>
+  <tbody><tr><td>Migration SikBeauty (Next.js)</td><td>Score SEO Lighthouse ≥ 90</td><td>98/100 Lighthouse SEO</td><td>✅ Dépassé</td></tr><tr><td>Performance SikBeauty</td><td>FCP < 1.5s</td><td>FCP = 0.8s</td><td>✅ Dépassé</td></tr><tr><td>Infrastructure CI/CD</td><td>Pipeline fonctionnel sur PR</td><td>Pipeline en 5 étapes complet</td><td>✅ Atteint</td></tr><tr><td>Déploiement VPS</td><td>Application accessible en prod</td><td>App + SSL + Domaine configurés</td><td>✅ Atteint</td></tr><tr><td>Module Auth Backend (Aligno)</td><td>Tous les endpoints implémentés</td><td>8 endpoints + 2 middlewares</td><td>✅ Complet</td></tr><tr><td>Tests d'intégration Auth</td><td>Couverture ≥ 30 tests</td><td>35 tests, 100% passing</td><td>✅ Dépassé</td></tr><tr><td>Module Auth Frontend</td><td>Toutes les pages Auth livrées</td><td>6 pages + composants réutilisables</td><td>✅ Complet</td></tr><tr><td>Coordination Scrum Master</td><td>4 sprints livrés dans les délais</td><td>4 sprints, 0 retard de livraison</td><td>✅ Atteint</td></tr><tr><td>Phase finale Aligno</td><td>Dark Mode + SEO + Accessibilité</td><td>Tous les critères validés</td><td>✅ Complet</td></tr><tr><td>Documentation technique</td><td>Docs à jour (READMEs + Swagger)</td><td>Swagger + 11 fichiers docs/</td><td>✅ Atteint</td></tr></tbody>
+</table>
+<p class="table-caption">Tableau 15 : Récapitulatif des indicateurs clés et résultats du stage</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Conclusion Générale</h1>
+<p>Ce stage de fin de formation au sein de Landmark Agency a représenté bien plus qu'une simple validation des acquis théoriques. Il s'est révélé être une véritable immersion dans la réalité des défis d'un développement professionnel : gestion de la complexité technique, coordination humaine, respect des délais, prise de décision sous contrainte et responsabilité vis-à-vis d'une équipe et d'un client.</p>
+<p>Sur le plan <strong>technique</strong>, les deux mois de stage m'ont permis de consolider et d'approfondir un spectre de compétences très large. La migration de SikBeauty m'a confronté aux réalités de la modernisation d'un système existant, avec toutes ses contraintes de compatibilité et ses exigences de performance. Le développement d'Aligno m'a offert l'opportunité, rare en stage, de concevoir et d'implémenter une architecture logicielle complète de zéro, en faisant des choix techniques réfléchis et en les assumant tout au long du projet. La mise en place du pipeline DevOps et la gestion de l'infrastructure de production m'ont donné une vision globale du cycle de vie d'une application web moderne, de la première ligne de code jusqu'au déploiement en production.</p>
+<p>Sur le plan <strong>méthodologique et humain</strong>, le rôle de Scrum Master a été la dimension la plus formatrice de ce stage. Coordonner une équipe de cinq personnes, animer des cérémonies Scrum, résoudre des conflits et maintenir une cadence de livraison régulière ont développé des compétences de leadership que l'apprentissage individuel ne peut pas reproduire. J'ai appris que la qualité d'une livraison logicielle dépend autant de la qualité de la communication et de l'organisation que de la qualité du code lui-même.</p>
+<p>L'expérience chez Landmark Agency m'a également confirmé dans mon orientation professionnelle. Le double rôle de Lead Developer et de Scrum Master correspond parfaitement à mes ambitions : je souhaite évoluer vers un profil d'ingénieur Full-Stack spécialisé en architecture logicielle et DevOps, capable à la fois de concevoir des systèmes complexes et de conduire une équipe technique vers ses objectifs.</p>
+<p>Les perspectives ouvertes par ce stage sont nombreuses. Les projets SikBeauty et Aligno continueront d'évoluer et d'accueillir de nouvelles fonctionnalités. La qualité de l'architecture mise en place sur Aligno garantit une scalabilité sereine de l'application. À titre personnel, ce stage constitue un tremplin solide vers une carrière d'ingénieur en développement logiciel, avec une feuille de route claire : approfondir mes connaissances en architecture distribuée, en orchestration Kubernetes et en pratiques de sécurité avancées.</p>
+<div class="page-break"></div>
+<h1 class="chapter-title">Chapitre — — Annexes</h1>
+<h2>Annexe A : Structure des répertoires du projet Aligno</h2>
+<div class="code-block">Aligno/
+├── app/                        <span class="cm"># Frontend Nuxt 4 (Vue 3)</span>
+│   ├── pages/                  <span class="cm"># Routes (login, register, dashboard...)</span>
+│   ├── components/             <span class="cm"># Composants Vue réutilisables</span>
+│   ├── stores/                 <span class="cm"># Stores Pinia (auth, wallet, kanban)</span>
+│   ├── composables/            <span class="cm"># Composables (useAuth, useWallet...)</span>
+│   ├── layouts/                <span class="cm"># Layouts (auth, default)</span>
+│   └── types/                  <span class="cm"># Interfaces TypeScript partagées</span>
+├── server/                     <span class="cm"># Backend Nitro (API REST)</span>
+│   ├── api/                    <span class="cm"># Route Handlers (GET, POST, PUT...)</span>
+│   ├── controller/             <span class="cm"># Controllers (validation, réponses)</span>
+│   ├── service/                <span class="cm"># Services (logique métier)</span>
+│   ├── repository/             <span class="cm"># Repositories (Prisma queries)</span>
+│   ├── dao/                    <span class="cm"># Interfaces DAO (contrats)</span>
+│   ├── dto/                    <span class="cm"># Data Transfer Objects</span>
+│   ├── mapper/                 <span class="cm"># Mappers (entity → DTO)</span>
+│   ├── middleware/             <span class="cm"># Auth + Guest middleware</span>
+│   ├── validations/            <span class="cm"># Schémas Zod par endpoint</span>
+│   ├── emails/                 <span class="cm"># Templates Vue Email (Resend)</span>
+│   └── utils/                  <span class="cm"># Prisma, Logger, Crypto, Sentry</span>
+├── prisma/                     <span class="cm"># Schémas Prisma + migrations</span>
+│   ├── models/                 <span class="cm"># user.prisma, project.prisma...</span>
+│   └── migrations/             <span class="cm"># Historique des migrations SQL</span>
+├── server/test/                <span class="cm"># Suite de tests Vitest</span>
+│   └── auth/                   <span class="cm"># 9 fichiers × 35 tests</span>
+├── .github/workflows/          <span class="cm"># CI/CD GitHub Actions</span>
+├── docker-compose.yml          <span class="cm"># Orchestration locale</span>
+├── Dockerfile                  <span class="cm"># Image Docker Nuxt 4</span>
+└── nuxt.config.ts              <span class="cm"># Configuration Nuxt</span></div>
+
+<h2>Annexe B : Extrait du schéma Prisma (modèle User)</h2>
+<div class="code-block"><span class="kw">model</span> <span class="fn">User</span> {
+  id                     <span class="kw">String</span>    <span class="kw">@id</span> <span class="kw">@default</span>(<span class="fn">cuid</span>())
+  first_name             <span class="kw">String</span>
+  last_name              <span class="kw">String</span>
+  age                    <span class="kw">Int</span>
+  email                  <span class="kw">String</span>    <span class="kw">@unique</span>
+  phone                  <span class="kw">String</span>    <span class="kw">@unique</span>
+  password_hash          <span class="kw">String</span>
+  profile_picture_url    <span class="kw">String</span>?
+  email_verified         <span class="kw">Boolean</span>   <span class="kw">@default</span>(<span class="str">false</span>)
+  email_verify_token     <span class="kw">String</span>?   <span class="cm">// SHA-256 hash</span>
+  email_verify_expires   <span class="kw">DateTime</span>? <span class="cm">// 24h TTL</span>
+  refresh_token          <span class="kw">String</span>?   <span class="cm">// SHA-256 hash</span>
+  reset_password_token   <span class="kw">String</span>?   <span class="cm">// SHA-256 hash</span>
+  reset_password_expires <span class="kw">DateTime</span>? <span class="cm">// 1h TTL</span>
+  created_at             <span class="kw">DateTime</span>  <span class="kw">@default</span>(<span class="fn">now</span>())
+  updated_at             <span class="kw">DateTime</span>  <span class="kw">@updatedAt</span>
+
+  <span class="cm">// Relations</span>
+  projects     <span class="fn">ProjectMember</span>[]
+  bank_accounts <span class="fn">BankAccount</span>[]
+
+  <span class="kw">@@map</span>(<span class="str">"users"</span>)
+}</div>
+
+<h2>Annexe C : Extrait du pipeline CI/CD (.github/workflows/ci.yml)</h2>
+<div class="code-block"><span class="kw">name</span>: <span class="str">Aligno CI Quality Gate</span>
+<span class="kw">on</span>:
+  pull_request:
+    <span class="kw">branches</span>: [main, dev]
+
+<span class="kw">jobs</span>:
+  <span class="fn">validate</span>:
+    <span class="kw">runs-on</span>: ubuntu-latest
+    <span class="kw">services</span>:
+      <span class="fn">postgres</span>:
+        <span class="kw">image</span>: postgres:16
+        <span class="kw">env</span>:
+          POSTGRES_DB: test_db
+          POSTGRES_PASSWORD: password
+    <span class="kw">steps</span>:
+      - <span class="kw">uses</span>: actions/checkout@v4
+      - <span class="kw">name</span>: <span class="str">Install dependencies</span>
+        <span class="kw">run</span>: npm ci
+      - <span class="kw">name</span>: <span class="str">Generate Prisma Client & Nuxt Types</span>
+        <span class="kw">run</span>: npx prisma generate && npx nuxt prepare
+      - <span class="kw">name</span>: <span class="str">Apply DB migrations</span>
+        <span class="kw">run</span>: npx prisma migrate deploy
+      - <span class="kw">name</span>: <span class="str">TypeScript type check</span>
+        <span class="kw">run</span>: ./node_modules/.bin/vue-tsc --noEmit
+      - <span class="kw">name</span>: <span class="str">Run full test suite</span>
+        <span class="kw">run</span>: npm run test</div>
+
+<div class="info-box">
+  <p><strong>[Réservé — Figure 8]</strong> Capture d'écran du tableau Kanban sur Jira en fin de Sprint 3. Le tableau montre les tickets répartis en colonnes : Todo, In Progress, In Review, Done.</p>
+</div>
+<div class="info-box">
+  <p><strong>[Réservé — Figure 9]</strong> Capture d'écran du rapport Lighthouse SEO de la marketplace SikBeauty après migration Next.js — Score : 98/100.</p>
+</div>
+<div class="info-box">
+  <p><strong>[Réservé — Figure 10]</strong> Capture d'écran du pipeline GitHub Actions en cours d'exécution — Étapes : Install, Generate, Type-check, Test (35/35 passed).</p>
+</div>
+</body>
+</html>
